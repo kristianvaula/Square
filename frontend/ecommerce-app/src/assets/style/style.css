@@ -1,0 +1,26 @@
+:root {
+  --main-color:#011627; 
+  --secondary-color:#FFFFFF;
+  --on-hover:#e4e9ed; 
+  --wine-red: #702632; 
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;  
+}
+
+a, router-link {
+  text-decoration: none;
+}
+
+li {
+  list-style: none; 
+}
+
+/* ICONS */
+.icon-medium {
+  width:3em;
+  opacity:0.6;
+}
