@@ -2,7 +2,9 @@
   <nav class="navbar">
     <div class="logo-search-container">
       <div class="logo">
-        <img src="@/assets/icons/logo.png" class="logo" alt="">
+        <router-link to="/">
+          <img src="@/assets/icons/logo.png" class="logo" alt="">
+        </router-link>
       </div>
     
       <div class="search-bar-container">
