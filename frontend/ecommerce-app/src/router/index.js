@@ -14,15 +14,21 @@ const routes = [
     component: CreateListingPage
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginPage.vue')
+  },
+  {
+    path: '/register-profile',
+    name: 'registerProfile',
+    component: () => import('../views/RegisterProfilePage.vue')
+  },
+  {
     path: '/messages',
     name: 'messages',
     component: HomeView
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: HomeView
-  },
+
   {
     path: '/profile-page',
     name: 'profilePage',
