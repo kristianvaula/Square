@@ -4,7 +4,11 @@ import { createStore } from 'vuex'
 export const store = reactive({
   user: {
     logInStatus: false, 
-    username: undefined 
+    username: undefined
+
+  },
+  productCard: {
+    isInFavourites: false,
   }
 })
 
