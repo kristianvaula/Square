@@ -14,7 +14,7 @@
     <div class="nav-links">
 
       <li>
-        <router-link to="/new-listing">
+        <router-link to="/create-listing">
           <img class="icon-medium" src="@/assets/icons/plus.png" alt="">
           <h1 class="title-medium">New Listing</h1>
         </router-link>

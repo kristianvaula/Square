@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
+import CreateListingPage from '@/views/CreateListingPage.vue'
 
 const routes = [
   {
@@ -8,9 +9,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/new-listing',
-    name: 'newListing',
-    component: HomeView
+    path: '/create-listing',
+    name: 'createListing',
+    component: CreateListingPage
   },
   {
     path: '/messages',
