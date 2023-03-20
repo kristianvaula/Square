@@ -6,7 +6,37 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
-  }
+  },
+  {
+    path: '/new-listing',
+    name: 'newListing',
+    component: HomeView
+  },
+  {
+    path: '/messages',
+    name: 'messages',
+    component: HomeView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: HomeView
+  },
+  {
+    path: '/profile-page',
+    name: 'profilePage',
+    component: HomeView
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: HomeView
+  },
+  {
+    path: '/my-listings',
+    name: 'myListings',
+    component: HomeView
+  },
 ]
 
 const router = createRouter({
