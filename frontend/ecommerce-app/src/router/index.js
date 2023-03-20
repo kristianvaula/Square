@@ -16,7 +16,33 @@ const routes = [
     path: '/register-profile',
     name: 'registerProfile',
     component: () => import('../views/RegisterProfilePage.vue')
-  }
+  },
+  {
+    path: '/new-listing',
+    name: 'newListing',
+    component: HomeView
+  },
+  {
+    path: '/messages',
+    name: 'messages',
+    component: HomeView
+  },
+
+  {
+    path: '/profile-page',
+    name: 'profilePage',
+    component: HomeView
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: HomeView
+  },
+  {
+    path: '/my-listings',
+    name: 'myListings',
+    component: HomeView
+  },
 ]
 
 const router = createRouter({
