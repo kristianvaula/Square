@@ -88,6 +88,8 @@
   margin-left:8px;
   font-size: 17px;
   border:0.5px solid rgba(1, 22, 39,0.2);
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 
@@ -100,4 +102,6 @@
   font-size: 17px;
   border: none;
   cursor: pointer;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
