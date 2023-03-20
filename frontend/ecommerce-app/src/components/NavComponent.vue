@@ -37,13 +37,15 @@
       </li>
 
       <li class="dropdown-container" v-if="store.user.logInStatus">
-        <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
-        <h1>{{ username }}</h1>
+        <router-link to="/profile-page">
+          <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
+          <h1>{{ username }}</h1>
+        </router-link>
         <ul class="dropdown">
-          <li><router-link to="/favorites">Favorites</router-link></li>
           <li><router-link to="/profile-page">My Profile</router-link></li>
+          <li><router-link to="/favorites">My Favorites</router-link></li>
           <li><router-link to="/my-listings">My Listings</router-link></li>
-          <li><a href="/user/sign-out">Sign out</a></li>
+          <li><a href="/user/sign-out">Sign Out</a></li>
         </ul>
       </li>
     </div>
