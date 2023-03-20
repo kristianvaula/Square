@@ -6,28 +6,28 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: {
-      loggedInStatus: false, 
+      loggedInStatus: false,
       username: ""
     }
   },
   getters: {
     getStatus(){
-      return this.user.loggedInStatus; 
+      return this.user.loggedInStatus;
     },
     getUsername() {
-      return this.user.username; 
+      return this.user.username;
     }
   },
   mutations: {
   },
   actions: {
     logIn(username) {
-      this.state.loggedInStatus = true; 
-      this.state.username = username; 
-    }, 
+      this.state.loggedInStatus = true;
+      this.state.username = username;
+    },
     logOut() {
-      this.state.loggedInStatus = false; 
-      this.state.username = ""; 
+      this.state.loggedInStatus = false;
+      this.state.username = "";
     }
   },
   modules: {
