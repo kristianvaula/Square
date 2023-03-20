@@ -2,7 +2,9 @@
   <nav class="navbar">
     <div class="logo-search-container">
       <div class="logo">
-        <img src="@/assets/icons/logo.png" class="logo" alt="">
+        <router-link to="/">
+          <img src="@/assets/icons/logo.png" class="logo" alt="">
+        </router-link>
       </div>
     
       <div class="search-bar-container">
@@ -14,7 +16,7 @@
     <div class="nav-links">
 
       <li>
-        <router-link to="/new-listing">
+        <router-link to="/create-listing">
           <img class="icon-medium" src="@/assets/icons/plus.png" alt="">
           <h1 class="title-medium">New Listing</h1>
         </router-link>
