@@ -1,5 +1,5 @@
 .title {
-    margin-top: 20px;
+    margin-top: 35px;
     font-size: 20px;
     font-weight: bold;
 }
@@ -17,4 +17,8 @@
     border-radius: 14px;
     box-shadow:  7px 7px 14px #ebebeb,
              -7px -7px 14px #ffffff;
+}
+
+.item {
+    margin-top: 35px;
 }

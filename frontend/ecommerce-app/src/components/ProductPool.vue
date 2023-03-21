@@ -1,7 +1,7 @@
 <template>
     <h3 class="title"> {{ title }}</h3>
     <div class="pool">
-        <ProductCard v-for="instance in this.store.productList" :key="instance.id" :ProductInfo="instance" ></ProductCard>
+        <ProductCard class="item" v-for="instance in this.store.productList" :key="instance.id" :ProductInfo="instance" ></ProductCard>
     </div>
 
 </template>
