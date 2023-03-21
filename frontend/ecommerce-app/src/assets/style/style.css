@@ -1,26 +1,3 @@
-.formContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.form {
-    display: flex;
-    flex-direction: column;
-    width: 425px;
-    padding: 20px;
-    border: 2px solid #d8d8d8;
-    background-color: white;
-    -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
-    -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
-    box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
-    color: #011627;
-}
-
-legend {
-    font-size: 20px;
-    font-weight: 600;
-    margin-top: 20px;
-}
 :root {
   --main-color:#011627; 
   --secondary-color:#FFFFFF;
@@ -40,6 +17,70 @@ a, router-link {
 
 li {
   list-style: none; 
+}
+
+fieldset {
+  border: 0;
+}
+
+legend {
+  font-size: 25px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid #d8d8d8;
+  background-color: white;
+  -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+  -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+  box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
+  color: #011627;
+}
+
+.form h1 {
+  border-bottom: solid #011627;
+}
+
+
+.button {
+  border-radius: 12px;
+  height: 50px;
+  width: 50%;
+  background-color: #702632;
+  font-size: 20px;
+  color: white;
+  box-shadow: 0 4px #999;
+}
+
+.button-small {
+  border-radius: 6px;
+  height: 25px;
+  width: 100px;
+  background-color: #702632;
+  font-size: 15px;
+  color: white;
+  box-shadow: 0 2px #999;
+}
+
+.button:hover, .button-small:hover {
+  background-color: #ba1632;
+  cursor: pointer;
+} 
+
+.button:active {
+  background-color: #ba1632;
+  box-shadow: 0 2px #666;
+  transform:translateY( 4px );
+}
+.button-small:active {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
 }
 
 /* ICONS */

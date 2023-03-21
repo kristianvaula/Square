@@ -1,1 +1,35 @@
+#loginFormContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+    height: 100%;
+}
+
+.form {
+    width: 500px;
+    height: 600px;
+    padding: 20px;
+}
+
+#registerButton {
+    background-color: white;
+    color: #011627;
+    font-size: 20px;
+    border: 0;
+    height: 50px;
+    width: 50%;
+    border-radius: 12px;
+}
+
+#registerButton:hover {
+    background-color: rgb(240, 233, 233);
+    box-shadow: 0 4px #999;
+}
+
+#registerButton:active {
+    background-color: rgb(240, 233, 233);
+    box-shadow: 0 2px #999;
+}
+
+
 

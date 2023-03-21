@@ -1,17 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
-import CreateListingPage from '@/views/CreateListingPage.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/create-listing',
-    name: 'createListing',
-    component: CreateListingPage
   },
   {
     path: '/login',
@@ -22,6 +16,11 @@ const routes = [
     path: '/register-profile',
     name: 'registerProfile',
     component: () => import('../views/RegisterProfilePage.vue')
+  },
+  {
+    path: '/create-listing',
+    name: 'createListing',
+    component: () => import('../views/CreateListingPage.vue')
   },
   {
     path: '/messages',
