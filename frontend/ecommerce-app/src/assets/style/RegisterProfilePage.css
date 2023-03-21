@@ -1,0 +1,18 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+#registerFormContainer {
+    margin-top: 5%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    height: 1000px;
+}
+
+.form {
+    height: 80%;
+    width: 700px;
+    padding: 15px;
+}
