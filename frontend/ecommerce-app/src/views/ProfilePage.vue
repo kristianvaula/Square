@@ -5,11 +5,14 @@
             <ProfileDetails/>
         </div>
         <div>
-            <router-link to="/favorites">
+            <router-link to="/my-favorites">
                 <Button class="my-button">My Favorites</Button>
             </router-link>
             <router-link to="/my-listings">
                 <Button class="my-button">My Listings</Button>
+            </router-link>
+            <router-link to="/my-purchases">
+                <Button class="my-button">My Purchases</Button>
             </router-link>
         </div>
         <div>

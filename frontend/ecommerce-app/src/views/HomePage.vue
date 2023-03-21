@@ -1,12 +1,23 @@
 <template>
   <div class="home">
-    <h1>Welcome</h1>
+    <div>
+      <CategoryPool/>
+      <ProductPool/>
+    </div>
   </div>
 </template>
 
 <script>
+import ProductPool from '@/components/ProductPool.vue';
+import CategoryPool from '@/components/CategoryPool.vue';
 
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  components: {
+    ProductPool,
+    CategoryPool
+    
+  }
+
 }
 </script>

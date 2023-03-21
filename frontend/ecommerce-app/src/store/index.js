@@ -12,6 +12,42 @@ export const store = reactive({
 
   },
 
+  CategoryList: [
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+    {
+      title: "Clothing",
+      categorySize: 78,
+    },
+
+  ],
+
   productList: [
     {
     price: 1000,
@@ -35,30 +71,6 @@ export const store = reactive({
     price: 1000,
     title: "New iphone",
     location: "Trondheim",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
     src: "@/assets/images/tools.jpg",
   },
   {
