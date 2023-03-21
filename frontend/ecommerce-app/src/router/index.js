@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
+import ProfilePage from '../views/ProfilePage.vue'
 
 const routes = [
   {
@@ -31,7 +32,7 @@ const routes = [
   {
     path: '/profile-page',
     name: 'profilePage',
-    component: HomeView
+    component: ProfilePage
   },
   {
     path: '/favorites',
