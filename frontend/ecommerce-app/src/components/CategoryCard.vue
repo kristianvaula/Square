@@ -7,10 +7,10 @@
       </div>
       <div class="category-info">
         <div class="category-title">
-          <h3>{{ this.title }}</h3>
+          <h3>{{ this.CategoryInfo.title }}</h3>
         </div>
         <div class="category-size">
-            <span>{{ "(" + this.categorySize + ")" }}</span>
+            <span>{{ "(" + this.CategoryInfo.categorySize + ")" }}</span>
         </div>
       </div>
     </div>
@@ -22,11 +22,16 @@
   
   export default {
     name: "CategoryCard",
+
+    props: {
+        CategoryInfo: {
+            type: Object,
+            required: true
+        }
+    },
   
     data() {
       return {
-        title: "Clothing",
-        categorySize: 78,
         store,
       };
     },
