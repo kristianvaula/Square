@@ -18,6 +18,11 @@ const routes = [
     component: () => import('../views/RegisterProfilePage.vue')
   },
   {
+    path: '/create-listing',
+    name: 'createListing',
+    component: () => import('../views/CreateListingPage.vue')
+  },
+  {
     path: '/messages',
     name: 'messages',
     component: HomeView
