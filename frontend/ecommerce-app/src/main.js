@@ -6,7 +6,7 @@ import store from './store'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
-import './assets/style/style.css'
+import './assets/style/Style.css'
 
 const requireComponent = require.context(
     './components/templates',
