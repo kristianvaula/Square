@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.categories;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;

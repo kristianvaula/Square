@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.categories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Blob;
 
 public class Category {
     @Id
@@ -13,6 +14,8 @@ public class Category {
     private int id;
     @Column
     private String description;
+    @Column
+    private Blob icon;
 
     @Autowired
     public Category() {}
@@ -23,6 +26,14 @@ public class Category {
 
     public String getDescription() {
         return description;
+    }
+
+    public Blob getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Blob icon) {
+        this.icon = icon;
     }
 
     public void setDescription(String description) {
