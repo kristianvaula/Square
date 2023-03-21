@@ -33,7 +33,7 @@
 
 <script>
 import router from "@/router";
-import '../assets/style/baseInput.css';
+import '../assets/style/BaseInput.css';
 
 export default {
   name: "LoginPage",

@@ -3,7 +3,19 @@
     v-if="label"
     :for="id"
     >{{ label }}</label>
+  <input
+    v-if="!textarea"
+    v-bind="$attrs" 
+    :placeholder="label"
+    class="field"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    :id="id"
+    :aria-describedby="error ? '${uuid}-error' : null"
+    :aria-invalid="error ? true : null"
+  >
   <textarea
+    v-if="textarea"
     v-bind="$attrs" 
     :placeholder="label"
     class="field"
@@ -24,6 +36,7 @@
 </template>
 
 <script>
+import UniqueID from '@/features/UniqueID';
 
   export default {
     props: {
@@ -45,7 +58,7 @@
       },
       id: {
         type: String, 
-        default:''
+        default: UniqueID().getID()
       },
     }
   }

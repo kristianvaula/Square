@@ -5,7 +5,7 @@
     class="field"
     v-bind="{
       ...$attrs,
-      onChange: ($event) => { $emit('inputUpdate', $event.target.value)}
+      onChange: ($event) => { $emit('update:modelValue', $event.target.value)}
     }"
     id="uuid"
   >
