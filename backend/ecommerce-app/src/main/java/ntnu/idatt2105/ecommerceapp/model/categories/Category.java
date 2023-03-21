@@ -14,8 +14,6 @@ public class Category {
     private int id;
     @Column
     private String description;
-    @Column
-    private Blob icon;
 
     @Autowired
     public Category() {}
@@ -26,14 +24,6 @@ public class Category {
 
     public String getDescription() {
         return description;
-    }
-
-    public Blob getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Blob icon) {
-        this.icon = icon;
     }
 
     public void setDescription(String description) {

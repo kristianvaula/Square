@@ -15,7 +15,7 @@ public class CategoryRepository implements CategoryRepositoryInterface{
 
     @Override
     public int newCategory(Category category) {
-        return jdbcTemplate.update("INSERT INTO category (description, icon) VALUES(?,?)", category.getDescription(), category.getIcon());
+        return jdbcTemplate.update("INSERT INTO category (description) VALUES(?)", category.getDescription());
     }
 
     @Override

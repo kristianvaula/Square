@@ -20,7 +20,7 @@ public class CategoryService {
 
     public ResponseEntity<String> newCategory(Category category){
         try {
-            if (category.getDescription() != null && category.getIcon() != null) {
+            if (category.getDescription() != null) {
                 int response = repository.newCategory(category);
                 if (response == 1) {
                     logger.info("New category added");
