@@ -30,16 +30,16 @@ legend {
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border: 2px solid #d8d8d8;
-    background-color: white;
-    -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
-    -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
-    box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
-    color: #011627;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid #d8d8d8;
+  background-color: white;
+  -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+  -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+  box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
+  color: #011627;
 }
 
 .form h1 {
@@ -57,14 +57,30 @@ legend {
   box-shadow: 0 4px #999;
 }
 
-.button:hover {
+.button-small {
+  border-radius: 6px;
+  height: 25px;
+  width: 100px;
+  background-color: #702632;
+  font-size: 15px;
+  color: white;
+  box-shadow: 0 2px #999;
+}
+
+.button:hover, .button-small:hover {
   background-color: #ba1632;
+  cursor: pointer;
 } 
 
 .button:active {
   background-color: #ba1632;
   box-shadow: 0 2px #666;
   transform:translateY( 4px );
+}
+.button-small:active {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
 }
 
 /* ICONS */
