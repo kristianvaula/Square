@@ -1,0 +1,34 @@
+.profile-page {
+    text-align: center;
+}
+
+.my-button {
+    margin-top: 20px;
+    margin-right: 10px;
+    background-color: #ffffff;
+    color: #011627;
+    font-size: 20px;
+    border-radius: 20px;
+    height: 50px;
+    width: 150px;
+}
+
+.my-button:hover {
+    font-weight: bold;
+    background-color: #e9e9e9;
+}
+
+.sign-out-button {
+    margin-top: 20px;
+    background-color: #011627;
+    color: #ffffff;
+    font-size: 16px;
+    border-radius: 20px;
+    height: 30px;
+    width: 120px;
+}
+
+.sign-out-button:hover {
+    font-weight: bold;
+    background-color: #702632;
+}
