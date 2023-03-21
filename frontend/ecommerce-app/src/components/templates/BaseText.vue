@@ -17,7 +17,7 @@
   <textarea
     v-if="textarea"
     v-bind="$attrs" 
-    :placeholder="label"
+    placeholder="..."
     class="field"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
