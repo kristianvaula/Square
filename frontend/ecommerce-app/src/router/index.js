@@ -14,7 +14,7 @@ const routes = [
     component: () => import('../views/LoginPage.vue')
   },
   {
-    path: '/register-profile',
+    path: '/create-profile',
     name: 'registerProfile',
     component: () => import('../views/RegisterProfilePage.vue')
   },
@@ -24,19 +24,19 @@ const routes = [
     component: () => import('../views/CreateListingPage.vue')
   },
   {
-    path: '/messages',
-    name: 'messages',
+    path: '/my-messages',
+    name: 'myMessages',
     component: HomeView
   },
 
   {
-    path: '/profile-page',
-    name: 'profilePage',
+    path: '/my-profile',
+    name: 'myProfile',
     component: ProfilePage
   },
   {
-    path: '/favorites',
-    name: 'favorites',
+    path: '/my-favorites',
+    name: 'myFavorites',
     component: HomeView
   },
   {
