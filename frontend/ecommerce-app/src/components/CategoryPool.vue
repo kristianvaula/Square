@@ -1,5 +1,6 @@
 <template>
-    <div class="category-pool">
+    <h3 class="title"> {{ title }}</h3> 
+    <div class="pool">
         <CategoryCard v-for="instance in this.store.CategoryList" :key="instance.id" :CategoryInfo="instance" ></CategoryCard>
     </div>
 
@@ -8,6 +9,7 @@
 <script>
 import { store } from '@/store';
 import CategoryCard from './CategoryCard.vue';
+import '@/assets/style/Pool.css'
     export default {
         name: "ProductPool",
         components: {
@@ -16,6 +18,7 @@ import CategoryCard from './CategoryCard.vue';
 
         data() {
             return {
+                title: "Categories",
                 store
             }
         }

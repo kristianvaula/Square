@@ -1,5 +1,6 @@
 <template>
-    <div class="product-pool">
+    <h3 class="title"> {{ title }}</h3>
+    <div class="pool">
         <ProductCard v-for="instance in this.store.productList" :key="instance.id" :ProductInfo="instance" ></ProductCard>
     </div>
 
@@ -8,6 +9,7 @@
 <script>
 import { store } from '@/store';
 import ProductCard from './ProductCard.vue';
+import '@/assets/style/Pool.css'
     export default {
         name: "ProductPool",
         components: {
@@ -16,6 +18,7 @@ import ProductCard from './ProductCard.vue';
 
         data() {
             return {
+                title: "New Products",
                 store
             }
         }

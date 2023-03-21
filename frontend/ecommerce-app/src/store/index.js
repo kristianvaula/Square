@@ -44,7 +44,7 @@ export const store = reactive({
     {
       title: "Clothing",
       categorySize: 78,
-    },
+    }
 
   ],
 
@@ -84,7 +84,61 @@ export const store = reactive({
     title: "Tools barely used",
     location: "Rennesøy",
     src: "@/assets/images/tools.jpg",
-  },]
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  }]
 })
 
 export default createStore({
