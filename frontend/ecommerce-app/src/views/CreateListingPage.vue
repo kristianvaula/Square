@@ -11,7 +11,7 @@
       <button class="button-small" @click="uploadFile" :disabled="!file">Upload</button>
     </div>
 
-    <form class="new-listing-form" @submit="submit">
+    <form @submit="submit">
       <legend>Product Information</legend>
       <div class="base-input center">
         <BaseText
@@ -70,7 +70,7 @@ import { useField, useForm } from 'vee-validate'
 import BaseText from '@/components/templates/BaseText.vue';
 import BaseSelect from '@/components/templates/BaseSelect.vue'
 import BaseCheckbox from '@/components/templates/BaseCheckbox.vue'
-import ImgCarousel from '@/components/image_carousel/ImgCarouselComponent.vue'
+import ImgCarousel from '@/components/ImgCarouselComponent.vue'
 import '@/assets/style/CreateListingPage.css'
 
 export default {

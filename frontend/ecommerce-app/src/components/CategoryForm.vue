@@ -21,14 +21,21 @@
 import '@/assets/style/CategoryForm.css'
 import BaseText from './templates/BaseText.vue';
 import { useField, useForm } from 'vee-validate'
+import HttpUtils from '@/utils/httputils.js'
 
 export default {
   components: {
     BaseText
   }, 
   setup () {
-    let sendForm = (listing) => {
-      console.log("MOCK SENDING "+ listing); 
+    let sendForm = (category) => {
+      HttpUtils.createCategory(category)
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
     }
 
     const textVal = value => {
@@ -48,8 +55,8 @@ export default {
 
     const submit = handleSubmit(values => {
       console.log(values)
-      let listing = {desc: values.desc}
-      sendForm(listing)
+      let category = {desc: values.desc}
+      sendForm(category)
     })
 
     return {desc, errors, submit
