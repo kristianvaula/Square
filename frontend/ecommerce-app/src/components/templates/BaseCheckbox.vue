@@ -1,4 +1,5 @@
 <template>
+  <label :for="uuid" v-if="label">{{ label }}</label>
   <input
       :id="uuid"
       type="checkbox"
@@ -6,7 +7,6 @@
       @change="$emit('update:modelValue', $event.target.checked)"
       class="field"
     />
-  <label :for="uuid" v-if="label">{{ label }}</label>
 </template>
 
 <script>
