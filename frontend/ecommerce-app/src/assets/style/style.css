@@ -73,3 +73,10 @@ li {
   width:3em;
   opacity:0.6;
 }
+.icon-heart {
+  width:2.5em;
+  opacity:0.8;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
