@@ -44,10 +44,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-select {
-  width: 150px;
-  height: 20px;
-}
-</style>

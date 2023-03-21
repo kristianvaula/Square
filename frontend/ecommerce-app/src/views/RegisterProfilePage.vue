@@ -9,6 +9,7 @@
             label="Firstname:"
             placeholder="Ola"
             type="text"
+            :error="firstNameError"
         />
       </fieldset>
 
@@ -18,7 +19,8 @@
             v-model="lastName"
             label="Lastname:"
             placeholder="Norman"
-            type="text"      
+            type="text"   
+            :error="lastNameError"   
         />
       </fieldset>
 
@@ -29,6 +31,7 @@
             label="E-mail:"
             placeholder="Ola.Nordman@mail.com"
             type="text"
+            :error="eMailError"
         />
       </fieldset>
 
@@ -36,7 +39,7 @@
         <legend>Which county are you from?</legend>
         <BaseSelect
             v-model="location.county"
-            :options="counties"
+            :options="counties"      
             label="County:"
         />
       </fieldset>
@@ -48,6 +51,7 @@
             label="City:"
             placeholder="Oslo"
             type="text"
+            :error="cityError"
         />
       </fieldset>
 
@@ -68,6 +72,8 @@
             label="Password:"
             placeholder="**********"
             type="password"
+            :error="passwordError"
+
         />
       </fieldset>
       <input class="button" type="button" value="Register" @click="register">
@@ -79,21 +85,16 @@
 import httputils from "@/utils/httputils";
 import "../assets/style/RegisterProfilePage.css"
 import "../assets/style/BaseInput.css"
-//import { useField } from 'vee-validate'
+import { useField } from 'vee-validate'
 
 export default {
   name: "RegsiterProfilePage",
   data () {
     return {
-      firstName: '',
-      lastName: '',
-      eMail: '',
       location: {
         county: '',
-        city: '',
         address: ''
       },
-      password: '',
       counties: []
     }
   },
@@ -105,9 +106,19 @@ export default {
       this.counties.push(conty.countyName)
     });
   },
-  /*
   setup() {
-    const { value: eMail, errorMessage: eMailError } = useField('eMail', function (value) {
+
+    function textValidation(value) {      
+      if (!value) return 'This field is required'
+      const regex = /^[a-z ,.'-]+$/i
+      if (!regex.test((String(value)))) {
+        return 'Please enter a valid name'
+      }
+      return true
+    }
+
+
+    const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
       if (!value) return 'This field is required'
 
 
@@ -117,9 +128,18 @@ export default {
       return true
     })
 
-    const { value: firstName, errorMessage: firstNameError } = useField('firstName', function (value) {this.validateString(value)});
-    const { value: lastName, errorMessage: lastNameError } = useField('lastName', function (value) {this.validateString(value)});
-    const { value: city, errorMessage: cityError } = useField('city', function (value) {this.validateString(value)});
+    const { value: password, errorMessage: passwordError} = useField('password', (value) => {
+      if (!value) return 'This field is required'
+
+      const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$/;
+      if (!regex.test(String(value).toLowerCase())) return 'A valid password must contian a digit, lower and upper case alphabet, a spesial carracter and have a length of 8 to 20 charactert. White spaces is not allowed in a password'
+
+      return true;
+    })
+
+    const { value: firstName, errorMessage: firstNameError } = useField('firstName', (value) => textValidation(value));
+    const { value: lastName, errorMessage: lastNameError } = useField('lastName', (value) => textValidation(value));
+    const { value: city, errorMessage: cityError } = useField('city', (value) => textValidation(value));
     
     return {
       eMail, 
@@ -129,22 +149,15 @@ export default {
       lastName,
       lastNameError,
       city,
-      cityError
+      cityError,
+      password,
+      passwordError
     }
 
   },
-  */
   methods: {
     register () {
       //todo: push to database and sign in
-    },
-    validateString (value) {
-      if (!value) return 'This field is required'
-      const regex = /^[a-z ,.'-]+$/i
-      if (!regex.test((String(value)))) {
-        return 'Please enter a valid name'
-      }
-      return true
     }
   }
 }
