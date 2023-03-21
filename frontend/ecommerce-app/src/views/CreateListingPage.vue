@@ -35,6 +35,15 @@
       </div>
       <div class="base-input center">
         <BaseText
+          id="briedDescInput"
+          v-model="briefDesc"
+          label="Brief Description"
+          type="text"
+          :error="errors.briefDesc"
+        />
+      </div>
+      <div class="base-input center">
+        <BaseText
           id="descInput"
           v-model="desc"
           label="Description"
@@ -134,7 +143,8 @@ export default {
 
     const validationSchema = {
       title: textVal,
-      price: priceVal, 
+      price: priceVal,
+      briefDesc: textVal, 
       desc: textVal
     }
     
@@ -142,6 +152,7 @@ export default {
 
     const {value: title} = useField('title')
     const {value: price} = useField('price')
+    const {value: briefDesc} = useField('briefDesc')
     const {value: desc} = useField('desc')
     const {value: state} = useField('state')
     const {value: category} = useField('category')
@@ -151,6 +162,7 @@ export default {
       let listing = {
         title: values.title,
         price: values.price,
+        briefDesc: values.briefDesc, 
         desc: values.desc,
         state: values.state, 
         category: values.category
@@ -161,6 +173,7 @@ export default {
     return {
       title,
       price,
+      briefDesc,
       desc,
       state, 
       category,
