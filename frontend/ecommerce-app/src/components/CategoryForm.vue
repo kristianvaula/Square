@@ -21,7 +21,7 @@
 import '@/assets/style/CategoryForm.css'
 import BaseText from './templates/BaseText.vue';
 import { useField, useForm } from 'vee-validate'
-import HttpUtils from '@/utils/httputils.js'
+import CategoryUtils from '@/utils/CategoryUtils.js'
 
 export default {
   components: {
@@ -29,7 +29,7 @@ export default {
   }, 
   setup () {
     let sendForm = (category) => {
-      HttpUtils.createCategory(category)
+      CategoryUtils.createCategory(category)
           .then((response) => {
             console.log(response)
           })
