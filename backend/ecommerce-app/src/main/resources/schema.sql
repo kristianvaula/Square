@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS county;
 
 CREATE TABLE county(
     countyId INT NOT NULL AUTO_INCREMENT,
-    stateName VARCHAR(50),
+    countyName VARCHAR(50),
     PRIMARY KEY (countyId)
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE profile(
      profileId INT NOT NULL AUTO_INCREMENT,
      firstName VARCHAR(50),
      lastName VARCHAR(50),
-     ePost VARCHAR(50),
+     eMail VARCHAR(50),
      password VARCHAR(50),
      addressId INT NOT NULL,
      profileTypeId INT NOT NULL,
