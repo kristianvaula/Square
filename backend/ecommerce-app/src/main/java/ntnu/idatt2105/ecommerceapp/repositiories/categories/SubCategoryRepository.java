@@ -15,12 +15,12 @@ public class SubCategoryRepository implements SubCategoryRepositoryInterface{
 
     @Override
     public int newSubCategory(SubCategory category) {
-        return jdbcTemplate.update("INSERT INTO subCategory (description, categoryId) VALUES(?,?)", category.getDescription(), category.getId());
+        return jdbcTemplate.update("INSERT INTO subCategory (description, categoryId) VALUES(?,?)", category.getDescription(), category.getCategoryId());
     }
 
     @Override
     public int removeSubCategory(int id) {
-        return jdbcTemplate.update("DELETE FROM subCategory WHERE id=?", id);
+        return jdbcTemplate.update("DELETE FROM subCategory WHERE subCategoryId=?", id);
     }
 
     @Override
