@@ -36,7 +36,6 @@
   .category-size {
     display: grid;
     grid-template-rows: 0.5fr, 2fr, 1fr;
-<<<<<<< HEAD
   }
 
   .category-selected {
@@ -51,7 +50,3 @@
     padding: 2%;
     grid-template-rows: 4fr, 2fr;
   }
-=======
-    margin-bottom: 5px;
-  }
->>>>>>> d6d7440f259fbbb0530e444b8587139b1a2a4c1b

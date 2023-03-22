@@ -1,17 +1,14 @@
 <template>
-<<<<<<< HEAD
     <div class="category-pool">
-        <CategoryCard v-for="instance in this.store.CategoryList" 
-        :key="instance.id" 
-        :CategoryInfo="instance" 
-        @selected-card-event="handleSelection"
-        @deselected-card-event="removeSelection"
-        ></CategoryCard>
-=======
-    <h3 class="title"> {{ title }}</h3> 
-    <div class="pool">
-        <CategoryCard v-for="instance in this.store.CategoryList" :key="instance.id" :CategoryInfo="instance" ></CategoryCard>
->>>>>>> d6d7440f259fbbb0530e444b8587139b1a2a4c1b
+        <h3 class="title"> {{ title }}</h3> 
+        <div class="pool">
+            <CategoryCard v-for="instance in this.store.CategoryList" 
+            :key="instance.categoryId" 
+            :CategoryInfo="instance"
+            @selected-card-event="handleSelection"
+            @deselected-card-event="removeSelection"
+            ></CategoryCard>
+        </div>
     </div>
 
 </template>
@@ -28,18 +25,16 @@ import '@/assets/style/Pool.css'
 
         data() {
             return {
-<<<<<<< HEAD
-                store,
-=======
                 title: "Categories",
-                store
->>>>>>> d6d7440f259fbbb0530e444b8587139b1a2a4c1b
+                store,
+                selectedCategoryID: null 
             }
         },
 
         methods: {
             handleSelection(value) {
-                console.log(value)
+                this.chosenCategoryID = value.categoryId
+                this.$emit("selectedCategoryEvent", this.chosenCategoryID)
             },
 
             removeSelection() {

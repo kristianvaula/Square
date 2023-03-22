@@ -16,34 +16,42 @@ export const store = reactive({
     {
       title: "Sports & Outdoors",
       categorySize: 38,
+      categoryId: 1
     },
     {
       title: "Clothing",
       categorySize: 74,
+      categoryId: 2
     },
     {
       title: "Furniture",
       categorySize: 58,
+      categoryId: 3
     },
     {
       title: "Electronics",
       categorySize: 25,
+      categoryId: 4
     },
     {
       title: "Pets",
       categorySize: 12,
+      categoryId: 5
     },
     {
       title: "Home Garden",
       categorySize: 103,
+      categoryId: 6
     },
     {
       title: "Tools",
       categorySize: 26,
+      categoryId: 17
     },
     {
       title: "Others",
       categorySize: 342,
+      categoryId: 18
     }
 
   ],
@@ -84,7 +92,6 @@ export const store = reactive({
     title: "Tools barely used",
     location: "Rennesøy",
     src: "@/assets/images/tools.jpg",
-<<<<<<< HEAD
   },],
 
   subCategories: [
@@ -102,63 +109,6 @@ export const store = reactive({
     id: 3
     },
   ],
-=======
-  },
-  {
-    price: 1000,
-    title: "New iphone",
-    location: "Trondheim",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 1000,
-    title: "New iphone",
-    location: "Trondheim",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 1000,
-    title: "New iphone",
-    location: "Trondheim",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 1000,
-    title: "New iphone",
-    location: "Trondheim",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  },
-  {
-    price: 500,
-    title: "Tools barely used",
-    location: "Rennesøy",
-    src: "@/assets/images/tools.jpg",
-  }]
->>>>>>> d6d7440f259fbbb0530e444b8587139b1a2a4c1b
 })
 
 export default createStore({
