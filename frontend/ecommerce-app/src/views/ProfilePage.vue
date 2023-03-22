@@ -24,7 +24,6 @@
   </template>
   
   <script>
-  import router from "@/router";
   import ProfileDetails from '@/components/ProfileDetails.vue'
   import '../assets/style/ProfilePage.css';
   
@@ -37,11 +36,6 @@
         password: ''
       }
     },
-    methods: {
-      registerProfile () {
-        router.push("/register-profile")
-      }
-    }
   }
   </script>
   
