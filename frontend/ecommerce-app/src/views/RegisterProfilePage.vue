@@ -86,6 +86,8 @@ import httputils from "@/utils/httputils";
 import "../assets/style/RegisterProfilePage.css"
 import "../assets/style/BaseInput.css"
 import { useField } from 'vee-validate' 
+import { useTokenStore } from "@/store/token.js";
+import router from "@/router/index"
 
 export default {
   name: "RegsiterProfilePage",
@@ -107,6 +109,8 @@ export default {
   },
   setup() {
 
+    const tokenStore = useTokenStore();
+
     function textValidation(value) {      
       if (!value) return 'This field is required'
       const regex = /^[a-z ,.'-]+$/i
@@ -117,6 +121,10 @@ export default {
     }
 
     function passwordValidation(value) {
+      if(!value) {
+        return "This field is required.";
+      }
+      
       const isWhitespace = /^(?=.*\s)/;
       if (isWhitespace.test(value)) {
         return "Password must not contain whitespaces.";
@@ -174,33 +182,29 @@ export default {
       city,
       cityError,
       password,
-      passwordError
+      passwordError,
+      tokenStore
     }
 
   },
   methods: {
     async register () {
-      let profileLocation = {
-          county: this.location.county,
-          city: this.city,
-          address: this.location.address
-      }
-
       let profile = {
         firstName: this.firstName,
-        lastname: this.lastName,
-        eEmail: this.eMail,
-        location: profileLocation,
+        lastName: this.lastName,
+        eMail: this.eMail,
+        county: this.location.county,
+        city: this.city,
+        address: this.location.address,
         password: this.password
       };
 
-      let profilePromise = await httputils.createUser(profile);
+      let profilePromise = await httputils.createUser(profile);  
       
-      //TODO: delete console log
-      console.log(profilePromise.data)
-
-      //username = profilePromise.data.username;
-      //logInStatus = profilePromise.data.logInStatus;
+      await this.tokenStore.getTokenAndSaveInStore(profilePromise.data.email, profilePromise.data.password);
+      if(this.tokenStore.jwtToken){
+          router.push("/");
+      }
     }
   }
 }

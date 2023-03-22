@@ -1,7 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.repositiories;
 
-import ntnu.idatt2105.ecommerceapp.model.County;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,13 @@ import java.util.List;
 public class ProfileDaoImpl implements ProfileDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    Logger logger = LoggerFactory.getLogger(ProfileDao.class);
+    Logger logger = LoggerFactory.getLogger(ProfileDaoImpl.class);
+
+    @Override
+    public int getCounty(String countyName) {
+        String countiesSql = "SELECT countyId FROM county WHERE countyName=?";
+        return jdbcTemplate.queryForObject(countiesSql, Integer.class, countyName);
+    }
 
     @Override
     public List<County> getCounties() {
@@ -25,31 +30,88 @@ public class ProfileDaoImpl implements ProfileDao {
         return jdbcTemplate.query(countiesSql, BeanPropertyRowMapper.newInstance(County.class));
     }
 
-    @Transactional
-    @Override
-    public int addProfile(Profile profile) {
-        // todo: spørring er feil...
-        String getProfileIdSql = "SELECT profileId FROM profile WHERE eMail=?";
-        String insertProfileSql = "INSERT INTO Profile(profileId, firstName, lastName, eMail, county, city, address, password)" +
-                " VALUES(NULL,?,?,?,?,?,?)";
-        Integer id;
+    /**
+     * Returns id for the entity if exists, otherwise the new id
+     * @param getSql
+     * @param insertSql
+     * @param name
+     * @param foreignKey
+     * @return
+     */
+    private int addSimpleEntity(String getSql, String insertSql, String name, int foreignKey) {
+        int id;
 
         try {
-            id = jdbcTemplate.queryForObject(getProfileIdSql, Integer.class, profile.getEMail());
+            logger.info(getSql);
+            id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
         } catch (EmptyResultDataAccessException e) {
-            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profile.getFirstName(), profile.getLastName(),
-                    profile.getEMail(), profile.getCounty(), profile.getCity(), profile.getAddress(), profile.getPassword()});
+            int rowAffected = jdbcTemplate.update(insertSql, new Object[] {null, name, foreignKey});
+            logger.info("rows affected: " + rowAffected);
+            id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
+        }
+        return id;
+    }
+    @Override
+    public int addCity(String cityName, int countyId) {
+        String getCityIdSql = "SELECT cityId FROM city WHERE cityName=? AND countyId=?";
+        String insertCitySql = "INSERT INTO city VALUES(?, ?, ?)";
+
+        int cityId = addSimpleEntity(getCityIdSql, insertCitySql, cityName, countyId);
+        logger.info("Answered with cityId {}", cityId);
+        return cityId;
+    }
+
+    @Override
+    public int addAddress(String address, int cityId) {
+        String getAddressIdSql = "SELECT addressId FROM address WHERE address=? AND cityId=?";
+        String insertAddressSql = "INSERT INTO address VALUES(?, ?, ?)";
+
+        int addressId = addSimpleEntity(getAddressIdSql, insertAddressSql, address, cityId);
+        logger.info("Answered with addressId {}", addressId);
+        return addressId;
+    }
+
+    @Override
+    public int addProfileType(String profileTypeName) {
+        String getProfileSql = "SELECT profileTypeId FROM profiletype WHERE roleName=?";
+        String insertProfileSql = "INSERT INTO profiletype VALUES(?, ?)";
+        int profileTypeId;
+
+        try {
+            profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
+        } catch (EmptyResultDataAccessException e) {
+            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileTypeName});
+            logger.info("rows affected: " + rowAffected);
+            profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
+        }
+        return profileTypeId;
+    }
+    @Transactional
+    @Override
+    public Profile addProfile(RegisterProfileRequest profileRequest) {
+        String getProfileIdSql = "SELECT * FROM profile WHERE eMail=?";
+        String insertProfileSql = "INSERT INTO profile VALUES(?, ?, ?, ?, ?, ?, ?)";
+        Profile profile;
+
+        try {
+            profile = jdbcTemplate.queryForObject(getProfileIdSql, BeanPropertyRowMapper.newInstance(Profile.class), profileRequest.geteMail());
+        } catch (EmptyResultDataAccessException e) {
+            int countyId = getCounty(profileRequest.getCounty());
+            int cityId = addCity(profileRequest.getCity(), countyId);
+            int addressId = addAddress(profileRequest.getAddress(), cityId);
+
+            // todo: fix profileTypeId: have to have
+            int profileTypeId = addProfileType("Test");
+
+            logger.info(profileRequest.getFirstName() + ", " + profileRequest.getLastName() + ", " + profileRequest.geteMail() + ", " + profileRequest.getPassword() + ", " + addressId + ", "+ 1);
+            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileRequest.getFirstName(),
+                    profileRequest.getLastName(), profileRequest.geteMail(), profileRequest.getPassword(), addressId, profileTypeId});
 
             logger.debug("Rows affected after added new user: {}", rowAffected);
-
-            id = jdbcTemplate.queryForObject(getProfileIdSql, Integer.class, profile.getEMail());
+            profile = jdbcTemplate.queryForObject(getProfileIdSql, BeanPropertyRowMapper.newInstance(Profile.class), profileRequest.geteMail());
         }
 
-        if (id == null) {
-            return -1;
-        }
-
-        return id;
+        return profile;
     }
 
     @Override
@@ -71,6 +133,4 @@ public class ProfileDaoImpl implements ProfileDao {
 
         return profiles.contains(profile);
     }
-
-
 }

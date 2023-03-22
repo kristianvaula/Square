@@ -63,7 +63,9 @@ export default {
     const tokenStore = useTokenStore();
     return { tokenStore };
   },
-  async mounted () {
+  mounted () {
+    //todo: remove async
+
     if(this.tokenStore.jwtToken) {
       this.user = this.tokenStore.loggedInUser
       /*

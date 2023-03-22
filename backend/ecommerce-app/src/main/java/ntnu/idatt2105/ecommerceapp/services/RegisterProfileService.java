@@ -2,6 +2,7 @@ package ntnu.idatt2105.ecommerceapp.services;
 
 import ntnu.idatt2105.ecommerceapp.model.County;
 import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.RegisterProfileRequest;
 import ntnu.idatt2105.ecommerceapp.repositiories.ProfileDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,9 @@ public class RegisterProfileService {
         return profileDao.getCounties();
     }
 
-    public int addProfile(Profile profile) {
+    public Profile addProfile(RegisterProfileRequest profileRequest) {
         // todo: hash and salt password
-        return -1;
+        return profileDao.addProfile(profileRequest);
     }
 
     public Profile getProfile(String eMail, String password) {

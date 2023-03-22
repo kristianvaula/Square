@@ -8,25 +8,18 @@ public class Profile {
     private String lastName;
     private String eMail;
 
-    private String county;
-
-    private String city;
-
-    private String address;
+    private int addressId;
     private String password;
 
     public Profile() {
     }
 
-    public Profile(int profileId, String firstName, String lastName, String eMail, String county, String city,
-                   String address, String password) {
+    public Profile(int profileId, String firstName, String lastName, String eMail, int addressId, String password) {
         this.profileId = profileId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.eMail = eMail;
-        this.county = county;
-        this.city = city;
-        this.address = address;
+        this.addressId = addressId;
         this.password = password;
     }
 
@@ -62,28 +55,12 @@ public class Profile {
         this.eMail = eMail;
     }
 
-    public String getCounty() {
-        return county;
+    public int getAddressId() {
+        return addressId;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
     }
 
     public String getPassword() {
@@ -108,6 +85,6 @@ public class Profile {
 
     @Override
     public String toString() {
-        return "id: " + profileId + ", " + firstName + " " + lastName + ", " + eMail + ", " + address;
+        return "id: " + profileId + ", " + firstName + " " + lastName + ", " + eMail + ", " + addressId;
     }
 }

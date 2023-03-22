@@ -26,8 +26,7 @@ public class TokenService {
 
 
     public String generateToken(ProfileRequest profileRequest) {
-        logger.info("loginRequest email: " + profileRequest.getEMail());
-        logger.info("loginRequest password: " + profileRequest.getPassword());
+        logger.info("generating token for email: {}", profileRequest.getEMail());
         if (profileDao.checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
             logger.info("Username: {} passed the credentials check", profileRequest.getEMail());
             logger.info("Generating token for username: {}", profileRequest.getEMail());

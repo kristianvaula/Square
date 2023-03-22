@@ -1,8 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
-import ntnu.idatt2105.ecommerceapp.model.County;
-import ntnu.idatt2105.ecommerceapp.model.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.*;
 import ntnu.idatt2105.ecommerceapp.services.RegisterProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +34,19 @@ public class RegisterProfileController {
         }
         logger.info("Returned list with counties");
         return new ResponseEntity<>(counties, HttpStatus.OK);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping("/unauthorized/new-profile")
+    public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest registerProfileRequest) {
+        logger.info("Received request to create a profile for: " + registerProfileRequest.getFirstName());
+        Profile profile = registerProfileService.addProfile(registerProfileRequest);
+        if (profile == null) {
+            logger.info("Could not find any user for the given email");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.info("Returned user:" + profile);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     @CrossOrigin("http://localhost:8080")
