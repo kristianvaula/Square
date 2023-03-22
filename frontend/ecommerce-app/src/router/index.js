@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
+import EditProfilePage from '@/views/EditProfilePage.vue'
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
     path: '/my-profile',
     name: 'myProfile',
     component: ProfilePage
+  },
+  {
+    path: '/edit-profile',
+    name: 'editProfile',
+    component: EditProfilePage
   },
   {
     path: '/my-favorites',

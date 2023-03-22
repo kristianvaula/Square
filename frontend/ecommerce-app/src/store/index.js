@@ -14,37 +14,37 @@ export const store = reactive({
 
   CategoryList: [
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Sports & Outdoors",
+      categorySize: 38,
     },
     {
       title: "Clothing",
-      categorySize: 78,
+      categorySize: 74,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Furniture",
+      categorySize: 58,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Electronics",
+      categorySize: 25,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Pets",
+      categorySize: 12,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Home Garden",
+      categorySize: 103,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
+      title: "Tools",
+      categorySize: 26,
     },
     {
-      title: "Clothing",
-      categorySize: 78,
-    },
+      title: "Others",
+      categorySize: 342,
+    }
 
   ],
 
@@ -84,6 +84,7 @@ export const store = reactive({
     title: "Tools barely used",
     location: "Rennesøy",
     src: "@/assets/images/tools.jpg",
+<<<<<<< HEAD
   },],
 
   subCategories: [
@@ -101,6 +102,63 @@ export const store = reactive({
     id: 3
     },
   ],
+=======
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 1000,
+    title: "New iphone",
+    location: "Trondheim",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  },
+  {
+    price: 500,
+    title: "Tools barely used",
+    location: "Rennesøy",
+    src: "@/assets/images/tools.jpg",
+  }]
+>>>>>>> d6d7440f259fbbb0530e444b8587139b1a2a4c1b
 })
 
 export default createStore({

@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.categories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Blob;
 
 public class Category {
     @Id
