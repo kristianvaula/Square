@@ -84,7 +84,23 @@ export const store = reactive({
     title: "Tools barely used",
     location: "Rennesøy",
     src: "@/assets/images/tools.jpg",
-  },]
+  },],
+
+  subCategories: [
+    {
+      name: "Tools",
+      id: 0
+    },
+    { name: "Sport",
+      id: 7
+    },
+    { name: "Sport",
+    id: 2
+    },
+    { name: "Sport",
+    id: 3
+    },
+  ],
 })
 
 export default createStore({

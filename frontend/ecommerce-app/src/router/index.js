@@ -44,6 +44,11 @@ const routes = [
     name: 'myListings',
     component: HomeView
   },
+  {
+    path: '/admin',
+    name: 'AdminCategoriesPage',
+    component: () => import('../views/AdminCategoriesPage.vue')
+  },
 ]
 
 const router = createRouter({

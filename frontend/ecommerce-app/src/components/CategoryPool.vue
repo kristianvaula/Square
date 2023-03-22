@@ -1,6 +1,11 @@
 <template>
     <div class="category-pool">
-        <CategoryCard v-for="instance in this.store.CategoryList" :key="instance.id" :CategoryInfo="instance" ></CategoryCard>
+        <CategoryCard v-for="instance in this.store.CategoryList" 
+        :key="instance.id" 
+        :CategoryInfo="instance" 
+        @selected-card-event="handleSelection"
+        @deselected-card-event="removeSelection"
+        ></CategoryCard>
     </div>
 
 </template>
@@ -16,9 +21,20 @@ import CategoryCard from './CategoryCard.vue';
 
         data() {
             return {
-                store
+                store,
             }
-        }
+        },
+
+        methods: {
+            handleSelection(value) {
+                console.log(value)
+            },
+
+            removeSelection() {
+                console.log("code to remove the category from list")
+
+            }
+        },
 
     }
 
@@ -32,6 +48,7 @@ import CategoryCard from './CategoryCard.vue';
         flex-wrap:wrap;
         padding: 5px;
     }
+
 
 
 </style>

@@ -1,6 +1,9 @@
 <template>
     <div class="product-pool">
-        <ProductCard v-for="instance in this.store.productList" :key="instance.id" :ProductInfo="instance" ></ProductCard>
+        <ProductCard v-for="instance in this.store.productList" 
+        :key="instance.id" 
+        :ProductInfo="instance" 
+        ></ProductCard>
     </div>
 
 </template>

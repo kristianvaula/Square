@@ -1,5 +1,5 @@
 <template>
-    <div class="category-card">
+    <div class="category-card" @click="handleSelect" :class="{'category-selected': isSelected}">
       <div class="image-wrapper">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDHBuwV8He2Ctns0kRe5afnUl8p8KXpytmDvk9V2HX8xjkdyyJhV7wQfbRN9zL8ZU3gxA&usqp=CAU"
@@ -33,8 +33,23 @@
     data() {
       return {
         store,
+        isSelected: false
+
       };
     },
+
+    methods: {
+      handleSelect() {
+        if(!this.isSelected) {
+          this.isSelected = true
+          this.$emit("selectedCardEvent", this.CategoryInfo)
+        } else {
+          this.isSelected = false
+          this.$emit("deselectedCardEvent")
+        }
+
+      }
+    }
   };
   </script>
   
