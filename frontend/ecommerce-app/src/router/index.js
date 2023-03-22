@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
+import ProfilePage from '../views/ProfilePage.vue'
+import EditProfilePage from '@/views/EditProfilePage.vue'
 
 const routes = [
   {
@@ -13,24 +15,34 @@ const routes = [
     component: () => import('../views/LoginPage.vue')
   },
   {
-    path: '/register-profile',
+    path: '/create-profile',
     name: 'registerProfile',
     component: () => import('../views/RegisterProfilePage.vue')
   },
   {
-    path: '/messages',
-    name: 'messages',
+    path: '/create-listing',
+    name: 'createListing',
+    component: () => import('../views/CreateListingPage.vue')
+  },
+  {
+    path: '/my-messages',
+    name: 'myMessages',
     component: HomeView
   },
 
   {
-    path: '/profile-page',
-    name: 'profilePage',
-    component: HomeView
+    path: '/my-profile',
+    name: 'myProfile',
+    component: ProfilePage
   },
   {
-    path: '/favorites',
-    name: 'favorites',
+    path: '/edit-profile',
+    name: 'editProfile',
+    component: EditProfilePage
+  },
+  {
+    path: '/my-favorites',
+    name: 'myFavorites',
     component: HomeView
   },
   {

@@ -1,16 +1,11 @@
 <template>
     <div class="category-card">
-      <div class="image-wrapper">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDHBuwV8He2Ctns0kRe5afnUl8p8KXpytmDvk9V2HX8xjkdyyJhV7wQfbRN9zL8ZU3gxA&usqp=CAU"
-          alt="Category Logo"/>
-      </div>
       <div class="category-info">
         <div class="category-title">
-          <h3>{{ this.title }}</h3>
+          <h3>{{ this.CategoryInfo.title }}</h3>
         </div>
         <div class="category-size">
-            <span>{{ "(" + this.categorySize + ")" }}</span>
+            <span>{{ "(" + this.CategoryInfo.categorySize + ")" }}</span>
         </div>
       </div>
     </div>
@@ -22,11 +17,16 @@
   
   export default {
     name: "CategoryCard",
+
+    props: {
+        CategoryInfo: {
+            type: Object,
+            required: true
+        }
+    },
   
     data() {
       return {
-        title: "Clothing",
-        categorySize: 78,
         store,
       };
     },

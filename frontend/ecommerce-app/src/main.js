@@ -8,7 +8,7 @@ import camelCase from 'lodash/camelCase'
 import { createPinia } from "pinia";
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 
-import './assets/style/Style.css'
+import './assets/style/style.css'
 
 const requireComponent = require.context(
     './components/templates',

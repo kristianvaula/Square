@@ -61,14 +61,30 @@ legend {
   box-shadow: 0 4px #999;
 }
 
-.button:hover {
+.button-small {
+  border-radius: 6px;
+  height: 25px;
+  width: 100px;
+  background-color: #702632;
+  font-size: 15px;
+  color: white;
+  box-shadow: 0 2px #999;
+}
+
+.button:hover, .button-small:hover {
   background-color: #ba1632;
+  cursor: pointer;
 } 
 
 .button:active {
   background-color: #ba1632;
   box-shadow: 0 2px #666;
   transform:translateY( 4px );
+}
+.button-small:active {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
 }
 
 /* ICONS */

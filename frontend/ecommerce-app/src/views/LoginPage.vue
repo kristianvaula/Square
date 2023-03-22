@@ -10,7 +10,7 @@
         <h1>Login</h1>
 
         <fieldset>
-          <legend>Type in your email</legend>
+          <legend>Enter your email</legend>
           <BaseInput
               v-model="eMail"
               label="E-mail:"
@@ -20,7 +20,7 @@
         </fieldset>
 
         <fieldset>
-          <legend>Type in your password:</legend>
+          <legend>Enter your password:</legend>
           <BaseInput
               v-model="password"
               label="Password:"
@@ -29,7 +29,8 @@
           />
         </fieldset>
 
-        <input class="button" type="submit" value="Login in" @click="signIn"> 
+        <input class="button" type="submit" value="Login in" @click="signIn">
+        <h5>or</h5>
         <input id="registerButton" type="button" value="Create account" @click="registerProfile">
 
         <p class="errorMessage">{{ errorMessage }}</p>
@@ -71,7 +72,7 @@ export default {
       }
     },
     registerProfile () {
-      router.push("/register-profile")
+      router.push("/create-profile")
     }
   }
 }

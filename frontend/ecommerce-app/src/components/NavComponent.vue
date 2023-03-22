@@ -23,7 +23,7 @@
       </li>
 
       <li>
-        <router-link to="/messages">
+        <router-link to="/my-messages">
           <img class="icon-medium" src="@/assets/icons/message.png" alt="">
           <h1 class="title-medium">Messages</h1>
         </router-link>  
@@ -42,9 +42,10 @@
           <h1>{{ user.firstName }}</h1>
         </router-link>
         <ul class="dropdown">
-          <li><router-link to="/profile-page">My Profile</router-link></li>
-          <li><router-link to="/favorites">My Favorites</router-link></li>
+          <li><router-link to="/my-profile">My Profile</router-link></li>
+          <li><router-link to="/my-favorites">My Favorites</router-link></li>
           <li><router-link to="/my-listings">My Listings</router-link></li>
+          <li><router-link to="/my-purchases">My Purchases</router-link></li>
           <li><a href="/user/sign-out">Sign Out</a></li>
         </ul>
       </li>

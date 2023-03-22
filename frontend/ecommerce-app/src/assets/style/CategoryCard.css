@@ -1,15 +1,17 @@
 .category-card {
     display: grid;
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 125px;
+    height: 125px;
     border-radius: 8px;
     overflow: hidden;
     padding: 2%;
-    grid-template-rows: 1fr, 4fr, 2fr;
+    grid-template-rows: 4fr, 2fr;
     border-radius: 14px;
     box-shadow:  7px 7px 14px #ebebeb,
              -7px -7px 14px #ffffff;
+    justify-content: center;
+    align-items: center;
   }
   
   .category-card:hover {
@@ -22,31 +24,17 @@
              -9px -9px 18px var(on-hover);
   }
   
-  
-  .image-wrapper {
-    overflow: hidden;
-    border-radius: 8px 8px 8px 8px;
-  }
-  
-  .image-wrapper img {
-    max-width: 100%;
-    max-height: 100%;
-    min-width: 100px;
-    min-height: 100px;
-    border-radius: 8px 8px 8px 8px;
-  }
-  
   .category-info {
     display: grid;
-    grid-template-rows: 0.5fr, 2fr, 1fr;
+    grid-template-rows: 2fr, 1fr;
   }
 
   .category-title {
     size: 16px;
-    margin-top: 16px;
   }
 
   .category-size {
     display: grid;
     grid-template-rows: 0.5fr, 2fr, 1fr;
+    margin-bottom: 5px;
   }
