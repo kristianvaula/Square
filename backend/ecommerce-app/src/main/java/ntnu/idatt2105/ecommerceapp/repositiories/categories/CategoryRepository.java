@@ -20,7 +20,7 @@ public class CategoryRepository implements CategoryRepositoryInterface{
 
     @Override
     public int removeCategory(int id) {
-        return jdbcTemplate.update("DELETE FROM category WHERE id=?", id);
+        return jdbcTemplate.update("DELETE FROM category WHERE categoryId=?", id);
     }
 
     @Override

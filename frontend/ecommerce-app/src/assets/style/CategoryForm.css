@@ -8,3 +8,7 @@
   box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
   color: #011627;
 }
+.base-input select {
+  width:40%;
+  min-width:150px;
+}
