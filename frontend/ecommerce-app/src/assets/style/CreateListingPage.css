@@ -23,6 +23,7 @@
   width:100%; 
   text-align: left;
   margin-top: 20px;
+  font-size: 1.25em;
 }
 
 .base-input input[type=text], .base-input select {
@@ -37,7 +38,7 @@
 
 .base-input select {
   width:40%;
-  min-width:50px;
+  min-width:70px;
 }
 
 .base-input textarea {
