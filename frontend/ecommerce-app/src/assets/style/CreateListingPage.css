@@ -10,9 +10,20 @@
   color: #011627;
 }
 
+.category-used-container {
+  display:flex;
+  flex-direction: row;
+  margin-bottom:50px;
+}
+
+.category-container {
+  margin-right:50px;
+}
+
 .base-input {
   display:flex;
   flex-direction: column;
+  margin-bottom:20px; 
 }
 
 .center {
@@ -22,7 +33,6 @@
 .base-input label {
   width:100%; 
   text-align: left;
-  margin-top: 20px;
   font-size: 1.25em;
 }
 
@@ -37,8 +47,10 @@
 }
 
 .base-input select {
-  width:40%;
-  min-width:70px;
+  max-width:300px;
+  min-width:300px;
+  margin-bottom:0px; 
+  font-size: 1em;
 }
 
 .base-input textarea {

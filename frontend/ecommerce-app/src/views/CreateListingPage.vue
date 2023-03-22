@@ -3,7 +3,7 @@
     <h1>{{ headerText }}</h1>
     <legend>Product Photos</legend>
     <div>
-      <ImgCarousel :images="this.images" />
+      <ImgCarousel v-if="displayImage" :images="this.images" />
     </div>
 
     <div class="base-input">
@@ -43,23 +43,28 @@
           :error="errors.desc"
         />
       </div>
-      <div>
+      <div class="category-used-container">
+        <div class="category-container">
+          <div class="base-input">
+            <label for="select">Category</label>
+            <select name="select" id="select" v-model="category">
+              <option v-for="instance in categories" :value="instance.categoryId" :key="instance.id">{{instance.description}}</option>
+            </select>
+          </div>
+          <div>
+            <label>Subcategories</label>
+            <SubcategoryList @selected-id-list="handleSelectedId" :categoryId="category"/>
+          </div>
+        </div> 
+        
         <div class="base-input">
-        <BaseSelect
-          v-model="category"
-          :options="categories"
-          label="County"
-          :error="errors.category"
-        />
+          <BaseCheckbox
+            v-model="state"
+            label="Used"
+          />
         </div>
       </div>
       
-      <div class="base-input">
-        <BaseCheckbox
-          v-model="state"
-          label="Used"
-        />
-      </div>
       <button class="button" type="submit">Create Listing</button>
     </form>
   </div>
@@ -68,29 +73,23 @@
 <script>
 import { useField, useForm } from 'vee-validate'
 import BaseText from '@/components/templates/BaseText.vue';
-import BaseSelect from '@/components/templates/BaseSelect.vue'
 import BaseCheckbox from '@/components/templates/BaseCheckbox.vue'
+import SubcategoryList from '@/components/SubCategoryList.vue';
 import ImgCarousel from '@/components/ImgCarouselComponent.vue'
+import CategoryUtils from '@/utils/CategoryUtils.js';
 import '@/assets/style/CreateListingPage.css'
 
 export default {
   components: {
-    BaseText, BaseSelect, BaseCheckbox, ImgCarousel
+    BaseText, BaseCheckbox, ImgCarousel, SubcategoryList
   },
   data() {
     return {
       headerText: 'Create a new listing',
-      categories: [
-        "Sports & Outdoors",
-        "Clothing", 
-        "Furniture", 
-        "Electronics", 
-        "Pets", 
-        "Home & Garden",
-        "Tools", 
-        "Others"
-      ],
-      image: null, 
+      categories: null,
+      subcategories: null,
+      image: null,
+      displayImage: false, 
       images: []
     }
   },
@@ -101,6 +100,7 @@ export default {
       const reader = new FileReader(); 
       reader.onload = () => {
         this.images.push(reader.result); 
+        this.displayImage = true; 
       }; 
       reader.readAsDataURL(this.file)
 
@@ -108,7 +108,24 @@ export default {
     uploadFile() {
       const formData = new formData(); 
       formData.append('image', this.file); 
+    },
+    handleSelectedId(subcategories) {
+      console.log(subcategories.slice())
+      this.subcategories = subcategories.slice(); 
     }
+  },  
+  mounted () {
+    let vm = this
+    CategoryUtils.getCategories()
+      .then((response) => {
+        if(response.data) {
+          console.log(response.data)
+          vm.categories = response.data
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   },  
   setup () {
     let sendForm = (listing) => {
