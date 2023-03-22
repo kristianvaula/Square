@@ -3,23 +3,23 @@ package ntnu.idatt2105.ecommerceapp.model.categories;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Blob;
 
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int categoryId;
     @Column
     private String description;
 
     @Autowired
     public Category() {}
 
-    public int getId() {
-        return id;
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getDescription() {

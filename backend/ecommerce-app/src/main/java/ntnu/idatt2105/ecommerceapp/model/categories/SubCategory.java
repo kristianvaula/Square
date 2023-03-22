@@ -1,14 +1,11 @@
 package ntnu.idatt2105.ecommerceapp.model.categories;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 public class SubCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int subCategoryId;
     @Column
     private String description;
     @Column
@@ -17,8 +14,12 @@ public class SubCategory {
     public SubCategory() {
     }
 
-    public int getId() {
-        return id;
+    public int getSubCategoryId() {
+        return subCategoryId;
+    }
+
+    public void setSubCategoryId(int subCategoryId) {
+        this.subCategoryId = subCategoryId;
     }
 
     public String getDescription() {
