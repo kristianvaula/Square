@@ -12,7 +12,7 @@ DROP TABLE County;
 
 CREATE TABLE County(
     countyId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    stateName VARCHAR(50),
+    countyName VARCHAR(50),
     PRIMARY KEY (countyId)
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE Profile(
      profileId INT UNSIGNED NOT NULL AUTO_INCREMENT,
      firstName VARCHAR(50),
      lastName VARCHAR(50),
-     ePost VARCHAR(50),
+     eMail VARCHAR(50),
      password VARCHAR(50),
      addressId INT NOT NULL,
      profileTypeId INT NOT NULL,
@@ -89,3 +89,16 @@ CREATE TABLE Product_SubCategory(
     FOREIGN KEY (productId) REFERENCES Product(productId),
     FOREIGN KEY (subCategoryId) REFERENCES SubCategory(subCategoryId)
 );
+
+INSERT INTO County VALUES(NULL, "Agder");
+INSERT INTO County VALUES(NULL, "Innlandet");
+INSERT INTO County VALUES(NULL, "Møre og Romsdal");
+INSERT INTO County VALUES(NULL, "Norland");
+INSERT INTO County VALUES(NULL, "Oslo");
+INSERT INTO County VALUES(NULL, "Rogaland");
+INSERT INTO County VALUES(NULL, "Vestfold og Telemark");
+INSERT INTO County VALUES(NULL, "Troms og Finnmark");
+INSERT INTO County VALUES(NULL, "Trøndelag");
+INSERT INTO County VALUES(NULL, "Vestland");
+INSERT INTO County VALUES(NULL, "Viken");
+

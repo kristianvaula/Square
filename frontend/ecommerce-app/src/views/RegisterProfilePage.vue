@@ -47,7 +47,7 @@
       <fieldset>
         <legend>Type in your home city</legend>
         <BaseInput
-            v-model="location.city"
+            v-model=" city"
             label="City:"
             placeholder="Oslo"
             type="text"
@@ -85,7 +85,7 @@
 import httputils from "@/utils/httputils";
 import "../assets/style/RegisterProfilePage.css"
 import "../assets/style/BaseInput.css"
-import { useField } from 'vee-validate'
+import { useField } from 'vee-validate' 
 
 export default {
   name: "RegsiterProfilePage",
@@ -99,7 +99,6 @@ export default {
     }
   },
   async mounted () {
-    // todo: load in counties from database
     let countiesPromise = await httputils.getCounties();
 
     countiesPromise.data.forEach(conty => {
@@ -117,29 +116,53 @@ export default {
       return true
     }
 
+    function passwordValidation(value) {
+      const isWhitespace = /^(?=.*\s)/;
+      if (isWhitespace.test(value)) {
+        return "Password must not contain whitespaces.";
+      }
+  
+      const isContainsUppercase = /^(?=.*[A-Z])/;
+      if (!isContainsUppercase.test(value)) {
+        return "Password must have at least one uppercase character.";
+      }
+  
+      const isContainsLowercase = /^(?=.*[a-z])/;
+      if (!isContainsLowercase.test(value)) {
+        return "Password must have at least one lowercase character.";
+      }
+  
+      const isContainsNumber = /^(?=.*[0-9])/;
+      if (!isContainsNumber.test(value)) {
+        return "Password must contain at least one digit.";
+      }
+  
+      const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_₹])/;
+      if (!isContainsSymbol.test(value)) {
+        return "Password must contain at least one special character.";
+      }
+  
+      const isValidLength = /^.{8,16}$/;
+      if (!isValidLength.test(value)) {
+        return "Password must be 8-16 characters long.";
+      }
+
+      return true;
+    }
 
     const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
       if (!value) return 'This field is required'
-
 
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if (!regex.test(String(value).toLowerCase())) return 'Please enter a valid email address'
 
       return true
     })
-
-    const { value: password, errorMessage: passwordError} = useField('password', (value) => {
-      if (!value) return 'This field is required'
-
-      const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$/;
-      if (!regex.test(String(value).toLowerCase())) return 'A valid password must contian a digit, lower and upper case alphabet, a spesial carracter and have a length of 8 to 20 charactert. White spaces is not allowed in a password'
-
-      return true;
-    })
-
+    
     const { value: firstName, errorMessage: firstNameError } = useField('firstName', (value) => textValidation(value));
     const { value: lastName, errorMessage: lastNameError } = useField('lastName', (value) => textValidation(value));
     const { value: city, errorMessage: cityError } = useField('city', (value) => textValidation(value));
+    const { value: password, errorMessage: passwordError} = useField('password', (value) => passwordValidation(value));
     
     return {
       eMail, 
@@ -156,8 +179,28 @@ export default {
 
   },
   methods: {
-    register () {
-      //todo: push to database and sign in
+    async register () {
+      let profileLocation = {
+          county: this.location.county,
+          city: this.city,
+          address: this.location.address
+      }
+
+      let profile = {
+        firstName: this.firstName,
+        lastname: this.lastName,
+        eEmail: this.eMail,
+        location: profileLocation,
+        password: this.password
+      };
+
+      let profilePromise = await httputils.createUser(profile);
+      
+      //TODO: delete console log
+      console.log(profilePromise.data)
+
+      //username = profilePromise.data.username;
+      //logInStatus = profilePromise.data.logInStatus;
     }
   }
 }

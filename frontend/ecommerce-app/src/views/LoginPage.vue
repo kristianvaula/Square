@@ -29,16 +29,17 @@
           />
         </fieldset>
 
-        <input class="button" type="submit" value="Login in">
+        <input class="button" type="submit" value="Login in" @click="signIn"> 
         <input id="registerButton" type="button" value="Create account" @click="registerProfile">
 
-        <p class="errorMessage"></p>
+        <p class="errorMessage">{{ errorMessage }}</p>
       </form>
     </div>
 </div>
 </template>
 
 <script>
+import { useTokenStore } from "@/store/token.js";
 import router from "@/router";
 import '../assets/style/BaseInput.css';
 import '../assets/style/FormPage.css';
@@ -48,10 +49,27 @@ export default {
   data () {
     return {
       eMail: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     }
   },
+  setup() {
+    const tokenStore = useTokenStore();
+    return { tokenStore };
+  },
   methods: {
+    async signIn () {
+      if (this.tokenStore.loggedInUser === null) {
+        await this.tokenStore.getTokenAndSaveInStore(this.eMail, this.password);
+        if(this.tokenStore.jwtToken){
+          router.push("/");
+        } else {
+          this.errorMessage = "Login failed!"
+        }
+      } else {
+        this.errorMessage = "Another user is already logged in. Please try again later!"
+      }
+    },
     registerProfile () {
       router.push("/register-profile")
     }
