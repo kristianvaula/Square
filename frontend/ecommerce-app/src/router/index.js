@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomePage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import EditProfilePage from '@/views/EditProfilePage.vue'
+import MyMessages from '@/views/MyMessages.vue';
 
 const routes = [
   {
@@ -27,7 +28,7 @@ const routes = [
   {
     path: '/my-messages',
     name: 'myMessages',
-    component: HomeView
+    component: MyMessages
   },
 
   {
