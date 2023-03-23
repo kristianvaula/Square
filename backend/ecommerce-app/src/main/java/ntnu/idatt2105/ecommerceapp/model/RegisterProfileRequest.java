@@ -75,6 +75,7 @@ public class RegisterProfileRequest {
         return password;
     }
 
+    //todo: when editing password should the old one be given before the change is made
     public void setPassword(String password) {
         this.password = password;
     }

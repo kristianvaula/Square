@@ -1,7 +1,7 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
 import ntnu.idatt2105.ecommerceapp.model.*;
-import ntnu.idatt2105.ecommerceapp.services.RegisterProfileService;
+import ntnu.idatt2105.ecommerceapp.services.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 public class RegisterProfileController {
 
     @Autowired
-    RegisterProfileService registerProfileService;
+    ProfileService profileService;
 
     Logger logger = LoggerFactory.getLogger(RegisterProfileController.class);
 
@@ -27,7 +27,7 @@ public class RegisterProfileController {
     @GetMapping("/unauthorized/counties")
     public ResponseEntity<List<County>> getCounties() {
         logger.info("Received a request to get registered counties");
-        List<County> counties = registerProfileService.getCounties();
+        List<County> counties = profileService.getCounties();
         if (counties == null) {
             logger.info("Could not find any counties");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -40,10 +40,10 @@ public class RegisterProfileController {
     @PostMapping("/unauthorized/new-profile")
     public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest registerProfileRequest) {
         logger.info("Received request to create a profile for: " + registerProfileRequest.getFirstName());
-        Profile profile = registerProfileService.addProfile(registerProfileRequest);
+        Profile profile = profileService.addProfile(registerProfileRequest);
         if (profile == null) {
-            logger.info("Could not find any user for the given email");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            logger.info("E-mail is already used for another user");
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         logger.info("Returned user:" + profile);
         return new ResponseEntity<>(profile, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class RegisterProfileController {
     @PostMapping("/profile")
     public ResponseEntity<Profile> getProfile(@RequestBody ProfileRequest profileRequest) {
         logger.info("Received a request to get profile for {}", profileRequest.getEMail());
-        Profile profile = registerProfileService.getProfile(profileRequest.getEMail(), profileRequest.getPassword());
+        Profile profile = profileService.getProfile(profileRequest);
         if (profile == null) {
             logger.info("Could not find any user for the given email");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

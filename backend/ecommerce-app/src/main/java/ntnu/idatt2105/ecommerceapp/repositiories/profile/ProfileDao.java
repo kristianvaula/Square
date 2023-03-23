@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.repositiories;
+package ntnu.idatt2105.ecommerceapp.repositiories.profile;
 
 import ntnu.idatt2105.ecommerceapp.model.*;
 
@@ -11,7 +11,6 @@ public interface ProfileDao {
     int addAddress(String addressName, int cityId);
     int addProfileType(String profileTypeName);
     Profile addProfile(RegisterProfileRequest profile);
-    Profile getProfile(String eMail, String password);
+    Profile getProfile(String eMail);
     List<Profile> getProfiles();
-    boolean checkProfileCredentials(String eMail, String password);
 }

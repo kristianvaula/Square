@@ -13,10 +13,12 @@ export const useTokenStore = defineStore("token", {
         async getTokenAndSaveInStore(eMail, password) {
             try{
                 let response = await httputils.getJwtToken(eMail, password);
-                let data = response.data;
+                let data = response.data;                        
+
                 if(data !== null && data !== '' && data !== undefined){
                     this.jwtToken = data;
                     response = await httputils.getProfile(eMail, password);                        
+                
                     this.loggedInUser = response.data.email                
                 }
             } catch (err){

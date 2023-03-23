@@ -67,6 +67,8 @@ public class Profile {
         return password;
     }
 
+    //todo: when editing password should the old one be given before the change is made
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -75,7 +77,7 @@ public class Profile {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Profile profile)) return false;
-        return Objects.equals(eMail, profile.eMail) && Objects.equals(getPassword(), profile.getPassword());
+        return Objects.equals(eMail, profile.eMail);
     }
 
     @Override

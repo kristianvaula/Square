@@ -77,6 +77,7 @@
         />
       </fieldset>
       <input class="button" type="button" value="Register" @click="register">
+      <p class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</p>
     </form>
   </div>
 </template>
@@ -97,7 +98,8 @@ export default {
         county: '',
         address: ''
       },
-      counties: []
+      counties: [],
+      errorMessage: ''
     }
   },
   async mounted () {
@@ -155,7 +157,7 @@ export default {
         return "Password must be 8-16 characters long.";
       }
 
-      return true;
+      return true
     }
 
     const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
@@ -185,7 +187,6 @@ export default {
       passwordError,
       tokenStore
     }
-
   },
   methods: {
     async register () {
@@ -199,12 +200,27 @@ export default {
         password: this.password
       };
 
-      let profilePromise = await httputils.createUser(profile);  
-      
-      await this.tokenStore.getTokenAndSaveInStore(profilePromise.data.email, profilePromise.data.password);
-      if(this.tokenStore.jwtToken){
-          router.push("/");
+      if (this.noErrorMessages) {    
+        try {
+          await httputils.createUser(profile);  
+        } catch (error) {    
+          if (error.response.status === 409) {
+            this.errorMessage = "It already exist a user with e-mail: " + this.eMail;
+          }
+        }      
+
+        await this.tokenStore.getTokenAndSaveInStore(profile.eMail, profile.password);
+        if(this.tokenStore.jwtToken){
+            router.push("/");
+        }
+      } else {
+        this.errorMessage = "Make sure that all filed is filed in properly"
       }
+    }
+  },
+  computed: {
+    noErrorMessages () {
+      return !this.eMailError && !this.firstNameError && !this.lastNameError && !this.cityError && !this.passwordError;
     }
   }
 }
