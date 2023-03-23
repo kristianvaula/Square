@@ -6,7 +6,7 @@
         :placeholder="placeholder"
         class="field"
         :value="modelValue"
-        @input="$emit('inputUpdate', $event.target.value)"
+        @input="$emit('update:modelValue', $event.target.value)"
         :id="uuid"
         aria-describedby="error ? `${uuid}-error` : null"
         :aria-invalid="error ? true : null"
@@ -53,7 +53,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

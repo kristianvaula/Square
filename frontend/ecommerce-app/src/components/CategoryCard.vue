@@ -1,5 +1,5 @@
 <template>
-    <div class="category-card">
+    <div class="category-card" @click="handleSelect" :class="{'category-selected': isSelected}">
       <div class="category-info">
         <div class="category-title">
           <h3>{{ this.CategoryInfo.title }}</h3>
@@ -28,8 +28,22 @@
     data() {
       return {
         store,
+        isSelected: false
       };
     },
+
+    methods: {
+      handleSelect() {
+        if(!this.isSelected) {
+          this.isSelected = true
+          this.$emit("selectedCardEvent", this.CategoryInfo)
+        } else {
+          this.isSelected = false
+          this.$emit("deselectedCardEvent")
+        }
+
+      }
+    }
   };
   </script>
   

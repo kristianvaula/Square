@@ -28,4 +28,9 @@ public class SubCategoryRepository implements SubCategoryRepositoryInterface{
         return jdbcTemplate.query("SELECT DISTINCT * FROM subCategory WHERE subCategory.categoryId = ?",
                 BeanPropertyRowMapper.newInstance(SubCategory.class), categoryId);
     }
+
+    @Override
+    public List<SubCategory> getAllSubCategories() {
+        return jdbcTemplate.query("SELECT DISTINCT * FROM subCategory", BeanPropertyRowMapper.newInstance(SubCategory.class));
+    }
 }

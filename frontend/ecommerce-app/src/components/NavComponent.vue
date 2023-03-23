@@ -29,17 +29,17 @@
         </router-link>  
       </li>
 
-      <li v-if="!store.user.logInStatus">
+      <li v-if="!user">
         <router-link to="/login">
           <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
           <h1 class="button-medium">Log In</h1>
         </router-link>
       </li>
 
-      <li class="dropdown-container" v-if="store.user.logInStatus">
-        <router-link to="/my-profile">
+      <li class="dropdown-container" v-if="user">
+        <router-link to="/profile-page">
           <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
-          <h1>{{ username }}</h1>
+          <h1>{{ user.firstName }}</h1>
         </router-link>
         <ul class="dropdown">
           <li><router-link to="/my-profile">My Profile</router-link></li>
@@ -54,21 +54,41 @@
 </template>
 
 <script>
-import { store } from '@/store/index.js'
+import { useTokenStore } from '@/store/token.js'
 import '@/assets/style/NavComponent.css'
+//import httputils from '@/utils/httputils.js'
 
 export default {
   name: 'NavComponent',
+  setup() {
+    const tokenStore = useTokenStore();
+    return { tokenStore };
+  },
+  mounted () {
+    //todo: remove async
+
+    if(this.tokenStore.jwtToken) {
+      this.user = this.tokenStore.loggedInUser
+      /*
+      let response = null;
+      try {
+        console.log("loggedInUser: " + this.tokenStore.loggedInUser + " token: " + this.tokenStore.jwtToken)
+        response = await httputils.getProfile(this.tokenStore.loggedInUser, this.tokenStore.jwtToken);
+        this.loggedInUser = response.data;
+      } catch (err) {
+        if (err.response.status === 403) { //error code 403 is forbidden access. Therefor setting token an loggedIn User to null when this error occurs
+          this.tokenStore.jwtToken = null;
+          this.tokenStore.loggedInUser = null;
+        }
+      }
+      */
+    }
+  },
   data() {
-    return { 
-      store, 
-      username : store.user.username
+    return {  
+      user: ''
     }
   }
 }
 
 </script>
-
-<style lang="scss" scoped>
-
-</style>

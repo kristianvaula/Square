@@ -1,29 +1,65 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
-import ntnu.idatt2105.ecommerceapp.model.County;
-import ntnu.idatt2105.ecommerceapp.services.RegisterProfileService;
+import ntnu.idatt2105.ecommerceapp.model.*;
+import ntnu.idatt2105.ecommerceapp.services.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
 public class RegisterProfileController {
 
     @Autowired
-    RegisterProfileService registerProfileService;
+    ProfileService profileService;
 
     Logger logger = LoggerFactory.getLogger(RegisterProfileController.class);
 
-    @GetMapping("/counties")
-    public List<County> getCounties() {
+    /**
+     * Returns an empty list if counties is null...
+     * @return
+     */
+    @CrossOrigin("http://localhost:8080")
+    @GetMapping("/unauthorized/counties")
+    public ResponseEntity<List<County>> getCounties() {
         logger.info("Received a request to get registered counties");
-        return registerProfileService.getCounties();
+        List<County> counties = profileService.getCounties();
+        if (counties == null) {
+            logger.info("Could not find any counties");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        logger.info("Returned list with counties");
+        return new ResponseEntity<>(counties, HttpStatus.OK);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping("/unauthorized/new-profile")
+    public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest registerProfileRequest) {
+        logger.info("Received request to create a profile for: " + registerProfileRequest.getFirstName());
+        Profile profile = profileService.addProfile(registerProfileRequest);
+        if (profile == null) {
+            logger.info("E-mail is already used for another user");
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        logger.info("Returned user:" + profile);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping("/profile")
+    public ResponseEntity<Profile> getProfile(@RequestBody ProfileRequest profileRequest) {
+        logger.info("Received a request to get profile for {}", profileRequest.getEMail());
+        Profile profile = profileService.getProfile(profileRequest);
+        if (profile == null) {
+            logger.info("Could not find any user for the given email");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.info("Returned user:" + profile);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
 
