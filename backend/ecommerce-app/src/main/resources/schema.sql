@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS subCategory;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS prodImage;
+DROP TABLE IF EXISTS message;
+DROP TABLE IF EXISTS chat;
 DROP TABLE IF EXISTS profile;
 DROP TABLE IF EXISTS profileType;
 DROP TABLE IF EXISTS address;
@@ -51,6 +53,27 @@ CREATE TABLE profile(
      FOREIGN KEY (profileTypeId) REFERENCES profileType(profileTypeId)
 );
 
+CREATE TABLE chat(
+     chatId INT NOT NULL AUTO_INCREMENT,
+     isUnread TINYINT,
+     profile1 INT,
+     profile2 INT,
+     PRIMARY KEY (chatId),
+     FOREIGN KEY (profile1) REFERENCES chat(chatId),
+     FOREIGN KEY (profile2) REFERENCES chat(chatId)
+);
+
+CREATE TABLE message(
+    messageId INT NOT NULL AUTO_INCREMENT,
+    text VARCHAR(200),
+    timeStamp TIMESTAMP,
+    chatId INT,
+    senderId INT,
+    PRIMARY KEY (messageId),
+    FOREIGN KEY (chatId) REFERENCES chat(chatId),
+    FOREIGN KEY (senderId) REFERENCES profile(profileId)
+);
+
 CREATE TABLE category(
     categoryId INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(50),
@@ -92,16 +115,4 @@ CREATE TABLE prodImage(
     PRIMARY KEY (prodImageId),
     FOREIGN KEY (productId) REFERENCES product(productId)
 );
-
-INSERT INTO county VALUES(NULL, "Agder");
-INSERT INTO county VALUES(NULL, "Innlandet");
-INSERT INTO county VALUES(NULL, "Møre og Romsdal");
-INSERT INTO county VALUES(NULL, "Norland");
-INSERT INTO county VALUES(NULL, "Oslo");
-INSERT INTO county VALUES(NULL, "Rogaland");
-INSERT INTO county VALUES(NULL, "Vestfold og Telemark");
-INSERT INTO county VALUES(NULL, "Troms og Finnmark");
-INSERT INTO county VALUES(NULL, "Trøndelag");
-INSERT INTO county VALUES(NULL, "Vestland");
-INSERT INTO county VALUES(NULL, "Viken");
 
