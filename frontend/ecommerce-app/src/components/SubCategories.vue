@@ -1,61 +1,48 @@
 <template>
     <div class="under-categories" >
         <ul id="subcategory-list">
-            <li v-for="instance in this.store.subCategories" 
+            <li v-for="instance in SubCategories" 
             :key="instance.id" 
-            :class="{ 'pressed': instance.id === selectedCategoryId }" 
-            @click="selectSubCategory(instance.id) "
-            > {{ instance.name }}</li>
+            :class="{ 'pressed': instance.subCategoryId === selectedCategoryId }" 
+            @click="selectSubCategory(instance.subCategoryId)"
+            > {{ instance.description }}</li>
         </ul>
-        <button class="delete-button" 
-        type="button" 
-        @click="deleteSubCategory">Delete Subcategory</button>
-      </div>
+    </div>
 </template>
 
 <script>
-import {store} from '@/store';
 import CategoryUtils from '@/utils/CategoryUtils';
+import {store} from '@/store';
 export default {
 
     data() {
         return {
             store,
             selectedCategoryId: null,
-            CategoryUtils,
+            allSubCategories: null,
+            subCategoriesShowing: null,
+            CategoryUtils
         }
     },
 
-    mounted () {
-            let vm = this
-            CategoryUtils.getAllSubCategories()
-                .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    vm.categories = response.data
-                }
-            })
-                .catch((err) => {
-                console.log(err)
-                })
-        },  
+    props: {
+      SubCategories: {
+        type: Object,
+        required: true 
+      }
+    },
+
+    
     methods: {
-        selectSubCategory(id) {  
-            if(this.selectedCategoryId == id) {
-              this.selectedCategoryId = null;
-            } else {
-              this.selectedCategoryId = id;
-            }
-            
-            
-        },
-
-        deleteSubCategory() {
-          if(this.selectedCategoryId != null)
-          this.$emit("deleteSubCategory", this.selectedCategoryId)
-        },
-
-    }, 
+      selectSubCategory(id) { 
+        this.$emit("subCategorySelected", id) 
+        if(this.selectedCategoryId == id) {
+          this.selectedCategoryId = null
+        } else {
+          this.selectedCategoryId = id
+        }  
+        },   
+      }, 
     
 }
 

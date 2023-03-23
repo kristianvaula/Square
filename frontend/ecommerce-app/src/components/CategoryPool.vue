@@ -1,7 +1,7 @@
 <template>
     <div class="category-pool">
         <div class="pool">
-            <CategoryCard v-for="instance in this.store.CategoryList" 
+            <CategoryCard v-for="instance in categories" 
             :key="instance.id" 
             :CategoryInfo="instance"
             @selected-card-event="handleSelection"
@@ -51,7 +51,9 @@ import '@/assets/style/Pool.css'
                 this.$emit("selectedCategoryEvent", this.chosenCategoryID)
             },
 
-            removeSelection() {
+            removeSelection(value) {
+                this.chosenCategoryID = null
+                this.$emit("deselectCategoryEvent", value.categoryId)
                 console.log("code to remove the category from list")
 
             }

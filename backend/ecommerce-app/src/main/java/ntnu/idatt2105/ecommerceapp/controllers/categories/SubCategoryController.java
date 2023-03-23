@@ -38,7 +38,7 @@ public class SubCategoryController {
 
     @GetMapping("/")
     public ResponseEntity<List<SubCategory>> getSubCategories(){
-        logger.info("Received new subcategory request");
+        logger.info("Received new subcategory get request");
         return service.getAllSubCategories();
     };
 

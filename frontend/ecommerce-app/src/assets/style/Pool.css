@@ -8,11 +8,31 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    width: 100%;
+    justify-content: center;
     margin: 15px;
     padding: 40px;
     border-radius: 8px;
     overflow: hidden;
     grid-template-rows: 4fr, 2fr;
+    border-radius: 14px;
+    box-shadow:  7px 7px 14px #ebebeb,
+             -7px -7px 14px #ffffff;
+}
+
+.pool-vertical {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px;
+    padding: 40px;
+    border-radius: 8px;
+    grid-template-rows: 4fr, 2fr;
+    height: 750px;
+    overflow-y: scroll;
+    width: 40%;
     border-radius: 14px;
     box-shadow:  7px 7px 14px #ebebeb,
              -7px -7px 14px #ffffff;
