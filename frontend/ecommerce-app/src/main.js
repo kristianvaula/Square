@@ -5,6 +5,8 @@ import store from './store'
 
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import { createPinia } from "pinia";
+import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 
 import './assets/style/style.css'
 
@@ -26,4 +28,7 @@ requireComponent.keys().forEach(fileName => {
     app.component(componentName, componentConfig.default || componentConfig)
 })
 
-app.use(store).use(router).mount('#app')
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedState)
+
+app.use(store).use(router).use(pinia).mount('#app')

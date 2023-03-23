@@ -9,6 +9,7 @@
             label="Firstname:"
             placeholder="Ola"
             type="text"
+            :error="firstNameError"
         />
       </fieldset>
 
@@ -18,7 +19,8 @@
             v-model="lastName"
             label="Lastname:"
             placeholder="Norman"
-            type="text"      
+            type="text"   
+            :error="lastNameError"   
         />
       </fieldset>
 
@@ -29,6 +31,7 @@
             label="E-mail:"
             placeholder="Ola.Nordman@mail.com"
             type="text"
+            :error="eMailError"
         />
       </fieldset>
 
@@ -36,7 +39,7 @@
         <legend>Which county are you from?</legend>
         <BaseSelect
             v-model="location.county"
-            :options="counties"
+            :options="counties"      
             label="County:"
         />
       </fieldset>
@@ -44,10 +47,11 @@
       <fieldset>
         <legend>Type in your home city</legend>
         <BaseInput
-            v-model="location.city"
+            v-model=" city"
             label="City:"
             placeholder="Oslo"
             type="text"
+            :error="cityError"
         />
       </fieldset>
 
@@ -68,6 +72,8 @@
             label="Password:"
             placeholder="**********"
             type="password"
+            :error="passwordError"
+
         />
       </fieldset>
       <input class="button" type="button" value="Register" @click="register">
@@ -79,47 +85,92 @@
 import httputils from "@/utils/httputils";
 import "../assets/style/RegisterProfilePage.css"
 import "../assets/style/BaseInput.css"
-//import { useField } from 'vee-validate'
+import { useField } from 'vee-validate' 
+import { useTokenStore } from "@/store/token.js";
+import router from "@/router/index"
 
 export default {
   name: "RegsiterProfilePage",
   data () {
     return {
-      firstName: '',
-      lastName: '',
-      eMail: '',
       location: {
         county: '',
-        city: '',
         address: ''
       },
-      password: '',
       counties: []
     }
   },
   async mounted () {
-    // todo: load in counties from database
     let countiesPromise = await httputils.getCounties();
 
     countiesPromise.data.forEach(conty => {
       this.counties.push(conty.countyName)
     });
   },
-  /*
   setup() {
-    const { value: eMail, errorMessage: eMailError } = useField('eMail', function (value) {
-      if (!value) return 'This field is required'
 
+    const tokenStore = useTokenStore();
+
+    function textValidation(value) {      
+      if (!value) return 'This field is required'
+      const regex = /^[a-z ,.'-]+$/i
+      if (!regex.test((String(value)))) {
+        return 'Please enter a valid name'
+      }
+      return true
+    }
+
+    function passwordValidation(value) {
+      if(!value) {
+        return "This field is required.";
+      }
+      
+      const isWhitespace = /^(?=.*\s)/;
+      if (isWhitespace.test(value)) {
+        return "Password must not contain whitespaces.";
+      }
+  
+      const isContainsUppercase = /^(?=.*[A-Z])/;
+      if (!isContainsUppercase.test(value)) {
+        return "Password must have at least one uppercase character.";
+      }
+  
+      const isContainsLowercase = /^(?=.*[a-z])/;
+      if (!isContainsLowercase.test(value)) {
+        return "Password must have at least one lowercase character.";
+      }
+  
+      const isContainsNumber = /^(?=.*[0-9])/;
+      if (!isContainsNumber.test(value)) {
+        return "Password must contain at least one digit.";
+      }
+  
+      const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_₹])/;
+      if (!isContainsSymbol.test(value)) {
+        return "Password must contain at least one special character.";
+      }
+  
+      const isValidLength = /^.{8,16}$/;
+      if (!isValidLength.test(value)) {
+        return "Password must be 8-16 characters long.";
+      }
+
+      return true;
+    }
+
+    const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
+      if (!value) return 'This field is required'
 
       const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if (!regex.test(String(value).toLowerCase())) return 'Please enter a valid email address'
 
       return true
     })
-
-    const { value: firstName, errorMessage: firstNameError } = useField('firstName', function (value) {this.validateString(value)});
-    const { value: lastName, errorMessage: lastNameError } = useField('lastName', function (value) {this.validateString(value)});
-    const { value: city, errorMessage: cityError } = useField('city', function (value) {this.validateString(value)});
+    
+    const { value: firstName, errorMessage: firstNameError } = useField('firstName', (value) => textValidation(value));
+    const { value: lastName, errorMessage: lastNameError } = useField('lastName', (value) => textValidation(value));
+    const { value: city, errorMessage: cityError } = useField('city', (value) => textValidation(value));
+    const { value: password, errorMessage: passwordError} = useField('password', (value) => passwordValidation(value));
     
     return {
       eMail, 
@@ -129,22 +180,31 @@ export default {
       lastName,
       lastNameError,
       city,
-      cityError
+      cityError,
+      password,
+      passwordError,
+      tokenStore
     }
 
   },
-  */
   methods: {
-    register () {
-      //todo: push to database and sign in
-    },
-    validateString (value) {
-      if (!value) return 'This field is required'
-      const regex = /^[a-z ,.'-]+$/i
-      if (!regex.test((String(value)))) {
-        return 'Please enter a valid name'
+    async register () {
+      let profile = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        eMail: this.eMail,
+        county: this.location.county,
+        city: this.city,
+        address: this.location.address,
+        password: this.password
+      };
+
+      let profilePromise = await httputils.createUser(profile);  
+      
+      await this.tokenStore.getTokenAndSaveInStore(profilePromise.data.email, profilePromise.data.password);
+      if(this.tokenStore.jwtToken){
+          router.push("/");
       }
-      return true
     }
   }
 }
