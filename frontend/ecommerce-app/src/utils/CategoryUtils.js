@@ -17,6 +17,9 @@ export default {
     removeCategory(id) {
         return axios.delete(`${baseurl}/category/delete/${id}`)
     }, 
+    getAllSubCategories() {
+        return axios.get(baseurl + "/sub-category/", config)
+    },
     getSubCategories(id) {
         return axios.get(`${baseurl}/sub-category/${id}`)
     },

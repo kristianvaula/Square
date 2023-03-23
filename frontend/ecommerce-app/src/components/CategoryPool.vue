@@ -2,7 +2,7 @@
     <div class="category-pool">
         <div class="pool">
             <CategoryCard v-for="instance in this.store.CategoryList" 
-            :key="instance.categoryId" 
+            :key="instance.id" 
             :CategoryInfo="instance"
             @selected-card-event="handleSelection"
             @deselected-card-event="removeSelection"
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import CategoryUtils from '@/utils/CategoryUtils.js'
 import { store } from '@/store';
 import CategoryCard from './CategoryCard.vue';
 import '@/assets/style/Pool.css'
@@ -25,9 +26,24 @@ import '@/assets/style/Pool.css'
         data() {
             return {
                 store,
-                selectedCategoryID: null 
+                selectedCategoryID: null, 
+                categories: null
             }
         },
+
+        mounted () {
+            let vm = this
+            CategoryUtils.getCategories()
+                .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    vm.categories = response.data
+                }
+            })
+                .catch((err) => {
+                console.log(err)
+                })
+        },  
 
         methods: {
             handleSelection(value) {

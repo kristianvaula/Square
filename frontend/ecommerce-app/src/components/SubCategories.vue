@@ -15,14 +15,30 @@
 
 <script>
 import {store} from '@/store';
+import CategoryUtils from '@/utils/CategoryUtils';
 export default {
 
     data() {
         return {
             store,
-            selectedCategoryId: null
+            selectedCategoryId: null,
+            CategoryUtils,
         }
     },
+
+    mounted () {
+            let vm = this
+            CategoryUtils.getAllSubCategories()
+                .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    vm.categories = response.data
+                }
+            })
+                .catch((err) => {
+                console.log(err)
+                })
+        },  
     methods: {
         selectSubCategory(id) {  
             if(this.selectedCategoryId == id) {

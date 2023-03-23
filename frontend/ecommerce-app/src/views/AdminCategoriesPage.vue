@@ -61,7 +61,9 @@
         },
 
         deleteCategory() {
-            console.log("main category to be deleted: " + this.currentCategoryID)
+            if(confirm(`Do you really want to delete category with id: ${this.currentCategoryID}?`)){
+                console.log("main category to be deleted: " + this.currentCategoryID)
+            }
 
         },
 
