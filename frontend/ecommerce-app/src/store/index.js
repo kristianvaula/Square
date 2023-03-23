@@ -2,6 +2,60 @@ import { reactive } from 'vue'
 import { createStore } from 'vuex'
 
 export const store = reactive({
+  
+  ChatList: [
+    {
+      title: "User 1",
+      lastMessage: "Im fine thank you. I would like to purchase the item you are listing for the price o...",
+      lastMessageTime: "11.37"
+    },
+    {
+      title: "User 2",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "13.35"
+    },
+    {
+      title: "User 3",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "19.48"
+    },
+    {
+      title: "User 4",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "20.33"
+    },
+    {
+      title: "User 5",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "22.78"
+    },
+    {
+      title: "User 1",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "11.37"
+    },
+    {
+      title: "User 2",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "13.35"
+    },
+    {
+      title: "User 3",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "19.48"
+    },
+    {
+      title: "User 4",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "20.33"
+    },
+    {
+      title: "User 5",
+      lastMessage: "Im fine thank y...",
+      lastMessageTime: "22.78"
+    }
+  ],
+  
   productCard: {
     isInFavourites: false,
 
