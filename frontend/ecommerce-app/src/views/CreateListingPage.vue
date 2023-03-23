@@ -3,15 +3,16 @@
     <h1>{{ headerText }}</h1>
     <legend>Product Photos</legend>
     <div>
-      <ImgCarousel v-if="displayImage" :images="this.images" />
-    </div>
-
-    <div class="base-input">
-      <input type="file" ref="fileInput" @change="handleFileUpload">
-      <button class="button-small" @click="uploadFile" :disabled="!file">Upload</button>
+      <ImgCarousel v-if="displayImage" :images="uploadedImages" />
     </div>
 
     <form @submit="submit">
+      
+      <div class="base-input">
+        <input type="file" ref="fileInput" @change="handleFileUpload">
+        <button class="button-small" @click="resetUploadedImages" :disabled="!file">Reset</button>
+      </div>
+
       <legend>Product Information</legend>
       <div class="base-input center">
         <BaseText
@@ -53,7 +54,7 @@
           </div>
           <div>
             <label>Subcategories</label>
-            <SubcategoryList @selected-id-list="handleSelectedId" :categoryId="category"/>
+            <SubcategoryList @selected-id-list="rerouteList" :categoryId="category"/>
           </div>
         </div> 
         
@@ -78,6 +79,7 @@ import SubcategoryList from '@/components/SubCategoryList.vue';
 import ImgCarousel from '@/components/ImgCarouselComponent.vue'
 import CategoryUtils from '@/utils/CategoryUtils.js';
 import '@/assets/style/CreateListingPage.css'
+import { reactive } from '@vue/reactivity'
 
 export default {
   components: {
@@ -87,32 +89,32 @@ export default {
     return {
       headerText: 'Create a new listing',
       categories: null,
-      subcategories: null,
       image: null,
-      displayImage: false, 
-      images: []
+      displayImage: false
     }
   },
   methods: {
+    handleImage(image){
+      this.uploadedImagesuploadedImages = image.slice()
+    },
     handleFileUpload() {
-      this.file = this.$refs.fileInput.files[0]; 
-
-      const reader = new FileReader(); 
+      this.file = this.$refs.fileInput.files[0]
+      const reader = new FileReader()
       reader.onload = () => {
-        this.images.push(reader.result); 
-        this.displayImage = true; 
-      }; 
+        this.uploadedImages.push(reader.result)
+        this.displayImage = true 
+      }
       reader.readAsDataURL(this.file)
-
     },
-    uploadFile() {
-      const formData = new formData(); 
-      formData.append('image', this.file); 
+    rerouteList(list) {
+      let arr = JSON.parse(JSON.stringify(list))
+      this.updateList(arr)
     },
-    handleSelectedId(subcategories) {
-      console.log(subcategories.slice())
-      this.subcategories = subcategories.slice(); 
+    resetUploadedImages() {
+      this.uploadedImages.splice(0,this.uploadedImages.length)
+      this.displayImage = false 
     }
+
   },  
   mounted () {
     let vm = this
@@ -128,8 +130,24 @@ export default {
       })
   },  
   setup () {
-    let sendForm = (listing) => {
-      console.log("MOCK SENDING "+ listing); 
+    const uploadedImages = reactive([])
+  
+    const list = reactive([]);
+    const updateList = (emittedList) => {
+      list.splice(0, list.length, ...emittedList);
+    };
+
+    let sendForm = (listing, images) => {
+      console.log(listing)
+      console.log(images)
+      /**CategoryUtils.createSubCategory(category)
+          .then((response) => {
+            console.log(response)
+            alert("Subcategory successfully created")
+          })
+          .catch((err) => {
+            console.log(err)
+          }) */
     }
 
     const textVal = value => {
@@ -152,9 +170,9 @@ export default {
     const validationSchema = {
       title: textVal,
       price: priceVal, 
-      desc: textVal
+      desc: textVal, 
+      category: (value) => {return value !== undefined}
     }
-    
     const { handleSubmit, errors } = useForm({validationSchema})
 
     const {value: title} = useField('title')
@@ -164,25 +182,32 @@ export default {
     const {value: category} = useField('category')
 
     const submit = handleSubmit(values => {
-      console.log(values)
+      if(values.state === undefined) values.state= false
+      if(list === undefined) return 
+      let arr = JSON.parse(JSON.stringify(list))
+      if(arr.length == 0) return 
       let listing = {
         title: values.title,
         price: values.price,
         desc: values.desc,
         state: values.state, 
-        category: values.category
+        category: values.category,
+        subcategory: arr
       }
-      sendForm(listing)
+      let images = uploadedImages
+      sendForm(listing, images) 
     })
 
     return {
-      title,
+      title, 
       price,
       desc,
-      state, 
-      category,
-      errors, 
-      submit
+      state,
+      category, 
+      errors,
+      submit,
+      uploadedImages,
+      updateList
     }
   }
 }
