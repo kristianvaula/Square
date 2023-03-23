@@ -2,7 +2,7 @@
     <div class="category-card" @click="handleSelect" :class="{'category-selected': isSelected}">
       <div class="category-info">
         <div class="category-title">
-          <h3>{{ this.CategoryInfo.title }}</h3>
+          <h3>{{ this.CategoryInfo.description }}</h3>
         </div>
         <div class="category-size">
             <span>{{ "(" + this.CategoryInfo.categorySize + ")" }}</span>
@@ -39,7 +39,7 @@
           this.$emit("selectedCardEvent", this.CategoryInfo)
         } else {
           this.isSelected = false
-          this.$emit("deselectedCardEvent")
+          this.$emit("deselectedCardEvent", this.CategoryInfo)
         }
 
       }

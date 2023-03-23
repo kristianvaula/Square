@@ -4,7 +4,7 @@
             <h1>Administrate Main Categories</h1>
             <div class="category-components">
                 <div>
-                    <CategoryPool @selected-category-event="selectCategory"/>
+                    <CategoryPool @selected-category-event="selectCategoryToDelete" @deselect-category-event="deSelectCategoryToDelete"/>
                     <button class="delete-button"
                     type="button" 
                     @click="deleteCategory">Delete Category</button>
@@ -18,20 +18,26 @@
                 <h1>Administrate Subcategories</h1>
                 <div class="category-components">
                     <div>
-                        <CategoryPool @selected-category-event="selectCategory"/>
+                        <CategoryPool @selected-category-event="selectCategory"
+                        @deselect-category-event="deselectCategory"/>
                     </div>
                     <div>
                         <SubCategoryForm/>
                     </div>
                     
                 </div>
-                <SubCategories @delete-sub-category="deleteSubCategory" />
-            </div>
+                    <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="currentSubCategories" />
+                    <button class="delete-button" 
+                    type="button" 
+                    @click="deleteSubCategory"
+                    v-if="this.currentSubCategories != null">Delete Subcategory</button>
+                </div>
     </div>
   </template>
   
   <script>
-     import CategoryForm from '@/components/CategoryForm.vue';
+    import CategoryUtils from '@/utils/CategoryUtils';
+    import CategoryForm from '@/components/CategoryForm.vue';
     import SubCategoryForm from '@/components/SubCategoryForm.vue';
     import CategoryPool from '@/components/CategoryPool.vue';
     import SubCategories from '@/components/SubCategories.vue';
@@ -44,7 +50,10 @@
     data() {
         return {
             store,
-            currentCategoryID: null
+            selectedCategories: [],
+            currentSubCategories: null,
+            selectedSubCategory: null,
+            categoriesToDelete: []
         }
     },
 
@@ -56,21 +65,70 @@
     },
 
     methods: {
-        deleteSubCategory(id) {
-            console.log("subcategory id to be deleted: " + id)
+        deleteSubCategory() {
+            if(this.selectedSubCategory != null) {
+                if(confirm(`Do you really want to delete Subcategory with id: ${this.selectedSubCategory}?`)){
+                CategoryUtils.removeSubCategory(this.selectedSubCategory)
+                }
+            }
+        },
+
+        selectSubCategory(id) {
+            if(this.selectedSubCategory == id) {
+                this.selectedSubCategory = null
+            } else {
+                this.selectedSubCategory = id
+            }
         },
 
         deleteCategory() {
-            if(confirm(`Do you really want to delete category with id: ${this.currentCategoryID}?`)){
-                console.log("main category to be deleted: " + this.currentCategoryID)
+            if(this.categoriesToDelete.length > 1) {
+                alert("Can't delete more than one Category at once")
+            } else {
+                if(confirm(`Do you really want to delete category with id: ${this.categoriesToDelete[0]}?`)){
+                CategoryUtils.removeCategory(this.categoriesToDelete[0])
+                }
             }
 
         },
 
-        selectCategory(id) {
-            this.currentCategoryID = id
+        async selectCategory(id) { 
+            this.selectedCategories.push(id)
+            var response = await CategoryUtils.getSubCategories(id)
+            var data = response.data
+            this.currentSubCategories = data
+        },
+
+        async deselectCategory(id) {
+            this.selectedCategories.pop(id)
+            var response = await CategoryUtils.getAllSubCategories()
+            console.log(response.data)
+            this.currentSubCategories = response.data
+
+        },
+
+        selectCategoryToDelete(id) {
+            this.categoriesToDelete.push(id)
+        },
+
+        deSelectCategoryToDelete(id) {
+            this.categoriesToDelete.pop(id)
         }
-    }
+    },
+
+    mounted () {
+            let vm = this
+            CategoryUtils.getAllSubCategories()
+                .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    vm.currentSubCategories = response.data
+                }
+            })
+                .catch((err) => {
+                console.log(err)
+                })
+        },  
   }
   </script>
   
