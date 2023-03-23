@@ -1,0 +1,57 @@
+.chat-card {
+    display: grid;
+    position: relative;
+    justify-content: left;
+    width: 450px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 2%;
+    border-radius: 14px;
+    box-shadow: 7px 7px 14px #ebebeb, -7px -7px 14px #ffffff;
+  }
+  
+  .chat-card:hover {
+    transform: scale(1.05) translate(0);
+    transition: 0.3s ease;
+    background-size: 1%;
+    cursor: pointer;
+    border-radius: 14px;
+    box-shadow: 9px 9px 18px #e6e6e6, -9px -9px 18px var(on-hover);
+  }
+  
+  .chat-title {
+    font-size: 20px;
+    margin-right: 5px;
+    top: 10px;
+    left: 10px;
+    position: absolute;
+  }
+  
+  .last-message {
+    font-size: 16px;
+    margin-right: 5px;
+    bottom: 12px;
+    left: 10px;
+    position: absolute;
+    max-width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .read-status {
+    width: 2.5em;
+    opacity: 0.85;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .last-message-time {
+    position: absolute;
+    bottom: 12px;
+    right: 10px;
+    background-color: #ffffff;
+  }
+  
