@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.repositiories;
+package ntnu.idatt2105.ecommerceapp.repositiories.profile;
 
 import ntnu.idatt2105.ecommerceapp.model.*;
 import org.slf4j.Logger;
@@ -21,7 +21,14 @@ public class ProfileDaoImpl implements ProfileDao {
     @Override
     public int getCounty(String countyName) {
         String countiesSql = "SELECT countyId FROM county WHERE countyName=?";
-        return jdbcTemplate.queryForObject(countiesSql, Integer.class, countyName);
+        int countyId;
+        try {
+            countyId = jdbcTemplate.queryForObject(countiesSql, Integer.class, countyName);
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("Could not find a county for county name: " + countyName);
+            countyId = -1;
+        }
+        return countyId;
     }
 
     @Override
@@ -86,6 +93,13 @@ public class ProfileDaoImpl implements ProfileDao {
         }
         return profileTypeId;
     }
+
+    /**
+     * The method adds a profile to the database if it does not already exist a profile for the given e-mail
+     * @param profileRequest The profile to add to the database
+     * @return Null is returned if it already exists a profile with the e-mail given in the profile request. Otherwise,
+     * returns the newly added profile.
+     */
     @Transactional
     @Override
     public Profile addProfile(RegisterProfileRequest profileRequest) {
@@ -94,13 +108,14 @@ public class ProfileDaoImpl implements ProfileDao {
         Profile profile;
 
         try {
-            profile = jdbcTemplate.queryForObject(getProfileIdSql, BeanPropertyRowMapper.newInstance(Profile.class), profileRequest.geteMail());
+            jdbcTemplate.queryForObject(getProfileIdSql, BeanPropertyRowMapper.newInstance(Profile.class), profileRequest.geteMail());
+            return null;
         } catch (EmptyResultDataAccessException e) {
             int countyId = getCounty(profileRequest.getCounty());
             int cityId = addCity(profileRequest.getCity(), countyId);
             int addressId = addAddress(profileRequest.getAddress(), cityId);
 
-            // todo: fix profileTypeId: have to have
+            // todo: fix profileTypeId: to not be mocked...
             int profileTypeId = addProfileType("Test");
 
             logger.info(profileRequest.getFirstName() + ", " + profileRequest.getLastName() + ", " + profileRequest.geteMail() + ", " + profileRequest.getPassword() + ", " + addressId + ", "+ 1);
@@ -115,22 +130,21 @@ public class ProfileDaoImpl implements ProfileDao {
     }
 
     @Override
-    public Profile getProfile(String eMail, String password) {
-        String profileSql = "SELECT * FROM profile WHERE eMail=? AND password=?";
-        return jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class), eMail, password);
+    public Profile getProfile(String eMail) {
+        String profileSql = "SELECT * FROM profile WHERE eMail=?";
+        Profile profile;
+        try {
+            profile = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class), eMail);
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("Could not find a profile for e-Mail: " + eMail);
+            profile = null;
+        }
+        return profile;
     }
 
     @Override
     public List<Profile> getProfiles() {
         String profilesSql = "SELECT * FROM profile";
         return jdbcTemplate.query(profilesSql, BeanPropertyRowMapper.newInstance(Profile.class));
-    }
-
-    @Override
-    public boolean checkProfileCredentials(String eMail, String password) {
-        List<Profile> profiles = getProfiles();
-        Profile profile = getProfile(eMail, password);
-
-        return profiles.contains(profile);
     }
 }

@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import ntnu.idatt2105.ecommerceapp.model.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.repositiories.ProfileDao;
+import ntnu.idatt2105.ecommerceapp.repositiories.profile.ProfileDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,9 @@ import java.util.UUID;
 public class TokenService {
 
     @Autowired
-    ProfileDao profileDao;
+    private ProfileDao profileDao;
+    @Autowired
+    private ProfileService profileService;
     public static final String KEY  = UUID.randomUUID().toString();
     private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(30); //token is valid for 5 minutes
 
@@ -27,7 +29,8 @@ public class TokenService {
 
     public String generateToken(ProfileRequest profileRequest) {
         logger.info("generating token for email: {}", profileRequest.getEMail());
-        if (profileDao.checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
+
+        if (profileService.checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
             logger.info("Username: {} passed the credentials check", profileRequest.getEMail());
             logger.info("Generating token for username: {}", profileRequest.getEMail());
 

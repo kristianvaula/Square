@@ -30,14 +30,5 @@ export default {
         };
 
         return axios.post("http://localhost:8081/profile", JSON.stringify({eMail, password}), config);
-    },
-    /*
-    //todo: slette når man er sikker på kode
-
-    testGetCity() {
-        let addressName = "Stavangergate"
-        let cityId = 3;
-        return axios.post("http://localhost:8081/unauthorized/address", JSON.stringify({addressName, cityId}), config);
     }
-    */
 }

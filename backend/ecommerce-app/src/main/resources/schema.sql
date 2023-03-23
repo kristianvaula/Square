@@ -43,7 +43,7 @@ CREATE TABLE profile(
      firstName VARCHAR(50),
      lastName VARCHAR(50),
      eMail VARCHAR(50),
-     password VARCHAR(50),
+     password VARCHAR(100),
      addressId INT NOT NULL,
      profileTypeId INT NOT NULL,
      PRIMARY KEY (profileId),
@@ -92,3 +92,16 @@ CREATE TABLE prodImage(
     PRIMARY KEY (prodImageId),
     FOREIGN KEY (productId) REFERENCES product(productId)
 );
+
+INSERT INTO county VALUES(NULL, "Agder");
+INSERT INTO county VALUES(NULL, "Innlandet");
+INSERT INTO county VALUES(NULL, "Møre og Romsdal");
+INSERT INTO county VALUES(NULL, "Norland");
+INSERT INTO county VALUES(NULL, "Oslo");
+INSERT INTO county VALUES(NULL, "Rogaland");
+INSERT INTO county VALUES(NULL, "Vestfold og Telemark");
+INSERT INTO county VALUES(NULL, "Troms og Finnmark");
+INSERT INTO county VALUES(NULL, "Trøndelag");
+INSERT INTO county VALUES(NULL, "Vestland");
+INSERT INTO county VALUES(NULL, "Viken");
+

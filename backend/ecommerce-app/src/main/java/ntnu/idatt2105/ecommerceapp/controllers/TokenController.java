@@ -22,7 +22,7 @@ public class TokenController {
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "/token")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<String> generateToken(final @RequestBody ProfileRequest profileRequest) throws Exception {
+    public ResponseEntity<String> generateToken(final @RequestBody ProfileRequest profileRequest) {
         logger.info("Received a request to generate token");
         // if username and password are valid, issue an access token
         // note that subsequent requests need this token
