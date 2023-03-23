@@ -1,6 +1,5 @@
 <template>
     <div class="category-pool">
-        <h3 class="title"> {{ title }}</h3> 
         <div class="pool">
             <CategoryCard v-for="instance in this.store.CategoryList" 
             :key="instance.categoryId" 
@@ -25,7 +24,6 @@ import '@/assets/style/Pool.css'
 
         data() {
             return {
-                title: "Categories",
                 store,
                 selectedCategoryID: null 
             }
