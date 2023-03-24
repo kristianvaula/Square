@@ -70,7 +70,7 @@ public class ProductRepository implements ProductRepositoryInterface {
             return jdbcTemplate.queryForObject(SELECT_PRODUCT_BY_ID_SQL,
                     BeanPropertyRowMapper.newInstance(Product.class), productId);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw e;
         }
     }
 
@@ -81,7 +81,7 @@ public class ProductRepository implements ProductRepositoryInterface {
                     Integer.class, title, sellerId);
             return prod;
         } catch (EmptyResultDataAccessException e) {
-            return -1;
+            throw e;
         }
     }
 

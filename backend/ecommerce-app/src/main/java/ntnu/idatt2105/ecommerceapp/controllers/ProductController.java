@@ -3,6 +3,7 @@ package ntnu.idatt2105.ecommerceapp.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ntnu.idatt2105.ecommerceapp.model.ListingObject;
 import ntnu.idatt2105.ecommerceapp.model.Product;
+import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
 import ntnu.idatt2105.ecommerceapp.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,14 +40,17 @@ public class ProductController {
         try{
             ObjectMapper mapper = new ObjectMapper();
             ListingObject listing = mapper.readValue(object, ListingObject.class);
-            Blob[] images = new Blob[files.size()/2];
-            for (int i = 0; i+1 < images.length; i+=2) {
-                byte[] bytes = files.get(i).getBytes();
-                byte[] bytes1 = files.get(i+1).getBytes();
-                byte[] all = new byte[bytes.length + bytes1.length];
-                System.arraycopy(bytes,0,all,0,bytes.length);
-                System.arraycopy(bytes1,0,all,bytes.length,bytes1.length);
-                images[i] = new SerialBlob(all);
+            ArrayList<String> filesFixed = new ArrayList<>(files);
+            if(files.get(0).length()<100){
+                filesFixed = new ArrayList<>();
+                for (int i = 0; i < files.size(); i+=2) {
+                    filesFixed.add(files.get(i)+files.get(i+1));
+                }
+            }
+            Blob[] images = new Blob[filesFixed.size()];
+            for (int i = 0; i < images.length; i++) {
+                byte[] bytes = filesFixed.get(i).getBytes();
+                images[i] = new SerialBlob(bytes);
             }
             return service.newProduct(listing, images);
         } catch (SQLException throwables) {
@@ -56,5 +61,10 @@ public class ProductController {
             logger.error("Exception occurred while parsing images: ", e);
         }
         return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ProductResponse>> getProducts() {
+        return service.getAllProducts();
     }
 }
