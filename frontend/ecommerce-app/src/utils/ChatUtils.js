@@ -9,15 +9,15 @@ const config = {
 
 export default {
     getChats(profileId) {
-        return axios.get(`${baseurl}/my-chats`, profileId, config)
+        return axios.get(`${baseurl}/my-chats/${profileId}`, config)
     },
     newChat(chat) {
-        return axios.post(`${baseurl}/new-chat`, chat)
+        return axios.post(`${baseurl}/new-chat`, chat, config)
     },
     getMessages(chatId) {
-        return axios.get(`${baseurl}/${chatId}/messages`, chatId, config)
+        return axios.get(`${baseurl}/messages/${chatId}`, config)
     }, 
     newMessage(chatId, message) {
-        return axios.post(`${baseurl}/${chatId}/new-message`, message)
+        return axios.post(`${baseurl}/new-message/${chatId}`, message, config)
     },    
 }
