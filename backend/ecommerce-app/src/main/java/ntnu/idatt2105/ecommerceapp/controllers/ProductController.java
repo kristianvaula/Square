@@ -63,8 +63,9 @@ public class ProductController {
         return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<ProductResponse>> getProducts() {
+        logger.info("Received request for all products");
         return service.getAllProducts();
     }
 }
