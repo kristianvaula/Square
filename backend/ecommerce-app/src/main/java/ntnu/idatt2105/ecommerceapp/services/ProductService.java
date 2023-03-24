@@ -2,9 +2,9 @@ package ntnu.idatt2105.ecommerceapp.services;
 
 import ntnu.idatt2105.ecommerceapp.model.ListingObject;
 import ntnu.idatt2105.ecommerceapp.model.Product;
+import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
 import ntnu.idatt2105.ecommerceapp.model.Profile;
 import ntnu.idatt2105.ecommerceapp.repositiories.ProductRepository;
-import ntnu.idatt2105.ecommerceapp.repositiories.profile.ProfileDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +46,6 @@ public class ProductService {
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try{
             Profile profile = repository.getUser(obj.getUsername());
-            logger.info("id: " + profile.getProfileId());
             if(profile.getProfileId() == -1) {return new ResponseEntity<>("Could not find user", HttpStatus.BAD_REQUEST);}
             obj.getProduct().setSellerId(profile.getProfileId());
             Product prod = repository.getProductByTitleSeller(obj.getProduct().getTitle(), obj.getProduct().getSellerId());
@@ -89,4 +90,33 @@ public class ProductService {
 
         return response;
     }
-}
+
+    public ResponseEntity<List<ProductResponse>> getAllProducts(){
+        logger.info("Fetching products");
+        List<Product> products = repository.getProducts();
+        if(products == null) return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        logger.info("Fetching images");
+        ArrayList<ProductResponse> responses = new ArrayList();
+        for (int i = 0; i < products.size(); i++) {
+            ProductResponse resp = getProductResponse(products.get(i));
+            if(resp == null){
+                logger.warn("Failed to load images for: " + products.get(i));
+                continue;
+            }
+            responses.add(resp);
+        }
+        logger.info("Returning products list of length " + responses.size());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    public ProductResponse getProductResponse(Product product){
+        int productId = product.getProductId();
+        try{
+            List<Blob> blobImgs = repository.getProductImages(productId);
+            return new ProductResponse(product, blobImgs);
+        } catch (SQLException throwables) {
+            System.out.println(throwables);
+            return null;
+        }
+    }
+ }

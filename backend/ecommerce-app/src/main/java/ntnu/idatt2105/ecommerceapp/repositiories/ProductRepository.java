@@ -9,9 +9,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -120,8 +124,20 @@ public class ProductRepository implements ProductRepositoryInterface {
     @Override
     public List<Blob> getProductImages(int productId) {
         try {
-            return jdbcTemplate.query(SELECT_IMAGES_SQL, BeanPropertyRowMapper.newInstance(Blob.class),productId);
-        } catch (EmptyResultDataAccessException e) {
+            return jdbcTemplate.query(SELECT_IMAGES_SQL, new ResultSetExtractor<List<Blob>>() {
+                @Override
+                public List<Blob> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                    List<Blob> images = new ArrayList<>();
+                    while (rs.next()) {
+                        Blob image = rs.getBlob("image");
+                        images.add(image);
+                    }
+                    return images;
+                }
+            }, productId);
+        }
+        catch (EmptyResultDataAccessException e) {
+            logger.warn("Get product returned 0: " + e);
             return null;
         }
     }
