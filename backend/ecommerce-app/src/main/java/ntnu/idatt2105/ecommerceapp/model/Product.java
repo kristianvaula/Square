@@ -3,14 +3,11 @@ package ntnu.idatt2105.ecommerceapp.model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int productId;
     @Column
     private String title;
     @Column
@@ -28,12 +25,12 @@ public class Product {
     public Product() {
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getDescription() {
