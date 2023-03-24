@@ -8,5 +8,14 @@ export default {
   }, 
   getProducts() {
     return axios.get(baseurl + "/product/all"); 
-  }
+  }, 
+  getProductById(id) {
+    return axios.get(baseurl + `/product/${id}`);
+  },
+  getProductByCategory(category) {
+    return axios.get(baseurl + `/product/${category}`);
+  },
+  getProductBySubcategory(subcategory) {
+    return axios.get(baseurl + `/product/${subcategory}`);
+  },
 }

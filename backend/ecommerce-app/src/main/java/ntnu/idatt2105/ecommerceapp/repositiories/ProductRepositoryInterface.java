@@ -16,6 +16,11 @@ public interface ProductRepositoryInterface {
     public int getProductId(String title, int sellerId);
     public Product getProductByTitleSeller(String title, int sellerId);
     public List<Product> getProducts();
+
+    List<Product> getProductsByCategory(int categoryId);
+
+    List<Product> getProductsBySubcategory(int subcategoryId);
+
     public List<Blob> getProductImages(int productId);
     public Profile getUser(String eMail);
 

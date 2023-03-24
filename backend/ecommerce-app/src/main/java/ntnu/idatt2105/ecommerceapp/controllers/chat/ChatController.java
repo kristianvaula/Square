@@ -51,7 +51,7 @@ public class ChatController {
      * Returns an empty list if messages is null...
      * @return messages. A list holding all sent messages
      */
-    @GetMapping("/{chatId}/messages")
+    @GetMapping("/messages/{chatId}")
     public ResponseEntity<List<Message>> getMessages(int chatId) {
         logger.info("Received a request to get messages in chat");
         List<Message> messages = chatService.getMessages(chatId);
@@ -67,7 +67,7 @@ public class ChatController {
      * Create a new message and add it to the database
      * @param message
      */
-    @PostMapping("/{chatId}/new-message")
+    @PostMapping("/new-message/{chatId}")
     public void newMessage(@RequestBody Message message){
         logger.info("Received a request to create a new message");
         chatService.addMessage(message);
