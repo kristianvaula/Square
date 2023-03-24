@@ -16,7 +16,6 @@
     transform: scale(1.05) translate(0);
     transition:  0.3s ease;
     background-size: 1%;
-    cursor: pointer;
     border-radius: 14px;
     box-shadow:  9px 9px 18px #e6e6e6,
              -9px -9px 18px var(on-hover);
@@ -36,24 +35,12 @@
     border-radius: 8px 8px 8px 8px;
   }
   
-  .favorite-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .favorite-button i {
-    color: #dc3545;
-    font-size: 1.5rem;
-  }
   
   .product-info {
     padding: 8px;
     display: grid;
     grid-template-rows: 0.5fr, 2fr, 1fr;
+    cursor: pointer;
   }
   
   
@@ -69,4 +56,8 @@
   
   .product-price span:first-child {
     margin-right: 5px;
+  }
+
+  .icon-heart {
+    cursor: pointer;
   }

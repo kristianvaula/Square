@@ -56,6 +56,12 @@ const routes = [
     name: 'AdminCategoriesPage',
     component: () => import('../views/AdminCategoriesPage.vue')
   },
+
+  {
+    path: `/productPage`,
+    name: `ProductPage`,
+    component: () => import(`../views/ProductPage.vue`)
+  }
 ]
 
 const router = createRouter({

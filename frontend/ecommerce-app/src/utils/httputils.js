@@ -30,5 +30,17 @@ export default {
         };
 
         return axios.post("http://localhost:8081/profile", JSON.stringify({eMail, password}), config);
+    },
+    getProfileByEmail(eMail) {
+        const tokenStore = useTokenStore();
+        
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + tokenStore.jwtToken
+            },
+        };
+
+        return axios.post("http://localhost:8081/profile/by-email", JSON.stringify({eMail}), config);
     }
 }
