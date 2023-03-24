@@ -1,5 +1,5 @@
 <template>
-    <div class="category-card" @click="handleSelect" :class="{'category-selected': isSelected}">
+    <div class="category-card" @click="handleSelect" :class="{'category-selected': this.CategoryInfo.categoryId === this.store.CurrentCategoryID}">
       <div class="category-info">
         <div class="category-title">
           <h3>{{ this.CategoryInfo.description }}</h3>
@@ -34,11 +34,11 @@
 
     methods: {
       handleSelect() {
-        if(!this.isSelected) {
-          this.isSelected = true
+        if(!(this.CategoryInfo.categoryId === this.store.CurrentCategoryID)) {
+          this.store.CurrentCategoryID = this.CategoryInfo.categoryId
           this.$emit("selectedCardEvent", this.CategoryInfo)
         } else {
-          this.isSelected = false
+          this.store.CurrentCategoryID = null
           this.$emit("deselectedCardEvent", this.CategoryInfo)
         }
 
