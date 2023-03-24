@@ -91,8 +91,11 @@ CREATE TABLE subCategory(
 
 CREATE TABLE product(
     productId INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255),
     description VARCHAR (500),
+    location VARCHAR(255),
     price INT,
+    used BOOLEAN,
     sellerId INT,
     buyerId INT,
     PRIMARY KEY (productId),
