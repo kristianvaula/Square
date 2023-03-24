@@ -2,7 +2,6 @@ package ntnu.idatt2105.ecommerceapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ntnu.idatt2105.ecommerceapp.model.ListingObject;
-import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
 import ntnu.idatt2105.ecommerceapp.services.ProductService;
 import org.slf4j.Logger;
@@ -12,10 +11,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -67,5 +64,23 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getProducts() {
         logger.info("Received request for all products");
         return service.getAllProducts();
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable("category") int categoryId) {
+        logger.info("Received request for all products");
+        return service.getProductsByCategory(categoryId);
+    }
+
+    @GetMapping("/subcategory/{subcategory}")
+    public ResponseEntity<List<ProductResponse>> getProductsBySubcategory(@PathVariable("subcategory") int subcategoryId) {
+        logger.info("Received request for all products");
+        return service.getProductsBySubCategory(subcategoryId);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ProductResponse>> getProduct(@PathVariable("id") int id) {
+        logger.info("Received request for all products");
+        return service.getProductById(id);
     }
 }

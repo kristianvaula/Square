@@ -9,16 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -91,10 +94,9 @@ public class ProductService {
         return response;
     }
 
-    public ResponseEntity<List<ProductResponse>> getAllProducts(){
-        logger.info("Fetching products");
-        List<Product> products = repository.getProducts();
+    public ResponseEntity<List<ProductResponse>> getProducts(List<Product> products){
         if(products == null) return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        if(products.size() == 0) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         logger.info("Fetching images");
         ArrayList<ProductResponse> responses = new ArrayList();
         for (int i = 0; i < products.size(); i++) {
@@ -109,6 +111,35 @@ public class ProductService {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    public ResponseEntity<List<ProductResponse>> getAllProducts(){
+        logger.info("Fetching products");
+        List<Product> products = repository.getProducts();
+        return getProducts(products);
+    }
+
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(int categoryId){
+        logger.info("Fetching products by category");
+        List<Product> products = repository.getProductsByCategory(categoryId);
+        return getProducts(products);
+    }
+
+    public ResponseEntity<List<ProductResponse>> getProductsBySubCategory(int subcategories){
+        logger.info("Fetching products by subcategory");
+        List<Product> products = repository.getProductsBySubcategory(subcategories);
+        return getProducts(products);
+    }
+
+    public ResponseEntity<List<ProductResponse>> getProductById(int id){
+        logger.info("Fetching product by id");
+        Product product;
+        try{
+            product = repository.getProductById(id);
+        }catch(EmptyResultDataAccessException e){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        return getProducts(Collections.singletonList(product));
+    }
+
     public ProductResponse getProductResponse(Product product){
         int productId = product.getProductId();
         try{
@@ -119,4 +150,6 @@ public class ProductService {
             return null;
         }
     }
+
+
  }

@@ -35,6 +35,8 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String SELECT_PRODUCT_BY_ID_SQL = "SELECT * FROM product WHERE productId = ?;";
     private static final String SELECT_PRODUCT_SQL = "SELECT * FROM product WHERE title = ? AND sellerId=?;";
     private static final String SELECT_PRODUCTS_SQL = "SELECT * FROM product;";
+    private static final String SELECT_PRODUCTS_CATEGORY_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps, subcategory s WHERE p.productId = ps.productId AND ps.subcategoryId = s.subcategoryId AND s.categoryId = ?";
+    private static final String SELECT_PRODUCTS_SUBCATEGORY_SQL = "SELECT p.productId, description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps WHERE p.productId = ps.productId AND ps.subcategoryId = ?";
     private static final String SELECT_PRODUCTID_SQL = "SELECT productId FROM product WHERE title = ? AND sellerId=?;";
     private static final String SELECT_IMAGES_SQL = "SELECT * FROM prodImage WHERE productId = ?;";
     private static final String SELECT_PROFILE_SQL ="SELECT * FROM profile WHERE email=?";
@@ -116,6 +118,24 @@ public class ProductRepository implements ProductRepositoryInterface {
     public List<Product> getProducts() {
         try {
             return jdbcTemplate.query(SELECT_PRODUCTS_SQL, BeanPropertyRowMapper.newInstance(Product.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(int categoryId) {
+        try {
+            return jdbcTemplate.query(SELECT_PRODUCTS_CATEGORY_SQL, BeanPropertyRowMapper.newInstance(Product.class), categoryId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Product> getProductsBySubcategory(int subcategoryId) {
+        try {
+            return jdbcTemplate.query(SELECT_PRODUCTS_SUBCATEGORY_SQL, BeanPropertyRowMapper.newInstance(Product.class), subcategoryId);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
