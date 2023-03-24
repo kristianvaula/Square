@@ -19,7 +19,6 @@ public class ListingObject {
     private String username;
     @Column
     private List<Integer> subcategories;
-    @Column List<Blob> images;
 
     @Autowired
     public ListingObject() {
@@ -49,11 +48,4 @@ public class ListingObject {
         this.subcategories = subcategories;
     }
 
-    public List<Blob> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Blob> images) {
-        this.images = images;
-    }
 }
