@@ -30,21 +30,23 @@ public class TokenService {
         if (profileService.checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
             logger.info("Username: {} passed the credentials check", profileRequest.getEMail());
             logger.info("generating token for email: {}", profileRequest.getEMail());
-
-            return generateToken(profileRequest.getEMail());
+            String profileType = profileService.getProfileType(profileRequest.getEMail(), profileRequest.getPassword()).getProfileName();
+            return generateToken(profileRequest.getEMail(), profileType);
         }
         logger.info("Access denied, wrong credentials");
         return null;
     }
 
 
-    public String generateToken(final String userEmail) {
+    private String generateToken(final String userEmail, final String profileType) {
+        logger.info("Generating token for " + userEmail + " with profileType " + profileType);
         final Instant now = Instant.now();
         final Algorithm hmac512 = Algorithm.HMAC512(KEY);;
         final JWTVerifier verifier = JWT.require(hmac512).build();
         return JWT.create()
                 .withSubject(userEmail)
                 .withIssuer("ecommerce-app")
+                .withClaim("authorization-role", profileType)
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
                 .sign(hmac512);

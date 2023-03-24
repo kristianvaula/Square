@@ -49,7 +49,7 @@ public class ProfileService {
     public Profile addProfile(RegisterProfileRequest profileRequest) {
         Profile existingProfile = IProfileDao.getProfile(profileRequest.geteMail());
         if (existingProfile == null) {
-            logger.info("Creating profile for " + profileRequest.geteMail());
+            logger.info("Creating profile for " + profileRequest.geteMail() + " with password " + profileRequest.getPassword());
             String encodedPassword = passwordEncoder.encode(profileRequest.getPassword());
             profileRequest.setPassword(encodedPassword);
             return IProfileDao.addProfile(profileRequest);
@@ -94,6 +94,11 @@ public class ProfileService {
     public ProfileType getProfileType(Profile profile) {
         logger.info("Retrieving profile type for " + profile.getEMail());
         return jdbcAuthenticationRepo.getProfileType(profile);
+    }
+
+    public ProfileType getProfileType(String email, String password) {
+        logger.info("Retrieving profile type for " + email + " password " + password);
+        return jdbcAuthenticationRepo.getProfileType(email, password, passwordEncoder);
     }
 
     public ProfileType getProfileType(String email) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,6 +29,22 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
             profileDb = null;
         }
         return profileDb != null;
+    }
+
+    private boolean controlProfileType(String email, String password, ProfileType profileType, PasswordEncoder passwordEncoder) {
+        String passwordDb;
+        logger.info("Controlling " + email + " with password " + password + " for profileType " + profileType.getProfileName());
+        try{
+            String passwordSql = "SELECT password FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
+                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ?";
+
+            passwordDb = jdbcTemplate.queryForObject(passwordSql, String.class, email);
+        }catch (EmptyResultDataAccessException e){
+            passwordDb = null;
+        }
+        boolean status = passwordEncoder.matches(password, passwordDb);
+        logger.info("Password status for controlling profile type for " + email + " with profileType " + profileType.getProfileName() + " is "  + status);
+        return status;
     }
 
     private boolean controlProfileType(String email, ProfileType profileType) {
@@ -65,6 +82,24 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
             profileType = ProfileType.UNAUTHORIZED;
         }
         logger.info(profile.getEMail() + " has profile type " + profileType.getProfileName());
+        return profileType;
+    }
+
+    public ProfileType getProfileType(String email, String password, PasswordEncoder passwordEncoder) {
+        logger.info("Getting profile type for " + email);
+        ProfileType profileType;
+        try {
+            if (controlProfileType(email, password, ProfileType.ADMIN, passwordEncoder)) {
+                profileType = ProfileType.ADMIN;
+            } else if (controlProfileType(email, password, ProfileType.USER, passwordEncoder)) {
+                profileType = ProfileType.USER;
+            } else {
+                profileType = ProfileType.UNAUTHORIZED;
+            }
+        } catch (EmptyResultDataAccessException e) {
+            profileType = ProfileType.UNAUTHORIZED;
+        }
+        logger.info(email + " has profile type " + profileType.getProfileName());
         return profileType;
     }
 

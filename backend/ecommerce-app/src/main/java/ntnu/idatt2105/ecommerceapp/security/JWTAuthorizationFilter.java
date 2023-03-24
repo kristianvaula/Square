@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -49,7 +50,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwtToken;
-        final String eMail;
+        final String[] profileInfo;
 
         if (header == null || !header.startsWith("Bearer ")) {
             SecurityContextHolder.clearContext();
@@ -61,46 +62,41 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         // Note that we have added userId as subject to the token when it is generated
         // Note also that the token comes in this format 'Bearer token'
         jwtToken = header.substring(7);
-        eMail = validateTokenAndGetUserEmail(jwtToken);
-        if (eMail == null) {
+        profileInfo = validateTokenAndGetProfileInfo(jwtToken);
+        if (profileInfo[0] == null) {
             // validation failed or token expired
             filterChain.doFilter(request, response);
             return;
         }
-        /*
-        Jws<Claims> claims = Jwts.parser().parseClaimsJws(jwtToken);
-
-        // perform necessary checks
-        if (claims.getBody().get("authorities") != null) {
-            // setup Spring authentication
-            List<String> authorities = (List) claims.getBody().get("authorities");
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getBody().getSubject(), null,
-                    authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        } else {
-            SecurityContextHolder.clearContext();
-        }
-
-         */
 
         // if token is valid, add user details to the authentication context
         // Note that user details should be fetched from the database in real scenarios
         // this is case we will retrieve use details from mock
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                eMail,
+                profileInfo[0],
                 null,
-                Collections.singletonList(new SimpleGrantedAuthority(jdbcAuthenticationRepo.getProfileType(eMail).getProfileName())));
+                Collections.singletonList(new SimpleGrantedAuthority(profileInfo[1])));
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         // then, continue with authenticated user context
         filterChain.doFilter(request, response);
     }
 
-    public String validateTokenAndGetUserEmail(final String token) {
+    /**
+     *
+     * @param token
+     * @return An array with email on index 0 and profileType on index 1
+     */
+    public String[] validateTokenAndGetProfileInfo(final String token) {
+        String[] profileInfo = new String[2];
         try {
             final Algorithm hmac512 = Algorithm.HMAC512(TokenService.KEY);
             final JWTVerifier verifier = JWT.require(hmac512).build();
-            return verifier.verify(token).getSubject();
+            DecodedJWT jwt = verifier.verify(token);
+            profileInfo[0] = jwt.getSubject();
+            profileInfo[1] = jwt.getClaim("authorization-role").asString();
+            logger.info("The profileType retrieved from token is " + profileInfo[1]);
+            return profileInfo;
         } catch (final JWTVerificationException verificationEx) {
             LOGGER.warn("token is invalid: {}", verificationEx.getMessage());
             return null;

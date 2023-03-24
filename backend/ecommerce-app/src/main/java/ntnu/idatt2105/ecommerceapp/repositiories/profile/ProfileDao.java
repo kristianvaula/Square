@@ -119,7 +119,7 @@ public class ProfileDao implements IProfileDao {
             int addressId = addAddress(profileRequest.getAddress(), cityId);
 
             // todo: fix profileTypeId: to not be mocked...
-            logger.info("Adds profile type to user " + profileRequest.geteMail());
+            logger.info("Adds profile type to user " + profileRequest.geteMail() + " adding profile type "  + ProfileType.USER.getProfileName());
             int profileTypeId = addProfileType(ProfileType.USER.getProfileName());
             logger.info(profileRequest.geteMail() + " has been given profile type with id: " + profileTypeId);
 

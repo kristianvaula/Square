@@ -1,6 +1,8 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
+import ntnu.idatt2105.ecommerceapp.services.ProfileService;
 import ntnu.idatt2105.ecommerceapp.services.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,8 @@ public class TokenController {
 
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ProfileService profileService;
     Logger logger = LoggerFactory.getLogger(TokenController.class);
 
     @CrossOrigin("http://localhost:8080")
