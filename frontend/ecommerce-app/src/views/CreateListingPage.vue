@@ -78,8 +78,11 @@ import BaseCheckbox from '@/components/templates/BaseCheckbox.vue'
 import SubcategoryList from '@/components/SubCategoryList.vue';
 import ImgCarousel from '@/components/ImgCarouselComponent.vue'
 import CategoryUtils from '@/utils/CategoryUtils.js';
+import ProductUtils from '@/utils/ProductUtils.js';
 import '@/assets/style/CreateListingPage.css'
 import { reactive } from '@vue/reactivity'
+import { useTokenStore } from '@/store/token.js'
+import router from '@/router';
 
 export default {
   components: {
@@ -90,6 +93,8 @@ export default {
       headerText: 'Create a new listing',
       categories: null,
       image: null,
+      images: null,
+      category: null,
       displayImage: false
     }
   },
@@ -130,6 +135,15 @@ export default {
       })
   },  
   setup () {
+    
+    let user = () => {
+      const tokenStore = useTokenStore();
+      if(tokenStore.jwtToken) {
+        return tokenStore.loggedInUser
+      }
+      return null
+    } 
+    
     const uploadedImages = reactive([])
   
     const list = reactive([]);
@@ -137,17 +151,16 @@ export default {
       list.splice(0, list.length, ...emittedList);
     };
 
-    let sendForm = (listing, images) => {
-      console.log(listing)
-      console.log(images)
-      /**CategoryUtils.createSubCategory(category)
+    let sendForm = (formData) => {
+      ProductUtils.createProduct(formData)
           .then((response) => {
             console.log(response)
-            alert("Subcategory successfully created")
+            alert("Product successfully created")
+            router.push("/")
           })
           .catch((err) => {
             console.log(err)
-          }) */
+          })
     }
 
     const textVal = value => {
@@ -170,8 +183,7 @@ export default {
     const validationSchema = {
       title: textVal,
       price: priceVal, 
-      desc: textVal, 
-      category: (value) => {return value !== undefined}
+      desc: textVal
     }
     const { handleSubmit, errors } = useForm({validationSchema})
 
@@ -179,31 +191,37 @@ export default {
     const {value: price} = useField('price')
     const {value: desc} = useField('desc')
     const {value: state} = useField('state')
-    const {value: category} = useField('category')
 
     const submit = handleSubmit(values => {
       if(values.state === undefined) values.state= false
       if(list === undefined) return 
       let arr = JSON.parse(JSON.stringify(list))
       if(arr.length == 0) return 
-      let listing = {
-        title: values.title,
-        price: values.price,
-        desc: values.desc,
-        state: values.state, 
-        category: values.category,
-        subcategory: arr
+
+      let listingObject = {
+        product: {
+          title: values.title,
+          description: values.desc,
+          price: values.price,
+          used: values.state,
+        },
+        username: user(),
+        subcategories: arr,
       }
-      let images = uploadedImages
-      sendForm(listing, images) 
+
+      const formData = new FormData(); 
+      formData.append('object', JSON.stringify(listingObject)); 
+      for (let i = 0; i < uploadedImages.length; i++){
+        formData.append('files', uploadedImages[i])
+      }  
+      sendForm(formData) 
     })
 
     return {
       title, 
       price,
       desc,
-      state,
-      category, 
+      state, 
       errors,
       submit,
       uploadedImages,
