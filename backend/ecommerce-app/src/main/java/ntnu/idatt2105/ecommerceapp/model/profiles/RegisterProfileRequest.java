@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.profiles;
 
 public class RegisterProfileRequest {
     private String firstName;

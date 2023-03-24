@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.profiles;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,6 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
-import ntnu.idatt2105.ecommerceapp.model.ProfileRequest;
+import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
 import ntnu.idatt2105.ecommerceapp.services.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

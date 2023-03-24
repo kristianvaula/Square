@@ -29,6 +29,6 @@ export default {
             },
         };
 
-        return axios.post("http://localhost:8081/profile", JSON.stringify({eMail, password}), config);
+        return axios.post("http://localhost:8081/user/profile", JSON.stringify({eMail, password}), config);
     }
 }

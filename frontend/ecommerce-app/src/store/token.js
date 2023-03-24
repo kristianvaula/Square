@@ -17,6 +17,9 @@ export const useTokenStore = defineStore("token", {
 
                 if(data !== null && data !== '' && data !== undefined){
                     this.jwtToken = data;
+                    
+                    console.log(this.jwtToken);
+
                     response = await httputils.getProfile(eMail, password);                        
                 
                     this.loggedInUser = response.data.email                

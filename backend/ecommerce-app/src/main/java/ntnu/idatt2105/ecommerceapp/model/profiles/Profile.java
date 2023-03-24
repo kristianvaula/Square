@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.profiles;
 
 import java.util.Objects;
 
@@ -7,7 +7,6 @@ public class Profile {
     private String firstName;
     private String lastName;
     private String eMail;
-
     private int addressId;
     private String password;
 

@@ -1,13 +1,16 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
 import ntnu.idatt2105.ecommerceapp.model.County;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
-import ntnu.idatt2105.ecommerceapp.model.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.model.RegisterProfileRequest;
-import ntnu.idatt2105.ecommerceapp.repositiories.profile.ProfileDao;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
+import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
+import ntnu.idatt2105.ecommerceapp.model.profiles.RegisterProfileRequest;
+import ntnu.idatt2105.ecommerceapp.repositiories.autentication.JdbcAuthenticationRepo;
+import ntnu.idatt2105.ecommerceapp.repositiories.profile.IProfileDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,9 @@ import java.util.List;
 public class ProfileService {
 
     @Autowired
-    private ProfileDao profileDao;
+    private IProfileDao IProfileDao;
+    @Autowired
+    private JdbcAuthenticationRepo jdbcAuthenticationRepo;
     private Logger logger = LoggerFactory.getLogger(ProfileService.class);
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -32,7 +37,7 @@ public class ProfileService {
      * @return List with counties
      */
     public List<County> getCounties() {
-        return profileDao.getCounties();
+        return IProfileDao.getCounties();
     }
 
     /**
@@ -42,12 +47,12 @@ public class ProfileService {
      * profile
      */
     public Profile addProfile(RegisterProfileRequest profileRequest) {
-        Profile existingProfile = profileDao.getProfile(profileRequest.geteMail());
+        Profile existingProfile = IProfileDao.getProfile(profileRequest.geteMail());
         if (existingProfile == null) {
             logger.info("Creating profile for " + profileRequest.geteMail());
             String encodedPassword = passwordEncoder.encode(profileRequest.getPassword());
             profileRequest.setPassword(encodedPassword);
-            return profileDao.addProfile(profileRequest);
+            return IProfileDao.addProfile(profileRequest);
         }
         logger.info("It already exists a profile for eMail "  + profileRequest.geteMail());
         return null;
@@ -60,8 +65,8 @@ public class ProfileService {
      * @return True if the credentials is correct, and false if the check is incorrect.
      */
     public boolean checkProfileCredentials(String eMail, String password) {
-        List<Profile> profiles = profileDao.getProfiles();
-        Profile profile = profileDao.getProfile(eMail);
+        List<Profile> profiles = IProfileDao.getProfiles();
+        Profile profile = IProfileDao.getProfile(eMail);
         boolean correctPassword = false;
 
         if (profile != null && profiles.contains(profile)) {
@@ -80,9 +85,20 @@ public class ProfileService {
     public Profile getProfile(ProfileRequest profileRequest) {
         if (checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
             logger.info("Credentials is correct! Returning profile for " + profileRequest.getEMail());
-            return profileDao.getProfile(profileRequest.getEMail());
+            return IProfileDao.getProfile(profileRequest.getEMail());
         }
         logger.info("Credentials is invalid for " + profileRequest.getEMail());
         return null;
     }
+
+    public ProfileType getProfileType(Profile profile) {
+        logger.info("Retrieving profile type for " + profile.getEMail());
+        return jdbcAuthenticationRepo.getProfileType(profile);
+    }
+
+    public ProfileType getProfileType(String email) {
+        logger.info("Retrieving profile type for " + email);
+        return jdbcAuthenticationRepo.getProfileType(email);
+    }
+
 }
