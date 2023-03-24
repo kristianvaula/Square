@@ -1,5 +1,7 @@
 package ntnu.idatt2105.ecommerceapp.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,15 +16,17 @@ public class Product {
     @Column
     private String description;
     @Column
-    private String location;
-    @Column
     private int price;
     @Column
     private boolean used;
     @Column
     private int sellerId;
     @Column
-    private int buyerId;
+    private Integer buyerId;
+
+    @Autowired
+    public Product() {
+    }
 
     public int getId() {
         return id;
@@ -56,11 +60,11 @@ public class Product {
         this.sellerId = sellerId;
     }
 
-    public int getBuyerId() {
+    public Integer getBuyerId() {
         return buyerId;
     }
 
-    public void setBuyerId(int buyerId) {
+    public void setBuyerId(Integer buyerId) {
         this.buyerId = buyerId;
     }
 
@@ -70,14 +74,6 @@ public class Product {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public boolean isUsed() {
