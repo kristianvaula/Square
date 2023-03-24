@@ -5,12 +5,13 @@
         <img v-else class="icon-heart" src="@/assets/icons/heart.png" @click="favouriteProduct">
       </div>  
       <div class="image-wrapper">
-        <img src="@/assets/images/tools.jpg" alt=""/>
+        <img :src="firstImage[0]" alt=""/>
       </div>
       <div class="product-info" @click="goToProductPage">
-        <div class="location">
+        <!--<div class="location">
             <span> {{ this.ProductInfo.location }} </span>
-        </div>
+        </div>-->
+      
         <div>
           <h3>{{ this.ProductInfo.title }}</h3>
         </div>
@@ -33,6 +34,12 @@ import router from '@/router';
         ProductInfo: {
             type: Object,
             required: true
+        },
+
+        firstImage: {
+          type: Array,
+          required: true
+
         }
     },
     data() {
