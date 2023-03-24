@@ -35,6 +35,4 @@ import '@/assets/style/Pool.css'
         flex-wrap:wrap;
         padding: 5px;
     }
-
-
 </style>

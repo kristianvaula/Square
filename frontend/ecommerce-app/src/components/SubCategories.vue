@@ -59,10 +59,14 @@ export default {
   margin: 10px 0;
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   display: inline-block; /* change the display property to inline-block */
   margin-right: 10px;
+  max-width: 150px;
+  max-height: 45px;
+  min-width: 100px;
+  min-height: 45px;
 }
 #category-list li:hover {
   background-color: #ddd;

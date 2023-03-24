@@ -4,13 +4,14 @@
       <CategoryPool @selected-category-event="selectCategoryToShow" @deselect-category-event="deSelectCategoryToshow"/>
     </div>
     <div class="product-menu">
-      <div>
+      <div class="sub-categories">
         <h3 class="margin-top">SubCategories</h3>
-        <SubCategoryListVue :categoryId="this.currentCategory"/>
+        <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="this.currentSubCategories"/>
       </div>
       <div>
         <ProductPool/>
       </div>
+      
     </div>
     
   </div>
@@ -19,30 +20,44 @@
 <script>
 import ProductPool from '@/components/ProductPool.vue';
 import CategoryPool from '@/components/CategoryPool.vue';
-import SubCategoryListVue from '@/components/SubCategoryList.vue';
+import SubCategories from '@/components/SubCategories.vue';
+import CategoryUtils from '@/utils/CategoryUtils';
 
 export default {
   name: 'HomePage',
 
   data() {
     return {
-      currentCategory: null
+      selectedCategory: null,
+      currentSubCategories: [],
+      selectedSubCategory: null,
     }
   },
 
   components: {
     ProductPool,
     CategoryPool,
-    SubCategoryListVue
+    SubCategories
   },
 
   methods: {
-    selectCategoryToShow(id) {
-      this.currentCategory = id
+    async selectCategoryToShow(id) {
+      this.selectedCategory = id
+      var response = await CategoryUtils.getSubCategories(id)
+      this.currentSubCategories = response.data
     },
 
     deSelectCategoryToshow() {
-      this.currentCategory = 0
+      this.selectedCategory = null
+      this.currentSubCategories = null
+    },
+
+    selectSubCategory(id) {
+      if(this.selectedSubCategory == id) {
+        this.selectedSubCategory = null
+      } else {
+        this.selectedSubCategory = id
+      }
     }
   },
 
@@ -53,12 +68,15 @@ export default {
 .product-menu {
   display: flex;
   flex-direction: row;
-  margin-top: 20px;
-  padding: 20px;
-  
 }
 
-
-
-
+.sub-categories {
+  max-width: 200px;
+  min-width: 200px;
+  margin-top: 100px;
+  margin-left: 40px;
+  border-radius: 14px;
+    box-shadow:  7px 7px 14px #ebebeb,
+             -7px -7px 14px #ffffff;
+}
 </style>

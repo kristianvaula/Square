@@ -24,7 +24,6 @@
                     <div>
                         <SubCategoryForm/>
                     </div>
-                    
                 </div>
                     <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="currentSubCategories" />
                     <button class="delete-button" 
@@ -50,10 +49,9 @@
     data() {
         return {
             store,
-            selectedCategories: [],
-            currentSubCategories: null,
+            selectedCategory: null,
+            currentSubCategories: [],
             selectedSubCategory: null,
-            categoriesToDelete: []
         }
     },
 
@@ -82,37 +80,30 @@
         },
 
         deleteCategory() {
-            if(this.categoriesToDelete.length > 1) {
-                alert("Can't delete more than one Category at once")
-            } else {
-                if(confirm(`Do you really want to delete category with id: ${this.categoriesToDelete[0]}?`)){
-                CategoryUtils.removeCategory(this.categoriesToDelete[0])
+                if(confirm(`Do you really want to delete category with id: ${this.selectedCategory}?`)){
+                CategoryUtils.removeCategory(this.selectedCategory)
                 }
-            }
-
         },
 
         async selectCategory(id) { 
-            this.selectedCategories.push(id)
+            this.selectedCategory = id
             var response = await CategoryUtils.getSubCategories(id)
-            var data = response.data
-            this.currentSubCategories = data
+            this.currentSubCategories = response.data
         },
 
-        async deselectCategory(id) {
-            this.selectedCategories.pop(id)
+        async deselectCategory() {
+            this.selectedCategory = null
             var response = await CategoryUtils.getAllSubCategories()
-            console.log(response.data)
             this.currentSubCategories = response.data
 
         },
 
         selectCategoryToDelete(id) {
-            this.categoriesToDelete.push(id)
+            this.selectedCategory = id
         },
 
         deSelectCategoryToDelete(id) {
-            this.categoriesToDelete.pop(id)
+            this.selectedCategory = id
         }
     },
 

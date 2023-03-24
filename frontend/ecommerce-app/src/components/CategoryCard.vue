@@ -34,7 +34,6 @@
 
     methods: {
       handleSelect() {
-        console.log(!(this.CategoryInfo.categoryId === this.store.CurrentCategoryID))
         if(!(this.CategoryInfo.categoryId === this.store.CurrentCategoryID)) {
           this.store.CurrentCategoryID = this.CategoryInfo.categoryId
           this.$emit("selectedCardEvent", this.CategoryInfo)
