@@ -25,7 +25,7 @@
 
     methods: {
         openChat() {
-            // make chat MainChat (load data into MainChat)
+            this.$emit("selected", this.ChatInfo);
             this.isUnread = false;
         },
     },
