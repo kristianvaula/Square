@@ -20,7 +20,7 @@ export default {
     },
     modelValue: {
       type: Boolean, 
-      defualt: false
+      default: false
     }
   },
   setup () {
