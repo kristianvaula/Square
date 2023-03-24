@@ -1,7 +1,7 @@
 <template>
       <div class="my-messages">
         <ChatPool/>
-        <MainChat/>
+        <MainChat :chatId="chatId" :loggedInUser="loggedInUser" @update:loggedInUser="loggedInUser = $event" />      
       </div>
   </template>
   
@@ -17,7 +17,13 @@
     components: {
       ChatPool,
       MainChat,
-    }
+    },
+    data() {
+      return {
+        loggedInUser: '',
+        chatId: '123',
+      };
+    },
   
   }
   </script>

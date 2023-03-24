@@ -71,7 +71,6 @@ public class ProfileService {
         return correctPassword;
     }
 
-
     /**
      * The method retrieves the profile for the parameters if the credentials is correct
      * @param profileRequest Profile request for wanted profile
@@ -84,5 +83,14 @@ public class ProfileService {
         }
         logger.info("Credentials is invalid for " + profileRequest.getEMail());
         return null;
+    }
+
+    /**
+     * The method retrieves the profile for the parameters if the credentials is correct
+     * @param email Profile request for wanted profile
+     * @return Profile if the credentials is correct, otherwise null
+     */
+    public Profile getProfileByEmail(String email) {
+        return profileDao.getProfile(email);
     }
 }
