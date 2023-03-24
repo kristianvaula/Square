@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping(value = "/unauthorized")
 @EnableAutoConfiguration
@@ -26,14 +25,39 @@ public class TokenController {
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "/token")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<String> generateToken(final @RequestBody ProfileRequest profileRequest) {
-        logger.info("Received a request to generate token");
-        // if username and password are valid, issue an access token
-        // note that subsequent requests need this token
-        String token = tokenService.generateToken(profileRequest);
-        if (token == null) {
-            return new ResponseEntity<>("Access denied, wrong credentials....", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<String> generateToken(@RequestBody Profile profileRequest) {
+        try {
+            Profile profile = new Profile(profileRequest);
+            logger.info("Received a request to generate token {}", profile);
+            String token = tokenService.getJwtToken(profile);
+            if (token != null) {
+                return new ResponseEntity<>(token, HttpStatus.OK);
+            }
+        } catch (NullPointerException e) {
+            logger.warn(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>("Access denied, wrong credentials....", HttpStatus.UNAUTHORIZED);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "/token2")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<String> generateToken(@RequestBody ProfileRequest request) {
+        try {
+            ProfileRequest profileRequest = new ProfileRequest(request);
+            logger.info("Received a request to generate token {}", profileRequest.getEMail());
+            Profile profile = profileService.getProfile(profileRequest);
+            if (profile != null) {
+                String token = tokenService.getJwtToken(profile);
+                if (token != null) {
+                    return new ResponseEntity<>(token, HttpStatus.OK);
+                }
+            }
+        } catch (NullPointerException e) {
+            logger.warn(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Access denied, wrong credentials....", HttpStatus.UNAUTHORIZED);
     }
 }

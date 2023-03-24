@@ -28,7 +28,7 @@ public class ProfileDao implements IProfileDao {
         try {
             countyId = jdbcTemplate.queryForObject(countiesSql, Integer.class, countyName);
         } catch (EmptyResultDataAccessException e) {
-            logger.warn("Could not find a county for county name: " + countyName);
+            logger.warn("Could not find a county for county name: {}", countyName);
             countyId = -1;
         }
         return countyId;
@@ -56,7 +56,7 @@ public class ProfileDao implements IProfileDao {
             id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
         } catch (EmptyResultDataAccessException e) {
             int rowAffected = jdbcTemplate.update(insertSql, new Object[] {null, name, foreignKey});
-            logger.info("rows affected: " + rowAffected);
+            logger.info("rows affected: {}", rowAffected);
             id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
         }
         return id;
@@ -91,7 +91,7 @@ public class ProfileDao implements IProfileDao {
             profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
         } catch (EmptyResultDataAccessException e) {
             int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileTypeName});
-            logger.info("rows affected: " + rowAffected);
+            logger.info("rows affected: {}", rowAffected);
             profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
         }
         return profileTypeId;
@@ -118,12 +118,12 @@ public class ProfileDao implements IProfileDao {
             int cityId = addCity(profileRequest.getCity(), countyId);
             int addressId = addAddress(profileRequest.getAddress(), cityId);
 
-            // todo: fix profileTypeId: to not be mocked...
-            logger.info("Adds profile type to user " + profileRequest.geteMail() + " adding profile type "  + ProfileType.USER.getProfileName());
-            int profileTypeId = addProfileType(ProfileType.USER.getProfileName());
-            logger.info(profileRequest.geteMail() + " has been given profile type with id: " + profileTypeId);
 
-            logger.info(profileRequest.getFirstName() + ", " + profileRequest.getLastName() + ", " + profileRequest.geteMail() + ", " + profileRequest.getPassword() + ", " + addressId + ", "+ profileTypeId);
+            logger.info("Adds profile type to user {} adding profile type {}", profileRequest.geteMail(), ProfileType.USER.getProfileName());
+            int profileTypeId = addProfileType(ProfileType.USER.getProfileName());
+            logger.info("{} has been given profile type with id: {}", profileRequest.geteMail(), profileTypeId);
+
+            logger.debug(profileRequest.getFirstName() + ", " + profileRequest.getLastName() + ", " + profileRequest.geteMail() + ", " + profileRequest.getPassword() + ", " + addressId + ", "+ profileTypeId);
             int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileRequest.getFirstName(),
                     profileRequest.getLastName(), profileRequest.geteMail(), profileRequest.getPassword(), addressId, profileTypeId});
 
@@ -141,7 +141,7 @@ public class ProfileDao implements IProfileDao {
         try {
             profile = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class), eMail);
         } catch (EmptyResultDataAccessException e) {
-            logger.warn("Could not find a profile for e-Mail: " + eMail);
+            logger.warn("Could not find a profile for e-Mail: {}", eMail);
             profile = null;
         }
         return profile;

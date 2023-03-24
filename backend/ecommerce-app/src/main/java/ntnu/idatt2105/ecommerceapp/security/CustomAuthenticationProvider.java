@@ -4,8 +4,6 @@ import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
 import ntnu.idatt2105.ecommerceapp.services.ProfileService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,13 +22,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private ProfileService profileService;
-    Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String email = authentication.getName();
         final String password = authentication.getCredentials().toString();
-        logger.info("Authenticating " + email);
 
         Profile profile = profileService.getProfile(new ProfileRequest(email, password));
         ProfileType profileType = profileService.getProfileType(profile);

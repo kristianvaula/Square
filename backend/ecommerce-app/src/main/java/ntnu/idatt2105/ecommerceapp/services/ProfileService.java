@@ -10,7 +10,6 @@ import ntnu.idatt2105.ecommerceapp.repositiories.profile.IProfileDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,15 +61,21 @@ public class ProfileService {
      * The method checks the credentials given as parameters against the database
      * @param eMail E-mail to profile the credentials check is preformed on
      * @param password Proposed password to the profile
+     * @param isPasswordEncrypted boolean should be set to true if the password is encrypted, otherwise false
      * @return True if the credentials is correct, and false if the check is incorrect.
      */
-    public boolean checkProfileCredentials(String eMail, String password) {
+    public boolean checkProfileCredentials(String eMail, String password, boolean isPasswordEncrypted) {
+        logger.info("Controlling credentials for "  + eMail + " password " + password);
         List<Profile> profiles = IProfileDao.getProfiles();
         Profile profile = IProfileDao.getProfile(eMail);
         boolean correctPassword = false;
 
         if (profile != null && profiles.contains(profile)) {
-            correctPassword = passwordEncoder.matches(password, profile.getPassword());
+            if (!isPasswordEncrypted) {
+                correctPassword = passwordEncoder.matches(password, profile.getPassword());
+            } else {
+                correctPassword = password.equals(profile.getPassword());
+            }
         }
         logger.info("Credentials check for " + eMail + " is " + correctPassword);
         return correctPassword;
@@ -83,7 +88,7 @@ public class ProfileService {
      * @return Profile if the credentials is correct, otherwise null
      */
     public Profile getProfile(ProfileRequest profileRequest) {
-        if (checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
+        if (checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword(), false)) {
             logger.info("Credentials is correct! Returning profile for " + profileRequest.getEMail());
             return IProfileDao.getProfile(profileRequest.getEMail());
         }
@@ -98,12 +103,11 @@ public class ProfileService {
 
     public ProfileType getProfileType(String email, String password) {
         logger.info("Retrieving profile type for " + email + " password " + password);
-        return jdbcAuthenticationRepo.getProfileType(email, password, passwordEncoder);
+        return jdbcAuthenticationRepo.getProfileType(email, password);
     }
 
     public ProfileType getProfileType(String email) {
         logger.info("Retrieving profile type for " + email);
         return jdbcAuthenticationRepo.getProfileType(email);
     }
-
 }

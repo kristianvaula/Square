@@ -14,6 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAutoConfiguration
 public class SecurityConfig {
     // inject SecurityFilterChain and tell that all requests are authenticated
+
+    /**
+     * Allows every user to use endpoints with the prefix "/unauthorized", only user with user or admin role can
+     * use endpoints with the prefix "/user" and only admin users can use endpoints with the prefix "/admin"
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -21,7 +29,7 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers("/unauthorized/**").permitAll()
-                .requestMatchers("/user/**").hasAnyRole( "USER", "ADMIN")
+                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
@@ -30,7 +38,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //todo: slette?
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

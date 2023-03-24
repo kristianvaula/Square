@@ -1,6 +1,4 @@
 package ntnu.idatt2105.ecommerceapp.model.profiles;
-
-// todo: vurdere å ta klasse inn som en parameter til enum typene
 public enum ProfileType {
     UNAUTHORIZED("ROLE_UNAUTHORIZED"),
     USER("ROLE_USER"),

@@ -47,6 +47,7 @@ import router from "@/router";
 import { useField } from 'vee-validate' 
 import '../assets/style/BaseInput.css';
 import '../assets/style/FormPage.css';
+import httputils from "@/utils/httputils";
 
 export default {
   name: "LoginPage",
@@ -82,10 +83,21 @@ export default {
       passwordError
     }
   },
-  methods: {
+  methods: {  
     async signIn () {
-      if (this.tokenStore.loggedInUser === null) {
-        await this.tokenStore.getTokenAndSaveInStore(this.eMail, this.password);
+      let tokenPromise;
+      if (!this.eMail || !this.password) {
+          this.errorMessage = "Please fill in all filds"
+      } else if (this.tokenStore.loggedInUser === null) { 
+        try {
+          tokenPromise = await httputils.getToken(this.eMail, this.password);
+          console.log(tokenPromise)
+        } catch(error) {        
+          if (error.response.status === 401) {
+            this.errorMessage = "Crendtials is invalid"
+          }
+        }
+        await this.tokenStore.setTokenAndLoggedInUser(tokenPromise.data, this.eMail);
         if(this.tokenStore.jwtToken){
           router.push("/");
         } else {

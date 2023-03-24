@@ -20,7 +20,7 @@ const routes = [
     component: () => import('../views/RegisterProfilePage.vue')
   },
   {
-    path: '/user/create-listing',
+    path: '/create-listing',
     name: 'createListing',
     component: () => import('../views/CreateListingPage.vue')
   },

@@ -3,17 +3,13 @@ package ntnu.idatt2105.ecommerceapp.controllers;
 import ntnu.idatt2105.ecommerceapp.model.*;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
 import ntnu.idatt2105.ecommerceapp.model.profiles.RegisterProfileRequest;
-import ntnu.idatt2105.ecommerceapp.repositiories.autentication.JdbcAuthenticationRepo;
 import ntnu.idatt2105.ecommerceapp.services.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +19,6 @@ public class RegisterProfileController {
 
     @Autowired
     private ProfileService profileService;
-    @Autowired
-    private JdbcAuthenticationRepo jdbcAuthenticationRepo;
     Logger logger = LoggerFactory.getLogger(RegisterProfileController.class);
 
     /**
@@ -46,19 +40,26 @@ public class RegisterProfileController {
 
     @CrossOrigin("http://localhost:8080")
     @PostMapping("/unauthorized/new-profile")
-    public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest registerProfileRequest) {
-        logger.info("Received request to create a profile for: " + registerProfileRequest.getFirstName());
-        Profile profile = profileService.addProfile(registerProfileRequest);
-        if (profile == null) {
-            logger.info("E-mail is already used for another user");
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest profileRequest) {
+        try {
+            RegisterProfileRequest registerProfileRequest = new RegisterProfileRequest(profileRequest);
+            logger.info("Received request to create a profile for: {}", registerProfileRequest.geteMail());
+            Profile profile = profileService.addProfile(registerProfileRequest);
+            if (profile != null) {
+                logger.info("Returned user: {}", profile);
+                return new ResponseEntity<>(profile, HttpStatus.OK);
+            }
+        } catch (NullPointerException e) {
+            logger.warn(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Returned user:" + profile);
-        return new ResponseEntity<>(profile, HttpStatus.OK);
+        logger.info("E-mail is already used for another user");
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
+    /*
     @CrossOrigin("http://localhost:8080")
-    @PostMapping("/unauthorized/new-admin")
+    @PostMapping("/admin/new-admin")
     public ResponseEntity<Profile> addNewAdmin(@RequestBody RegisterProfileRequest registerProfileRequest) {
         logger.info("Received request to create a admin profile for: " + registerProfileRequest.getFirstName());
         Profile profile = profileService.addProfile(registerProfileRequest);
@@ -69,24 +70,31 @@ public class RegisterProfileController {
         logger.info("Returned user:" + profile);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
+     */
 
     //todo: add in another controller?
+
+    /**
+     * This endpoint requires that the password is in raw text
+     * @param request
+     * @return
+     */
     @CrossOrigin("http://localhost:8080")
     @PostMapping("/user/profile")
-    public ResponseEntity<Profile> getProfile(@RequestBody ProfileRequest profileRequest) {
-        logger.info("Received a request to get profile for {}", profileRequest.getEMail());
-        Profile profile = profileService.getProfile(profileRequest);
+    public ResponseEntity<Profile> getProfile(@RequestBody ProfileRequest request) {
+        try {
+            ProfileRequest profileRequest = new ProfileRequest(request);
+            logger.info("Received a request to get profile for {}", profileRequest.getEMail());
+            Profile profile = profileService.getProfile(profileRequest);
 
-        if (profile == null) {
-            logger.info("Could not find any user for the given email");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (profile != null) {
+                logger.info("Returned user: {}", profile);
+                return new ResponseEntity<>(profile, HttpStatus.OK);
+            }
+        } catch (NullPointerException e) {
+            logger.warn(e.getMessage());
         }
-        logger.info("Returned user:" + profile);
-        return new ResponseEntity<>(profile, HttpStatus.OK);
-    }
-
-    //todo: add in another controller?
-    public ResponseEntity<String> getProfileType() {
-        return null;
+        logger.info("Could not find any user for the given email");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

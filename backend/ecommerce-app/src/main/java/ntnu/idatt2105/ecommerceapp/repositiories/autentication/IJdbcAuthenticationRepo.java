@@ -10,5 +10,6 @@ public interface IJdbcAuthenticationRepo {
      * @return Profile type to the user
      */
     ProfileType getProfileType(Profile profile);
-    ProfileType getProfileType(String profile);
+    ProfileType getProfileType(String email, String password);
+    ProfileType getProfileType(String email);
 }
