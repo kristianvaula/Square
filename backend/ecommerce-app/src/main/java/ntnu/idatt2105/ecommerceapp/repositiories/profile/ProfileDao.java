@@ -55,7 +55,7 @@ public class ProfileDao implements IProfileDao {
             logger.info(getSql);
             id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
         } catch (EmptyResultDataAccessException e) {
-            int rowAffected = jdbcTemplate.update(insertSql, new Object[] {null, name, foreignKey});
+            int rowAffected = jdbcTemplate.update(insertSql, new Object[] {name, foreignKey});
             logger.info("rows affected: {}", rowAffected);
             id = jdbcTemplate.queryForObject(getSql, Integer.class, name, foreignKey);
         }
@@ -64,7 +64,7 @@ public class ProfileDao implements IProfileDao {
     @Override
     public int addCity(String cityName, int countyId) {
         String getCityIdSql = "SELECT cityId FROM city WHERE cityName=? AND countyId=?";
-        String insertCitySql = "INSERT INTO city VALUES(?, ?, ?)";
+        String insertCitySql = "INSERT INTO city (cityName, countyId) VALUES(?, ?)";
 
         int cityId = addSimpleEntity(getCityIdSql, insertCitySql, cityName, countyId);
         logger.info("Answered with cityId {}", cityId);
@@ -74,7 +74,7 @@ public class ProfileDao implements IProfileDao {
     @Override
     public int addAddress(String address, int cityId) {
         String getAddressIdSql = "SELECT addressId FROM address WHERE address=? AND cityId=?";
-        String insertAddressSql = "INSERT INTO address VALUES(?, ?, ?)";
+        String insertAddressSql = "INSERT INTO address(address, cityId) VALUES(?, ?)";
 
         int addressId = addSimpleEntity(getAddressIdSql, insertAddressSql, address, cityId);
         logger.info("Answered with addressId {}", addressId);
@@ -84,13 +84,13 @@ public class ProfileDao implements IProfileDao {
     @Override
     public int addProfileType(String profileTypeName) {
         String getProfileSql = "SELECT profileTypeId FROM profiletype WHERE roleName=?";
-        String insertProfileSql = "INSERT INTO profiletype VALUES(?, ?)";
+        String insertProfileSql = "INSERT INTO profiletype(roleName) VALUES(?)";
         int profileTypeId;
 
         try {
             profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
         } catch (EmptyResultDataAccessException e) {
-            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileTypeName});
+            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {profileTypeName});
             logger.info("rows affected: {}", rowAffected);
             profileTypeId = jdbcTemplate.queryForObject(getProfileSql, Integer.class, profileTypeName);
         }
@@ -107,7 +107,7 @@ public class ProfileDao implements IProfileDao {
     @Override
     public Profile addProfile(RegisterProfileRequest profileRequest) {
         String getProfileIdSql = "SELECT * FROM profile WHERE eMail=?";
-        String insertProfileSql = "INSERT INTO profile VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String insertProfileSql = "INSERT INTO profile(firstName, lastName, email, password, addressId, profileTypeId) VALUES(?, ?, ?, ?, ?, ?)";
         Profile profile;
 
         try {
@@ -124,7 +124,7 @@ public class ProfileDao implements IProfileDao {
             logger.info("{} has been given profile type with id: {}", profileRequest.geteMail(), profileTypeId);
 
             logger.debug(profileRequest.getFirstName() + ", " + profileRequest.getLastName() + ", " + profileRequest.geteMail() + ", " + profileRequest.getPassword() + ", " + addressId + ", "+ profileTypeId);
-            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {null, profileRequest.getFirstName(),
+            int rowAffected = jdbcTemplate.update(insertProfileSql, new Object[] {profileRequest.getFirstName(),
                     profileRequest.getLastName(), profileRequest.geteMail(), profileRequest.getPassword(), addressId, profileTypeId});
 
             logger.debug("Rows affected after added new user: {}", rowAffected);

@@ -101,7 +101,6 @@ public class ProfileDaoImpl implements ProfileDao {
      * returns the newly added profile.
      */
     @Transactional
-    @Override
     public Profile addProfile(RegisterProfileRequest profileRequest) {
         String getProfileIdSql = "SELECT * FROM profile WHERE eMail=?";
         String insertProfileSql = "INSERT INTO profile(firstName, lastName, email, password, addressId, profileTypeId) VALUES(?, ?, ?, ?, ?, ?)";
