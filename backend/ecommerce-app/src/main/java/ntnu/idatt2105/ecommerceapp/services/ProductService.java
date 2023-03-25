@@ -3,7 +3,7 @@ package ntnu.idatt2105.ecommerceapp.services;
 import ntnu.idatt2105.ecommerceapp.model.ListingObject;
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.repositiories.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

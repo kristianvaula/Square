@@ -1,7 +1,7 @@
 package ntnu.idatt2105.ecommerceapp.repositiories;
 
 import ntnu.idatt2105.ecommerceapp.model.Product;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 
 import java.sql.Blob;
 import java.util.List;
