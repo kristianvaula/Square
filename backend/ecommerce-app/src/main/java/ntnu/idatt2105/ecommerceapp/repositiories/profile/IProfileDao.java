@@ -72,4 +72,10 @@ public interface IProfileDao {
      * @return List with all profiles registered in the database
      */
     List<Profile> getProfiles();
+
+    Address getAddress(int addressId);
+
+    City getCity(int cityId);
+
+    County getCounty(int countyId);
 }

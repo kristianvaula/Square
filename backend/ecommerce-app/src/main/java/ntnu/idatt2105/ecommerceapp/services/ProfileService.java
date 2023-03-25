@@ -1,6 +1,9 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
+import ntnu.idatt2105.ecommerceapp.model.Address;
+import ntnu.idatt2105.ecommerceapp.model.City;
 import ntnu.idatt2105.ecommerceapp.model.County;
+import ntnu.idatt2105.ecommerceapp.model.Location;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
@@ -95,6 +98,13 @@ public class ProfileService {
         return null;
     }
 
+    public int getProfile(String eMail) {
+        logger.info("Returning profile for " + eMail);
+        int profileId = profileDao.getProfile(eMail).getProfileId();
+        logger.info("Profile is returned for {} is {}", eMail, profileId);
+        return profileId;
+    }
+
     public ProfileType getProfileType(Profile profile) {
         logger.info("Retrieving profile type for " + profile.getEMail());
         return jdbcAuthenticationRepo.getProfileType(profile);
@@ -117,5 +127,19 @@ public class ProfileService {
      */
     public Profile getProfileByEmail(String email) {
         return profileDao.getProfile(email);
+    }
+
+    public Location getLocation(int addressId){
+        logger.info("Retrieving address for addressId {}" + addressId);
+        Address address = profileDao.getAddress(addressId);
+        logger.info("Received address {} with cityId {}", address.getAddressName(), address.getCityId());
+        City city = profileDao.getCity(address.getCityId());
+        logger.info("Received city {} with countyId {}", city.getCityName(), city.getCountyId());
+        County county = profileDao.getCounty(city.getCountyId());
+        logger.info("Received county {}", county.getCountyName());
+
+        Location location = new Location(address.getAddressName(), city.getCityName(), county.getCountyName());
+        logger.info("Returns location {} ", location);
+        return location;
     }
 }
