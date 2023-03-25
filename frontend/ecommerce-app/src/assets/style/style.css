@@ -76,12 +76,22 @@ legend {
   cursor: pointer;
 } 
 
+button:disabled {
+  opacity:0.5;
+}
+
 .button:active {
   background-color: #ba1632;
   box-shadow: 0 2px #666;
   transform:translateY( 4px );
 }
 .button-small:active {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
+}
+
+.button-small:disabled {
   background-color: #ba1632;
   box-shadow: 0 0px #666;
   transform:translateY( 2px );
