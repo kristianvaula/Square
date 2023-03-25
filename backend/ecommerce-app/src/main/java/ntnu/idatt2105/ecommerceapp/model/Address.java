@@ -1,12 +1,15 @@
 package ntnu.idatt2105.ecommerceapp.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+
 /**
  * The class represents an address as it is stored in the database
  * Each attribute have setters and getters
  */
 public class Address {
     private int addressId;
-    private String addressName;
+    private String address;
     private int cityId;
 
     /**
@@ -18,12 +21,13 @@ public class Address {
     /**
      * Constructor for an address
      * @param addressId
-     * @param addressName
+     * @param address
      * @param cityId
      */
-    public Address(int addressId, String addressName, int cityId) {
+    public Address(@JsonProperty("addressId") int addressId, @JsonProperty("address") String address,
+                   @JsonProperty("cityId") int cityId) {
         this.addressId = addressId;
-        this.addressName = addressName;
+        this.address = address;
         this.cityId = cityId;
     }
 
@@ -31,6 +35,7 @@ public class Address {
      * Getter for addressId
      * @return addressId
      */
+    @JsonProperty("addressId")
     public int getAddressId() {
         return addressId;
     }
@@ -47,22 +52,24 @@ public class Address {
      * Getter for address name
      * @return address name
      */
-    public String getAddressName() {
-        return addressName;
+    @JsonProperty("address")
+    public String getAddress() {
+        return address;
     }
 
     /**
      * Setter for address name
-     * @param addressName address name
+     * @param address address name
      */
-    public void setAddressName(String addressName) {
-        this.addressName = addressName;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**
      * Getter for cityId
      * @return cityId
      */
+    @JsonProperty("cityId")
     public int getCityId() {
         return cityId;
     }
@@ -71,7 +78,7 @@ public class Address {
      * Setter for cityId
      * @param cityId new cityId
      */
-    public void setCity(int cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 }

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useTokenStore } from "@/store/token";
 
-//const baseurl = "http://localhost:8081";
-const config = {
+const baseurl = "http://localhost:8081";
+const configBasic = {
     headers: {
         "Content-type": "application/json"
     },
@@ -10,17 +10,17 @@ const config = {
 
 export default {
     getCounties() {
-        return axios.get("http://localhost:8081/unauthorized/counties", config);
+        return axios.get(`${baseurl}/unauthorized/counties`, configBasic);
     },
     createUser(profile) {
-        return axios.post("http://localhost:8081/unauthorized/new-profile", JSON.stringify(profile), config);
+        return axios.post(`${baseurl}/unauthorized/new-profile`, JSON.stringify(profile), configBasic);
     },
 
     getJwtToken(profile) {
-        return axios.post("http://localhost:8081/unauthorized/token", JSON.stringify(profile), config);
+        return axios.post(`${baseurl}/unauthorized/token`, JSON.stringify(profile), configBasic);
     },
     getToken(eMail, password) {
-        return axios.post("http://localhost:8081/unauthorized/token2", JSON.stringify({eMail, password}), config);
+        return axios.post(`${baseurl}/unauthorized/token2`, JSON.stringify({eMail, password}), configBasic);
     },
     getProfile(eMail, password) {
         const tokenStore = useTokenStore();
@@ -32,7 +32,7 @@ export default {
             },
         };
 
-        return axios.post("http://localhost:8081/user/profile", JSON.stringify({eMail, password}), config);
+        return axios.post(`${baseurl}/user/profile`, JSON.stringify({eMail, password}), config);
     },
     getProfileId(eMail) {
         const tokenStore = useTokenStore();
@@ -45,7 +45,7 @@ export default {
         };
         console.log(eMail)
         console.log(tokenStore.jwtToken)
-        return axios.get("http://localhost:8081/user/profile/" + eMail, config);
+        return axios.get(`${baseurl}/user/profile/${eMail}`, config);
     },
     getProfileByEmail(eMail) {
         const tokenStore = useTokenStore();
@@ -57,6 +57,16 @@ export default {
             },
         };
 
-        return axios.get("http://localhost:8081/profile/by-email/" + eMail, config);
+        return axios.get(`${baseurl}/profile/by-email/${eMail}`, config);
+    },
+    getLocation(id) {
+        const tokenStore = useTokenStore(); 
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + tokenStore.jwtToken
+            },
+        }; 
+        return axios.get(`${baseurl}/user/address/${id}`, config);
     }
 }

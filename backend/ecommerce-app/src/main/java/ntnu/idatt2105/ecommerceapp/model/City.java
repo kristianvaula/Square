@@ -71,7 +71,7 @@ public class City {
      * Setter for countyId
      * @param countyId new countyId
      */
-    public void setCounty(int countyId) {
+    public void setCountyId(int countyId) {
         this.countyId = countyId;
     }
 }

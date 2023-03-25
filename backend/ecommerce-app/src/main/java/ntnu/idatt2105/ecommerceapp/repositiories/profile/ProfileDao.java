@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -195,7 +196,7 @@ public class ProfileDao implements IProfileDao {
 
     @Override
     public Address getAddress(int addressId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM address WHERE addressId = ?",
+        return jdbcTemplate.queryForObject("SELECT * FROM address WHERE addressId=?",
                 BeanPropertyRowMapper.newInstance(Address.class), addressId);
     }
 

@@ -126,19 +126,19 @@ public class ProfileService {
      * @return Profile if the credentials is correct, otherwise null
      */
     public Profile getProfileByEmail(String email) {
-        return IProfileDao.getProfile(email);
+        return profileDao.getProfile(email);
     }
 
     public Location getLocation(int addressId){
-        logger.info("Retrieving address for addressId {}" + addressId);
+        logger.info("Retrieving address for addressId {}", addressId);
         Address address = profileDao.getAddress(addressId);
-        logger.info("Received address {} with cityId {}", address.getAddressName(), address.getCityId());
+        logger.info("Received address {} with cityId {}", address.getAddress(), address.getCityId());
         City city = profileDao.getCity(address.getCityId());
         logger.info("Received city {} with countyId {}", city.getCityName(), city.getCountyId());
         County county = profileDao.getCounty(city.getCountyId());
         logger.info("Received county {}", county.getCountyName());
 
-        Location location = new Location(address.getAddressName(), city.getCityName(), county.getCountyName());
+        Location location = new Location(address.getAddress(), city.getCityName(), county.getCountyName());
         logger.info("Returns location {} ", location);
         return location;
     }

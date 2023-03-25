@@ -34,28 +34,31 @@
         ProfileInfo: null
       }
     },
-
     setup() {
-        const store = useTokenStore()
-        return {
-            store
-        }
+      const store = useTokenStore()
+      return {
+          store
+      }
     },
+    async mounted () {                  
+      let profilePromise = await httputils.getProfileByEmail(this.store.loggedInUser);      
+      let profile = profilePromise.data;
 
-    mounted () {
-            let vm = this
-            httputils.getProfileByEmail(this.store.loggedInUser)
-                .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    vm.ProfileInfo = response.data
-                }
-            })
-                .catch((err) => {
-                console.log(err)
-                })
-        }, 
+      let locationPromise;
+      if (profile) {    
+        locationPromise = await httputils.getLocation(profile.addressId);
+      }
 
-  };
+      let location = locationPromise.data;
+
+      this.ProfileInfo = {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        eMail: profile.eMail,
+        location: location.county + ", " + location.city,
+        address: location.address
+      }
+    }
+  }
   </script>
   
