@@ -97,4 +97,17 @@ public class RegisterProfileController {
         logger.info("Could not find any user for the given email");
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping("/profile/by-email")
+    public ResponseEntity<Profile> getProfileByEmail(@RequestParam String email) {
+        logger.info("Received a request to get profile with email: {}", email);
+        Profile profile = profileService.getProfileByEmail(email);
+        if (profile == null) {
+            logger.info("Could not find any user for the given email");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.info("Returned user:" + profile);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
 }

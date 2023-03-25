@@ -7,7 +7,7 @@
       <div class="image-wrapper">
         <img src="@/assets/images/tools.jpg" alt=""/>
       </div>
-      <div class="product-info">
+      <div class="product-info" @click="goToProductPage">
         <div class="location">
             <span> {{ this.ProductInfo.location }} </span>
         </div>
@@ -24,6 +24,7 @@
   
   <script>
   import '@/assets/style/ProductCardComponent.css'
+import router from '@/router';
   import { store } from '@/store/index.js'
   
   export default {
@@ -43,12 +44,20 @@
 
     methods: {
         favouriteProduct() {
-            this.isInFavourites = true;
+          this.isInFavourites = true;
+          alert(`${this.ProductInfo.title} added to favourites!`)
+            
         },
 
         unfavouriteProduct() {
             this.isInFavourites = false;
+            alert(`${this.ProductInfo.title} removed from favourites!`)
         },
+
+        goToProductPage() {
+          this.store.CurrentProductId = this.ProductInfo.productId
+          router.push(`/productPage`)
+        }
     },
   };
   </script>

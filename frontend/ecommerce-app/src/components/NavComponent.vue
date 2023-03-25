@@ -37,7 +37,7 @@
       </li>
 
       <li class="dropdown-container" v-if="user">
-        <router-link to="/profile-page">
+        <router-link to="/my-profile">
           <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
           <h1>{{ user.firstName }}</h1>
         </router-link>

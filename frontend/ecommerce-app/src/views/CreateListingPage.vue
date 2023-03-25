@@ -3,15 +3,16 @@
     <h1>{{ headerText }}</h1>
     <legend>Product Photos</legend>
     <div>
-      <ImgCarousel v-if="displayImage" :images="this.images" />
-    </div>
-
-    <div class="base-input">
-      <input type="file" ref="fileInput" @change="handleFileUpload">
-      <button class="button-small" @click="uploadFile" :disabled="!file">Upload</button>
+      <ImgCarousel v-if="displayImage" :images="uploadedImages" />
     </div>
 
     <form @submit="submit">
+      
+      <div class="base-input">
+        <input type="file" ref="fileInput" @change="handleFileUpload">
+        <button class="button-small" @click="resetUploadedImages" :disabled="!file">Reset</button>
+      </div>
+
       <legend>Product Information</legend>
       <div class="base-input center">
         <BaseText
@@ -53,7 +54,7 @@
           </div>
           <div>
             <label>Subcategories</label>
-            <SubcategoryList @selected-id-list="handleSelectedId" :categoryId="category"/>
+            <SubcategoryList @selected-id-list="rerouteList" :categoryId="category"/>
           </div>
         </div> 
         
@@ -77,7 +78,11 @@ import BaseCheckbox from '@/components/templates/BaseCheckbox.vue'
 import SubcategoryList from '@/components/SubCategoryList.vue';
 import ImgCarousel from '@/components/ImgCarouselComponent.vue'
 import CategoryUtils from '@/utils/CategoryUtils.js';
+import ProductUtils from '@/utils/ProductUtils.js';
 import '@/assets/style/CreateListingPage.css'
+import { reactive } from '@vue/reactivity'
+import { useTokenStore } from '@/store/token.js'
+import router from '@/router';
 
 export default {
   components: {
@@ -87,32 +92,34 @@ export default {
     return {
       headerText: 'Create a new listing',
       categories: null,
-      subcategories: null,
       image: null,
-      displayImage: false, 
-      images: []
+      images: null,
+      category: null,
+      displayImage: false
     }
   },
   methods: {
+    handleImage(image){
+      this.uploadedImagesuploadedImages = image.slice()
+    },
     handleFileUpload() {
-      this.file = this.$refs.fileInput.files[0]; 
-
-      const reader = new FileReader(); 
+      this.file = this.$refs.fileInput.files[0]
+      const reader = new FileReader()
       reader.onload = () => {
-        this.images.push(reader.result); 
-        this.displayImage = true; 
-      }; 
+        this.uploadedImages.push(reader.result)
+        this.displayImage = true 
+      }
       reader.readAsDataURL(this.file)
-
     },
-    uploadFile() {
-      const formData = new formData(); 
-      formData.append('image', this.file); 
+    rerouteList(list) {
+      let arr = JSON.parse(JSON.stringify(list))
+      this.updateList(arr)
     },
-    handleSelectedId(subcategories) {
-      console.log(subcategories.slice())
-      this.subcategories = subcategories.slice(); 
+    resetUploadedImages() {
+      this.uploadedImages.splice(0,this.uploadedImages.length)
+      this.displayImage = false 
     }
+
   },  
   mounted () {
     let vm = this
@@ -128,8 +135,32 @@ export default {
       })
   },  
   setup () {
-    let sendForm = (listing) => {
-      console.log("MOCK SENDING "+ listing); 
+    
+    let user = () => {
+      const tokenStore = useTokenStore();
+      if(tokenStore.jwtToken) {
+        return tokenStore.loggedInUser
+      }
+      return null
+    } 
+    
+    const uploadedImages = reactive([])
+  
+    const list = reactive([]);
+    const updateList = (emittedList) => {
+      list.splice(0, list.length, ...emittedList);
+    };
+
+    let sendForm = (formData) => {
+      ProductUtils.createProduct(formData)
+          .then((response) => {
+            console.log(response)
+            alert("Product successfully created")
+            router.push("/")
+          })
+          .catch((err) => {
+            console.log(err)
+          })
     }
 
     const textVal = value => {
@@ -154,35 +185,47 @@ export default {
       price: priceVal, 
       desc: textVal
     }
-    
     const { handleSubmit, errors } = useForm({validationSchema})
 
     const {value: title} = useField('title')
     const {value: price} = useField('price')
     const {value: desc} = useField('desc')
     const {value: state} = useField('state')
-    const {value: category} = useField('category')
 
     const submit = handleSubmit(values => {
-      console.log(values)
-      let listing = {
-        title: values.title,
-        price: values.price,
-        desc: values.desc,
-        state: values.state, 
-        category: values.category
+      if(values.state === undefined) values.state= false
+      if(list === undefined) return 
+      let arr = JSON.parse(JSON.stringify(list))
+      if(arr.length == 0) return 
+
+      let listingObject = {
+        product: {
+          title: values.title,
+          description: values.desc,
+          price: values.price,
+          used: values.state,
+        },
+        username: user(),
+        subcategories: arr,
       }
-      sendForm(listing)
+
+      const formData = new FormData(); 
+      formData.append('object', JSON.stringify(listingObject)); 
+      for (let i = 0; i < uploadedImages.length; i++){
+        formData.append('files', uploadedImages[i])
+      }  
+      sendForm(formData) 
     })
 
     return {
-      title,
+      title, 
       price,
       desc,
       state, 
-      category,
-      errors, 
-      submit
+      errors,
+      submit,
+      uploadedImages,
+      updateList
     }
   }
 }

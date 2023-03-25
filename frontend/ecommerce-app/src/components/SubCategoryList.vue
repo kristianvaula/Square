@@ -20,7 +20,7 @@ export default {
     categoryId: {
       type: Number, 
       required: true, 
-      default: 1
+      default: 0
     }
   },
   data() {
@@ -34,7 +34,6 @@ export default {
       let vm = this
       let id = this.categoryId
       if(typeof id == 'number') {
-        console.log("Success")
         CategoryUtils.getSubCategories(id)
         .then((response) => {
           if(response.data) {

@@ -36,5 +36,17 @@
   .category-size {
     display: grid;
     grid-template-rows: 0.5fr, 2fr, 1fr;
-    margin-bottom: 5px;
+  }
+
+  .category-selected {
+    background-color: #6b232d;
+    color: white;
+    display: grid;
+    position: relative;
+    width: 125px;
+    height: 125px;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 2%;
+    grid-template-rows: 4fr, 2fr;
   }

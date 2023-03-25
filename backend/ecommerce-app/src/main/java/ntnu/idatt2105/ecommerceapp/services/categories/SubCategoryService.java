@@ -50,4 +50,11 @@ public class SubCategoryService {
         logger.info("Returning list of length " + categories.size());
         return new ResponseEntity<>(categories, HttpStatus.OK);
     };
+
+    public ResponseEntity<List<SubCategory>> getAllSubCategories(){
+        List<SubCategory> categories = new ArrayList<>();
+        categories.addAll(repository.getAllSubCategories());
+        logger.info("Returning list of length " + categories.size());
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    };
 }

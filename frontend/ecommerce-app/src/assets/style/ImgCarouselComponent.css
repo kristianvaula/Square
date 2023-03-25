@@ -7,6 +7,10 @@
   border: 1px solid #ccc;
   background-color:#54595e;
   border-radius:5px; 
+  min-height:500px;
+  min-width:700px;
+  max-height: 500px;
+  max-width: 700px;
 }
 .carousel {
   min-height:400px;

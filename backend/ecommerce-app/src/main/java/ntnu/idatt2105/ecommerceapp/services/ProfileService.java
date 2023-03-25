@@ -81,7 +81,6 @@ public class ProfileService {
         return correctPassword;
     }
 
-
     /**
      * The method retrieves the profile for the parameters if the credentials is correct
      * @param profileRequest Profile request for wanted profile
@@ -109,5 +108,14 @@ public class ProfileService {
     public ProfileType getProfileType(String email) {
         logger.info("Retrieving profile type for " + email);
         return jdbcAuthenticationRepo.getProfileType(email);
+    }
+
+    /**
+     * The method retrieves the profile for the parameters if the credentials is correct
+     * @param email Profile request for wanted profile
+     * @return Profile if the credentials is correct, otherwise null
+     */
+    public Profile getProfileByEmail(String email) {
+        return profileDao.getProfile(email);
     }
 }

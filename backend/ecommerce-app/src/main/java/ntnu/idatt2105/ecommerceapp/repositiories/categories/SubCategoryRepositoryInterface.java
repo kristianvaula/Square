@@ -11,4 +11,6 @@ public interface SubCategoryRepositoryInterface {
     public int removeSubCategory(int id);
 
     public List<SubCategory> getSubCategories(int categoryId);
+
+    public List<SubCategory> getAllSubCategories();
 }
