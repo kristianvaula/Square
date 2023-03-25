@@ -1,10 +1,8 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
-import ntnu.idatt2105.ecommerceapp.repositiories.profile.IProfileDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

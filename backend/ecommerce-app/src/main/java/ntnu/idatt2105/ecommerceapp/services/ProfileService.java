@@ -116,6 +116,6 @@ public class ProfileService {
      * @return Profile if the credentials is correct, otherwise null
      */
     public Profile getProfileByEmail(String email) {
-        return profileDao.getProfile(email);
+        return IProfileDao.getProfile(email);
     }
 }
