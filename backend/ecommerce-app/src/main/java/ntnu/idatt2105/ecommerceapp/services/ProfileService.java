@@ -24,7 +24,7 @@ import java.util.List;
 public class ProfileService {
 
     @Autowired
-    private IProfileDao IProfileDao;
+    private IProfileDao profileDao;
     @Autowired
     private JdbcAuthenticationRepo jdbcAuthenticationRepo;
     private Logger logger = LoggerFactory.getLogger(ProfileService.class);
@@ -36,7 +36,7 @@ public class ProfileService {
      * @return List with counties
      */
     public List<County> getCounties() {
-        return IProfileDao.getCounties();
+        return profileDao.getCounties();
     }
 
     /**
@@ -46,12 +46,12 @@ public class ProfileService {
      * profile
      */
     public Profile addProfile(RegisterProfileRequest profileRequest) {
-        Profile existingProfile = IProfileDao.getProfile(profileRequest.geteMail());
+        Profile existingProfile = profileDao.getProfile(profileRequest.geteMail());
         if (existingProfile == null) {
             logger.info("Creating profile for " + profileRequest.geteMail() + " with password " + profileRequest.getPassword());
             String encodedPassword = passwordEncoder.encode(profileRequest.getPassword());
             profileRequest.setPassword(encodedPassword);
-            return IProfileDao.addProfile(profileRequest);
+            return profileDao.addProfile(profileRequest);
         }
         logger.info("It already exists a profile for eMail "  + profileRequest.geteMail());
         return null;
@@ -66,8 +66,8 @@ public class ProfileService {
      */
     public boolean checkProfileCredentials(String eMail, String password, boolean isPasswordEncrypted) {
         logger.info("Controlling credentials for "  + eMail + " password " + password);
-        List<Profile> profiles = IProfileDao.getProfiles();
-        Profile profile = IProfileDao.getProfile(eMail);
+        List<Profile> profiles = profileDao.getProfiles();
+        Profile profile = profileDao.getProfile(eMail);
         boolean correctPassword = false;
 
         if (profile != null && profiles.contains(profile)) {
@@ -89,7 +89,7 @@ public class ProfileService {
     public Profile getProfile(ProfileRequest profileRequest) {
         if (checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword(), false)) {
             logger.info("Credentials is correct! Returning profile for " + profileRequest.getEMail());
-            return IProfileDao.getProfile(profileRequest.getEMail());
+            return profileDao.getProfile(profileRequest.getEMail());
         }
         logger.info("Credentials is invalid for " + profileRequest.getEMail());
         return null;
