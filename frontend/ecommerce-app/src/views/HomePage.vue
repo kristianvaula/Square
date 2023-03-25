@@ -61,7 +61,7 @@ export default {
     async selectSubCategory(id) {
       if(this.selectedSubCategory == id) {
         this.selectedSubCategory = null
-        var data = await ProductUtils.getProducts()
+        var data = await ProductUtils.getProductByCategory(this.selectedCategory)
         this.products = data.data
       } else {
         this.selectedSubCategory = id
