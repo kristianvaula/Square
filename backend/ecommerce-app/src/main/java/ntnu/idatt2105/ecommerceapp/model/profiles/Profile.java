@@ -1,4 +1,6 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.profiles;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
@@ -7,14 +9,33 @@ public class Profile {
     private String firstName;
     private String lastName;
     private String eMail;
-
     private int addressId;
     private String password;
 
     public Profile() {
     }
 
-    public Profile(int profileId, String firstName, String lastName, String eMail, int addressId, String password) {
+    public Profile(Profile profile) {
+        if (profile.getFirstName() == null || profile.getLastName() == null || profile.getEMail() == null ||
+        profile.getPassword() == null) {
+            throw new NullPointerException("There is not given properly information to create a profile");
+        }
+
+        this.profileId = profile.getProfileId();
+        this.firstName = profile.getFirstName();
+        this.lastName = profile.getLastName();
+        this.eMail = profile.getEMail();
+        this.addressId = profile.getAddressId();
+        this.password = profile.password;
+    }
+
+    public Profile(@JsonProperty("profileId") int profileId,@JsonProperty("firstName") String firstName,
+                   @JsonProperty("lastName") String lastName,@JsonProperty("eMail") String eMail,
+                   @JsonProperty("addressId") int addressId,@JsonProperty("password") String password) {
+        if (firstName == null || lastName == null || eMail == null || password == null) {
+            throw new NullPointerException("There is not given properly information to create a profile");
+        }
+
         this.profileId = profileId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +43,7 @@ public class Profile {
         this.addressId = addressId;
         this.password = password;
     }
-
+    @JsonProperty("profileId")
     public int getProfileId() {
         return profileId;
     }
@@ -30,7 +51,7 @@ public class Profile {
     public void setProfileId(int profileId) {
         this.profileId = profileId;
     }
-
+    @JsonProperty("firstName")
     public String getFirstName() {
         return firstName;
     }
@@ -38,7 +59,7 @@ public class Profile {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
+    @JsonProperty("lastName")
     public String getLastName() {
         return lastName;
     }
@@ -46,7 +67,7 @@ public class Profile {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
+    @JsonProperty("eMail")
     public String getEMail() {
         return eMail;
     }
@@ -54,7 +75,7 @@ public class Profile {
     public void setEMail(String eMail) {
         this.eMail = eMail;
     }
-
+    @JsonProperty("addressId")
     public int getAddressId() {
         return addressId;
     }
@@ -62,13 +83,12 @@ public class Profile {
     public void setAddressId(int addressId) {
         this.addressId = addressId;
     }
-
+    @JsonProperty("password")
     public String getPassword() {
         return password;
     }
 
     //todo: when editing password should the old one be given before the change is made
-
     public void setPassword(String password) {
         this.password = password;
     }

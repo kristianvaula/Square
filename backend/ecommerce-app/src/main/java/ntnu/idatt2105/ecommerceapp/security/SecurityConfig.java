@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -15,6 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAutoConfiguration
 public class SecurityConfig {
     // inject SecurityFilterChain and tell that all requests are authenticated
+
+    /**
+     * Allows every user to use endpoints with the prefix "/unauthorized", only user with user or admin role can
+     * use endpoints with the prefix "/user" and only admin users can use endpoints with the prefix "/admin"
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -22,9 +29,11 @@ public class SecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers("/unauthorized/**").permitAll()
+                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

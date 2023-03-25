@@ -1,4 +1,4 @@
-package ntnu.idatt2105.ecommerceapp.model;
+package ntnu.idatt2105.ecommerceapp.model.profiles;
 
 public class RegisterProfileRequest {
     private String firstName;
@@ -12,8 +12,28 @@ public class RegisterProfileRequest {
     public RegisterProfileRequest() {
     }
 
+    public RegisterProfileRequest(RegisterProfileRequest registerProfileRequest) {
+        if (registerProfileRequest.getFirstName() == null || registerProfileRequest.getLastName() == null ||
+                registerProfileRequest.geteMail() == null || registerProfileRequest.getCounty() == null ||
+                registerProfileRequest.getCity() == null || registerProfileRequest.getAddress() == null ||
+                registerProfileRequest.getPassword() == null) {
+            throw new NullPointerException("All parameters in the register request must be defined");
+        }
+        this.firstName = registerProfileRequest.getFirstName();
+        this.lastName = registerProfileRequest.getLastName();
+        this.eMail = registerProfileRequest.geteMail();
+        this.county = registerProfileRequest.getCounty();
+        this.city = registerProfileRequest.getCity();
+        this.address = registerProfileRequest.getAddress();
+        this.password = registerProfileRequest.getPassword();
+    }
+
     public RegisterProfileRequest(String firstName, String lastName, String eMail, String county, String city,
                                   String address, String password) {
+        if (firstName == null || lastName == null || eMail == null || county == null || city == null || address == null
+        || password == null) {
+            throw new NullPointerException("All parameters in the register request must be defined");
+        }
         this.firstName = firstName;
         this.lastName = lastName;
         this.eMail = eMail;

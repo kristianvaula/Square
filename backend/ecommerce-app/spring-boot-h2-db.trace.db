@@ -16,3 +16,9 @@ SELECT * FROM county [42104-214]
 2023-03-22 19:28:28 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "COUNTY" not found (this database is empty); SQL statement:
 SELECT * FROM county [42104-214]
+2023-03-23 15:41:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "COUNTY" not found (this database is empty); SQL statement:
+SELECT * FROM county [42104-214]
+2023-03-23 15:41:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "COUNTY" not found (this database is empty); SQL statement:
+SELECT * FROM county [42104-214]
