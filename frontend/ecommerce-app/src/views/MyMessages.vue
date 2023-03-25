@@ -1,7 +1,7 @@
 <template>
   <div class="my-messages">
-    <ChatPool @chatSelected="onChatSelected" />
-    <MainChat :selectedChat="selectedChat" :loggedInUser="loggedInUser" />
+    <ChatPool @chatSelected="onChatSelected"/>
+    <MainChat :selectedChat="selectedChat"/>
   </div>
 </template>
 
@@ -18,33 +18,12 @@ export default {
   },
   data() {
     return {
-      loggedInUser: 'user1',
-      selectedChat: null,
-      chats: [
-      {
-        id: 1,
-        title: 'Chat 1',
-        lastMessage: 'Hi there!',
-        lastMessageTime: '10:00 AM',
-      },
-      {
-        id: 2,
-        title: 'Chat 2',
-        lastMessage: 'How are you?',
-        lastMessageTime: '11:30 AM',
-      },
-      {
-        id: 3,
-        title: 'Chat 3',
-        lastMessage: 'See you later!',
-        lastMessageTime: '1:45 PM',
-      },
-      ],
+      selectedChatId: null,
     };
   },
   methods: {
-    onChatSelected(chat) {
-      this.selectedChat = chat;
+    onChatSelected(chatId) {
+      this.selectedChatId = chatId;
     },
   },
 };

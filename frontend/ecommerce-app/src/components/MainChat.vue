@@ -11,7 +11,7 @@
     </div>
     <form class="send-message" @submit.prevent="sendMessage">
       <input class="message-input" type="text" v-model="messageText" placeholder="Type your message...">
-      <button type="submit" >Send</button>
+      <button type="submit">Send</button>
     </form>
   </div>
 </template>
@@ -19,7 +19,7 @@
 <script>
 import '@/assets/style/MainChat.css'
 import ChatUtils from '@/utils/ChatUtils.js'
-import httputils from '@/utils/httputils';
+//import httputils from '@/utils/httputils';
 
 export default {
   name: 'MainChat',
@@ -51,7 +51,7 @@ export default {
       messages: [],
     };
   },
-  watch: {
+  watch: { //er hentet for chatGPT - ikke sikker på om det fungerer
     chatId() {
       this.loadMessages();
     },
@@ -64,6 +64,38 @@ export default {
   },
   methods: {
     async sendMessage() {
+      /*
+      let responesePromise = await ChatUtils.getChats(33); //gets array with chats
+      let chatArray = responesePromise.data;
+      console.log(chatArray)
+      let chat = chatArray[0];
+      
+      let message = {
+        "chatId": 1,
+        "text": 'Message from frontend',
+        "senderId": 34
+      }
+
+      await ChatUtils.newMessage(message);
+
+      let promise = await ChatUtils.getMessages(chat.chatId);
+      console.log(promise.data)
+
+      let newChat = {
+        "profile1": 34,
+        "profile2": 33
+      }
+
+      await ChatUtils.newChat(newChat)
+
+      let responesePromise1 = await ChatUtils.getChats(33); //gets array with chats
+      let chatArray1 = responesePromise1.data;
+      console.log(chatArray1)
+
+      //let promise2 = await ChatUtils.getMessages(chatArray1.length - 1);
+      //console.log(promise2.data)
+      */
+ 
       const newMessage = {
         chatId: this.chatId,
         sender: this.loggedInUser,
@@ -85,6 +117,7 @@ export default {
       const minutes = "0" + date.getMinutes();
       return `${hours}:${minutes.substr(-2)}`;
     },
+    /*
     async loadMessages() {
       try {
         const response = await ChatUtils.getMessages(this.chatId);
@@ -102,10 +135,11 @@ export default {
         console.log(e)
       }
     },
+    */
   },
   mounted() {
-    this.loadMessages();
-    this.loadLoggedInUser();
+    //this.loadMessages();
+    //this.loadLoggedInUser();
   },
 }
 </script>
