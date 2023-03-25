@@ -3,7 +3,7 @@
     <h1>{{ headerText }}</h1>
     <legend>Product Photos</legend>
     <div>
-      <ImgCarousel v-if="displayImage" :images="images" />
+      <ImgCarousel :loaded="displayImage" v-if="displayImage" :images="images" />
     </div>
 
     <form @submit="submit">
@@ -94,8 +94,8 @@ export default {
       categories: null,
       image: null,
       images: [],
-      category: null,
-      displayImage: false
+      category: undefined,
+      displayImage: false, 
     }
   },
   methods: {
@@ -107,7 +107,7 @@ export default {
       // For previewing purpose
       const readerBase64 = new FileReader();
       readerBase64.onload = () => { 
-        this.images.push(readerBase64.result); 
+        this.images.push(readerBase64.result);
         this.displayImage = true; 
       };
       readerBase64.readAsDataURL(this.file); 
