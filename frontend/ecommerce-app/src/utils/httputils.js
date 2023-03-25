@@ -44,6 +44,6 @@ export default {
             },
         };
 
-        return axios.post("http://localhost:8081/profile/by-email", JSON.stringify({eMail}), config);
+        return axios.get("http://localhost:8081/profile/by-email/" + eMail, config);
     }
 }

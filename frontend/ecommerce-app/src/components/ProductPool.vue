@@ -1,5 +1,4 @@
 <template>
-    <h3 class="title"> {{ title }}</h3>
     <div class="pool">
         <ProductCard class="item" v-for="instance in this.products" :key="instance.id" :ProductInfo="instance.product" :firstImage="instance.imageList"></ProductCard>
     </div>
@@ -18,7 +17,6 @@ import '@/assets/style/Pool.css'
 
         data() {
             return {
-                title: "New Products",
                 store,
             }
         },
