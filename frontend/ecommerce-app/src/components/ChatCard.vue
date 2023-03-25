@@ -10,9 +10,11 @@
   </template>
   
   <script>
+  import { useTokenStore } from "@/store/token";
   import '@/assets/style/ChatCard.css'
   import { store } from '@/store/index.js'
   import ChatUtils from '@/utils/ChatUtils.js'
+
   
   export default {
     name: "ChatCard",
@@ -26,7 +28,7 @@
     setup() { 
       const tokenStore = useTokenStore();
 
-      let participant = ChatUtils.getParticipant(ChatInfo.chatId, tokenStore.loggedInUser)  
+      let participant = ChatUtils.getParticipant(this.ChatInfo.chatId, tokenStore.loggedInUser)  
       return {
         tokenStore,
         participant

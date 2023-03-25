@@ -28,7 +28,7 @@
       let chatsPromise = await ChatUtils.getChats(profileId.data);
     
       console.log(chatsPromise.data);
-      chats = chatsPromise.data;
+      let chats = chatsPromise.data;
       
       return {
         tokenStore,
