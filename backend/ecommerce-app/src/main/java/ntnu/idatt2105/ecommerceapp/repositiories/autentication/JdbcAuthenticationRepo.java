@@ -26,11 +26,11 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
      * @return Boolean value as represents if the profile is of the expected profile or not
      */
     private boolean controlProfileType(Profile profile, ProfileType profileType) {
-        logger.debug("Controlling {} with password {} for profileType {}", profile.getEMail(), profile.getPassword(),  profileType.getProfileName());
+        logger.info("1: Controlling {} with password {} for profileType {}", profile.getEMail(), profile.getPassword(),  profileType.getProfileName());
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ? AND profile.password = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ? AND profile.password = ?";
 
             profileDb = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class),
                     profile.getEMail(), profile.getPassword());
@@ -49,11 +49,11 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
      * @return Boolean value as represents if the profile is of the expected profile or not
      */
     private boolean controlProfileType(String email, String password, ProfileType profileType) {
-        logger.debug("Controlling {} with password {} for profileType {}", email, password, profileType.getProfileName());
+        logger.info("2: Controlling {} with password {} for profileType {}", email, password, profileType.getProfileName());
         Profile profileDb;
         try{
             String passwordSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ? AND profile.password = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ? AND profile.password = ?";
 
             profileDb = jdbcTemplate.queryForObject(passwordSql, BeanPropertyRowMapper.newInstance(Profile.class), email, password);
         }catch (EmptyResultDataAccessException e){
@@ -69,11 +69,11 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
      * @return Boolean value as represents if the profile is of the expected profile or not
      */
     private boolean controlProfileType(String email, ProfileType profileType) {
-        logger.debug("Controlling {} for profileType {}", email, profileType.getProfileName());
+        logger.info("3: Controlling {} for profileType {}", email, profileType.getProfileName());
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ?";
 
             profileDb = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class),
                     email);

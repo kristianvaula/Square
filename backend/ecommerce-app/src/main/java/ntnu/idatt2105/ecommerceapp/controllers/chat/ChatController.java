@@ -2,6 +2,8 @@ package ntnu.idatt2105.ecommerceapp.controllers.chat;
 
 import ntnu.idatt2105.ecommerceapp.model.chat.Chat;
 import ntnu.idatt2105.ecommerceapp.model.chat.Message;
+import ntnu.idatt2105.ecommerceapp.model.chat.MessageRequest;
+import ntnu.idatt2105.ecommerceapp.model.chat.ParticipantRequest;
 import ntnu.idatt2105.ecommerceapp.services.chat.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/chat")
+@RequestMapping("/unauthorized/chat") //todo: add user to url - only users should have the ability to send chats
 public class ChatController {
 
     @Autowired
@@ -25,15 +27,15 @@ public class ChatController {
      * Returns an empty list if chats is null...
      * @return chats. A list holding all active chats
      */
-    @GetMapping("/my-chats")
-    public ResponseEntity<List<Chat>> getChats(int profileId) {
-        logger.info("Received a request to get active chats");
+    @GetMapping("/my-chats/{profileId}")
+    public ResponseEntity<List<Chat>> getChats(@PathVariable int profileId) {
+        logger.info("Received a request to get chats for profileId {}", profileId);
         List<Chat> chats = chatService.getChats(profileId);
         if (chats == null) {
-            logger.info("Could not find any chats");
+            logger.info("Could not find any chats for profileId {}", profileId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Returned list with chats");
+        logger.info("Returned list with chats for profileId {}", profileId);
         return new ResponseEntity<>(chats, HttpStatus.OK);
     }
 
@@ -44,7 +46,8 @@ public class ChatController {
     @PostMapping("/new-chat")
     public void newChat(@RequestBody Chat chat){
         logger.info("Received a request to create a new chat");
-        chatService.addChat(chat);
+        boolean status = chatService.addChat(chat);
+        logger.info("Status adding new chat {}", status);
     }
 
     /**
@@ -52,14 +55,14 @@ public class ChatController {
      * @return messages. A list holding all sent messages
      */
     @GetMapping("/messages/{chatId}")
-    public ResponseEntity<List<Message>> getMessages(int chatId) {
-        logger.info("Received a request to get messages in chat");
+    public ResponseEntity<List<Message>> getMessages(@PathVariable int chatId) {
+        logger.info("Received a request to get messages in chat with chatId {}", chatId);
         List<Message> messages = chatService.getMessages(chatId);
         if (messages == null) {
-            logger.info("Could not find any messages");
+            logger.info("Could not find any messages in chat with chatId {}", chatId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Returned list with messages");
+        logger.info("Returned list with messages for chat with chatId {}", chatId);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
@@ -67,10 +70,22 @@ public class ChatController {
      * Create a new message and add it to the database
      * @param message
      */
-    @PostMapping("/new-message/{chatId}")
-    public void newMessage(@RequestBody Message message){
-        logger.info("Received a request to create a new message");
-        chatService.addMessage(message);
+    @PostMapping("/new-message")
+    public void newMessage(@RequestBody MessageRequest message){
+        logger.info("Received a request to create a new message for chatId {}, the messageTxt is {}", message.getChatId(), message.getText());
+        int messageId = chatService.addMessage(message);
+        logger.info("Message with messageId {} is added to chatId {}", messageId, message.getChatId());
+    }
+
+    @PostMapping("/participant")
+    public ResponseEntity<String> getParticipant(@RequestBody ParticipantRequest participantRequest){
+        logger.info("Received a request from {} to get the other profile in chat with chatId {}", participantRequest.getMyEmail(), participantRequest.getChatId());
+        String participantEmail = chatService.getParticipant(participantRequest.getChatId(), participantRequest.getMyEmail());
+        logger.info("The other participant in chat with chatId {} is {}", participantRequest.getChatId(), participantEmail);
+        if (participantEmail != null) {
+            return new ResponseEntity<>(participantEmail, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

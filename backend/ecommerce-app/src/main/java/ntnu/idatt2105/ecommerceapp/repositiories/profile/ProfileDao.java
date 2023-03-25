@@ -192,4 +192,24 @@ public class ProfileDao implements IProfileDao {
         String profilesSql = "SELECT * FROM profile";
         return jdbcTemplate.query(profilesSql, BeanPropertyRowMapper.newInstance(Profile.class));
     }
+
+    @Override
+    public Address getAddress(int addressId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM address WHERE addressId = ?",
+                BeanPropertyRowMapper.newInstance(Address.class), addressId);
+    }
+
+    @Override
+    public City getCity(int cityId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM city WHERE cityId = ?",
+                BeanPropertyRowMapper.newInstance(City.class), cityId);
+    }
+
+    @Override
+    public County getCounty(int countyId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM county WHERE countyId = ?",
+                BeanPropertyRowMapper.newInstance(County.class), countyId);
+    }
+
+
 }
