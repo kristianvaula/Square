@@ -3,7 +3,7 @@
     <div class="carousel">
       <div class="carousel-image-container">
         <p v-if="this.images.length===0">Your images will be displayed here</p>
-        <img v-if="this.images.length!==0" :src="currentImage">
+        <img v-if="loaded" :src="images[currentIndex]">
       </div>
     </div>
     <div class="carousel-controls">
@@ -23,6 +23,11 @@ export default {
       type: Array,
       required: true,
       default:undefined
+    },
+    loaded: {
+      type: Boolean, 
+      required: true, 
+      default: false
     }
   },
   data() {

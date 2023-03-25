@@ -3,7 +3,7 @@
     <h1>{{ headerText }}</h1>
     <legend>Product Photos</legend>
     <div>
-      <ImgCarousel v-if="displayImage" :images="uploadedImages" />
+      <ImgCarousel :loaded="displayImage" v-if="displayImage" :images="images" />
     </div>
 
     <form @submit="submit">
@@ -93,9 +93,9 @@ export default {
       headerText: 'Create a new listing',
       categories: null,
       image: null,
-      images: null,
-      category: null,
-      displayImage: false
+      images: [],
+      category: undefined,
+      displayImage: false, 
     }
   },
   methods: {
@@ -104,12 +104,23 @@ export default {
     },
     handleFileUpload() {
       this.file = this.$refs.fileInput.files[0]
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.uploadedImages.push(reader.result)
-        this.displayImage = true 
-      }
-      reader.readAsDataURL(this.file)
+      // For previewing purpose
+      const readerBase64 = new FileReader();
+      readerBase64.onload = () => { 
+        this.images.push(readerBase64.result);
+        this.displayImage = true; 
+      };
+      readerBase64.readAsDataURL(this.file); 
+
+      // For post-purpose
+      const readerByte = new FileReader();
+      readerByte.onload = () => {
+        const arrayBuffer = readerByte.result;  
+        const uint8Array = new Uint8Array(arrayBuffer); 
+        const blob = new Blob([uint8Array], {type: this.file.type});
+        this.uploadedImages.push(blob);
+      };
+      readerByte.readAsArrayBuffer(this.file);
     },
     rerouteList(list) {
       let arr = JSON.parse(JSON.stringify(list))
@@ -117,6 +128,7 @@ export default {
     },
     resetUploadedImages() {
       this.uploadedImages.splice(0,this.uploadedImages.length)
+      this.images = []; 
       this.displayImage = false 
     }
 
@@ -152,6 +164,7 @@ export default {
     };
 
     let sendForm = (formData) => {
+      console.log(formData)
       ProductUtils.createProduct(formData)
           .then((response) => {
             console.log(response)
@@ -160,7 +173,7 @@ export default {
           })
           .catch((err) => {
             console.log(err)
-          })
+          }) 
     }
 
     const textVal = value => {
@@ -193,24 +206,27 @@ export default {
     const {value: state} = useField('state')
 
     const submit = handleSubmit(values => {
+      //Extra checks 
       if(values.state === undefined) values.state= false
       if(list === undefined) return 
       let arr = JSON.parse(JSON.stringify(list))
       if(arr.length == 0) return 
+      if(user() === null) return 
 
-      let listingObject = {
-        product: {
+      let product = {
           title: values.title,
           description: values.desc,
           price: values.price,
-          used: values.state,
-        },
-        username: user(),
-        subcategories: arr,
-      }
+          used: values.state
+      }; 
+
+      let username = user();
+      let subcategories = list; 
 
       const formData = new FormData(); 
-      formData.append('object', JSON.stringify(listingObject)); 
+      formData.append('product', JSON.stringify(product)); 
+      formData.append('username', username); 
+      formData.append('subcategories', subcategories)
       for (let i = 0; i < uploadedImages.length; i++){
         formData.append('files', uploadedImages[i])
       }  

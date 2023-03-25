@@ -58,7 +58,7 @@ const routes = [
   },
 
   {
-    path: `/productPage`,
+    path: `/productPage/:productId`,
     name: `ProductPage`,
     component: () => import(`../views/ProductPage.vue`)
   }

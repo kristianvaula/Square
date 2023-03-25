@@ -66,7 +66,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public int newProductImage(Blob image, int productId) throws DataAccessException{
+    public int newProductImage(byte[] image, int productId) throws DataAccessException{
         return jdbcTemplate.update(INSERT_IMAGE_SQL, image, productId);
     }
 

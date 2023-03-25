@@ -49,4 +49,6 @@
     overflow: hidden;
     padding: 2%;
     grid-template-rows: 4fr, 2fr;
+    z-index: 1;
+    transition: 0.3s ease;
   }
