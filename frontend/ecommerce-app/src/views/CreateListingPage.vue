@@ -94,7 +94,7 @@ export default {
       categories: null,
       image: null,
       images: [],
-      category: null,
+      category: undefined,
       displayImage: false
     }
   },
