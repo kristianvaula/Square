@@ -66,7 +66,7 @@ public class ProductController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable("category") int categoryId) {
-        logger.info("Received request for all products");
+        logger.info("Received request for all products in a category");
         return service.getProductsByCategory(categoryId);
     }
 
