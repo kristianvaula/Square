@@ -16,8 +16,11 @@ export default {
         return axios.post("http://localhost:8081/unauthorized/new-profile", JSON.stringify(profile), config);
     },
 
-    getJwtToken(eMail, password) {
-        return axios.post("http://localhost:8081/unauthorized/token", JSON.stringify({eMail, password}), config);
+    getJwtToken(profile) {
+        return axios.post("http://localhost:8081/unauthorized/token", JSON.stringify(profile), config);
+    },
+    getToken(eMail, password) {
+        return axios.post("http://localhost:8081/unauthorized/token2", JSON.stringify({eMail, password}), config);
     },
     getProfile(eMail, password) {
         const tokenStore = useTokenStore();
@@ -29,7 +32,7 @@ export default {
             },
         };
 
-        return axios.post("http://localhost:8081/profile", JSON.stringify({eMail, password}), config);
+        return axios.post("http://localhost:8081/user/profile", JSON.stringify({eMail, password}), config);
     },
     getProfileByEmail(eMail) {
         const tokenStore = useTokenStore();

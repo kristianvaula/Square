@@ -200,16 +200,17 @@ export default {
         password: this.password
       };
 
-      if (this.noErrorMessages) {    
+      if (this.hasAllFiledsInput) {    
+        let profilePromise;
         try {
-          await httputils.createUser(profile);  
-        } catch (error) {    
+          profilePromise = await httputils.createUser(profile);          
+        } catch (error) {          
           if (error.response.status === 409) {
             this.errorMessage = "It already exist a user with e-mail: " + this.eMail;
           }
         }      
 
-        await this.tokenStore.getTokenAndSaveInStore(profile.eMail, profile.password);
+        await this.tokenStore.getTokenAndSaveInStore(profilePromise.data);
         if(this.tokenStore.jwtToken){
             router.push("/");
         }
@@ -219,8 +220,8 @@ export default {
     }
   },
   computed: {
-    noErrorMessages () {
-      return !this.eMailError && !this.firstNameError && !this.lastNameError && !this.cityError && !this.passwordError;
+    hasAllFiledsInput () {
+      return this.firstName && this.lastName && this.eMail && this.location.county && this.city && this.location.address && this.password;
     }
   }
 }

@@ -9,21 +9,23 @@ export const useTokenStore = defineStore("token", {
     persist: {
         storage: sessionStorage, // note that data in sessionStorage is cleared when the page session ends
     },
-    actions: {
-        async getTokenAndSaveInStore(eMail, password) {
+    actions: {        
+        async getTokenAndSaveInStore(profile) {
             try{
-                let response = await httputils.getJwtToken(eMail, password);
+                let response = await httputils.getJwtToken(profile);
                 let data = response.data;                        
 
                 if(data !== null && data !== '' && data !== undefined){
-                    this.jwtToken = data;
-                    response = await httputils.getProfile(eMail, password);                        
-                
-                    this.loggedInUser = response.data.email                
+                    this.jwtToken = data;                
+                    this.loggedInUser = profile.eMail                   
                 }
             } catch (err){
                 console.log(err)
             }
+        },
+        setTokenAndLoggedInUser(token, profile) {
+            this.jwtToken = token;        
+            this.loggedInUser = profile;
         }
     },
 });

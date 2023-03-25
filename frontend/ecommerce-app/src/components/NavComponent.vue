@@ -15,7 +15,7 @@
     
     <div class="nav-links">
 
-      <li>
+      <li>      
         <router-link to="/create-listing">
           <img class="icon-medium" src="@/assets/icons/plus.png" alt="">
           <h1 class="title-medium">New Listing</h1>
@@ -64,8 +64,7 @@ export default {
     const tokenStore = useTokenStore();
     return { tokenStore };
   },
-  mounted () {
-    //todo: remove async
+  mounted () {  
 
     if(this.tokenStore.jwtToken) {
       this.user = this.tokenStore.loggedInUser

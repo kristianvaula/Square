@@ -1,10 +1,8 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import ntnu.idatt2105.ecommerceapp.model.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.repositiories.profile.ProfileDao;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,36 +16,30 @@ import java.util.UUID;
 public class TokenService {
 
     @Autowired
-    private ProfileDao profileDao;
-    @Autowired
     private ProfileService profileService;
-    public static final String KEY  = UUID.randomUUID().toString();
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(30); //token is valid for 5 minutes
-
+    public static final String KEY = UUID.randomUUID().toString();
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(30); //token is valid for 30 minutes
     Logger logger = LoggerFactory.getLogger(TokenService.class);
 
 
-    public String generateToken(ProfileRequest profileRequest) {
-        logger.info("generating token for email: {}", profileRequest.getEMail());
-
-        if (profileService.checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword())) {
-            logger.info("Username: {} passed the credentials check", profileRequest.getEMail());
-            logger.info("Generating token for username: {}", profileRequest.getEMail());
-
-            return generateToken(profileRequest.getEMail());
+    public String getJwtToken(Profile profile) {
+        if (profileService.checkProfileCredentials(profile.getEMail(), profile.getPassword(), true)) {
+            logger.info("Username: {} passed the credentials check", profile.getEMail());
+            String profileType = profileService.getProfileType(profile.getEMail(), profile.getPassword()).getProfileName();
+            return generateToken(profile.getEMail(), profileType);
         }
         logger.info("Access denied, wrong credentials");
         return null;
     }
 
-
-    public String generateToken(final String userId) {
+    private String generateToken(final String userEmail, final String profileType) {
+        logger.info("Generating token for " + userEmail + " with profileType " + profileType);
         final Instant now = Instant.now();
-        final Algorithm hmac512 = Algorithm.HMAC512(KEY);;
-        final JWTVerifier verifier = JWT.require(hmac512).build();
+        final Algorithm hmac512 = Algorithm.HMAC512(KEY);
         return JWT.create()
-                .withSubject(userId)
+                .withSubject(userEmail)
                 .withIssuer("ecommerce-app")
+                .withClaim("authorization-role", profileType)
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
                 .sign(hmac512);

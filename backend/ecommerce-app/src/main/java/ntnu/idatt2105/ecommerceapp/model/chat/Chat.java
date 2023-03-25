@@ -1,6 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.model.chat;
 
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 
 public class Chat {
 

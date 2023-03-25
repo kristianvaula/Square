@@ -1,9 +1,8 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
-import ntnu.idatt2105.ecommerceapp.model.ListingObject;
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
-import ntnu.idatt2105.ecommerceapp.model.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.repositiories.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,28 +37,43 @@ public class ProductService {
         this.transactionManager = transactionManager;
     }
 
-    public ResponseEntity<String> newProduct(ListingObject obj, Blob[] images) {
-        if(obj.getProduct().getSellerId() < 0 ||
-            obj.getProduct().getTitle() == null ||
-            obj.getProduct().getDescription() == null ||
-            obj.getProduct().getPrice() < 0 ||
-            obj.getSubcategories() == null)
+    /**
+     * Performs necessary operations to create a
+     * new product.
+     * @param product Product object
+     * @param username username of seller
+     * @param subcategories subcategories associated
+     * @param files image files
+     * @return response for user
+     */
+    public ResponseEntity<String> newProduct(Product product, String username,List<Integer> subcategories, List<byte[]> files) {
+        if(product.getSellerId() < 0 ||
+            product.getTitle() == null ||
+            product.getDescription() == null ||
+            product.getPrice() < 0 ||
+            username == null ||
+            subcategories == null)
         {return new ResponseEntity<>("Invalid data", HttpStatus.BAD_REQUEST);}
 
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try{
-            Profile profile = repository.getUser(obj.getUsername());
-            if(profile.getProfileId() == -1) {return new ResponseEntity<>("Could not find user", HttpStatus.BAD_REQUEST);}
-            obj.getProduct().setSellerId(profile.getProfileId());
-            Product prod = repository.getProductByTitleSeller(obj.getProduct().getTitle(), obj.getProduct().getSellerId());
-            if(prod != null){throw new Exception("User already has a listing with this title.");}
+            Profile profile = repository.getUser(username); //Get profile
+            int profileId = profile.getProfileId();
+            if(profileId <= 0) {
+                return new ResponseEntity<>("Could not find user", HttpStatus.BAD_REQUEST);
+            }
+            product.setSellerId(profileId);
+            if(productExists(product.getTitle(), product.getSellerId())){
+                logger.warn("User already has a listing with this title.");
+                return new ResponseEntity<>("User already has a listing with this title.", HttpStatus.BAD_REQUEST);
+            }
             logger.info("Adding product");
-            repository.newProduct(obj.getProduct());
-            int productId = repository.getProductId(obj.getProduct().getTitle(), obj.getProduct().getSellerId());
+            repository.newProduct(product);
+            int productId = repository.getProductId(product.getTitle(), product.getSellerId());
             logger.info("Adding subcategories");
-            addSubcategories(productId, obj.getSubcategories());
+            addSubcategories(productId, subcategories);
             logger.info("Adding images");
-            addImages(productId, images);
+            addImages(productId, files);
             transactionManager.commit(status);
             logger.info("All product successfully added");
             return new ResponseEntity<>("Product successfully added", HttpStatus.OK);
@@ -71,6 +85,13 @@ public class ProductService {
         }
     }
 
+    /**
+     * Performs call to add a subcategory
+     * @param productId product id
+     * @param subcategories subcategory ids
+     * @return 1 if success
+     * @throws DataAccessException
+     */
     public int addSubcategories(int productId, List<Integer> subcategories) throws DataAccessException {
         int response = -1;
         for (Integer sub : subcategories) {
@@ -79,10 +100,17 @@ public class ProductService {
         return response;
     }
 
-    public int addImages(int productId, Blob[] images) throws DataAccessException {
+    /**
+     * Calls to add images to database
+     * @param productId product id associated
+     * @param images imagefiles
+     * @return 1 if success
+     * @throws DataAccessException
+     */
+    private int addImages(int productId, List<byte[]> images) throws DataAccessException {
         int response = -1;
         try{
-            for (Blob img : images) {
+            for (byte[] img : images) {
                 response = repository.newProductImage(img, productId);
             }
         }catch(DataAccessException e) {
@@ -94,6 +122,13 @@ public class ProductService {
         return response;
     }
 
+    /**
+     * Creates a response to return to client.
+     * Takes a list of product objects and fetches
+     * necesarry data and converts to a response
+     * @param products list of products
+     * @return response
+     */
     public ResponseEntity<List<ProductResponse>> getProducts(List<Product> products){
         if(products == null) return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         if(products.size() == 0) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -111,24 +146,43 @@ public class ProductService {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    /**
+     * Gets all product
+     * @return List of products
+     */
     public ResponseEntity<List<ProductResponse>> getAllProducts(){
         logger.info("Fetching products");
         List<Product> products = repository.getProducts();
         return getProducts(products);
     }
 
+    /**
+     * Gets products by category
+     * @param categoryId category id
+     * @return product
+     */
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(int categoryId){
         logger.info("Fetching products by category");
         List<Product> products = repository.getProductsByCategory(categoryId);
         return getProducts(products);
     }
 
-    public ResponseEntity<List<ProductResponse>> getProductsBySubCategory(int subcategories){
+    /**
+     * Gets products by subcategory
+     * @param subcategoryId subcategory id
+     * @return product
+     */
+    public ResponseEntity<List<ProductResponse>> getProductsBySubCategory(int subcategoryId){
         logger.info("Fetching products by subcategory");
-        List<Product> products = repository.getProductsBySubcategory(subcategories);
+        List<Product> products = repository.getProductsBySubcategory(subcategoryId);
         return getProducts(products);
     }
 
+    /**
+     * Gets product by id
+     * @param id id
+     * @return product
+     */
     public ResponseEntity<List<ProductResponse>> getProductById(int id){
         logger.info("Fetching product by id");
         Product product;
@@ -140,6 +194,11 @@ public class ProductService {
         return getProducts(Collections.singletonList(product));
     }
 
+    /**
+     * Creates ProductResponse to return to client
+     * @param product Product
+     * @return the ProductResponse
+     */
     public ProductResponse getProductResponse(Product product){
         int productId = product.getProductId();
         try{
@@ -151,5 +210,22 @@ public class ProductService {
         }
     }
 
+    /**
+     * Checks if a product exists by getting it and checking response
+     * @param title title
+     * @param userId user id
+     * @return true if exists
+     */
+    private boolean productExists(String title, int userId){
+        try{
+            Product prod = repository.getProductByTitleSeller(title, userId);
+            if(prod != null){
+                return true;
+            }
+        }catch(Exception e){
+            return false;
+        }
+        return false;
+    }
 
  }

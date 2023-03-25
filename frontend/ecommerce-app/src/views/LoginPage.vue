@@ -16,6 +16,7 @@
               label="E-mail:"
               placeholder="Ola.Nordman@mail.com"
               type="text"
+              :error="eMailError"
           />
         </fieldset>
 
@@ -26,6 +27,7 @@
               label="Password:"
               placeholder="*******"
               type="password"
+              :error="passwordError"   
           />
         </fieldset>
 
@@ -42,26 +44,60 @@
 <script>
 import { useTokenStore } from "@/store/token.js";
 import router from "@/router";
+import { useField } from 'vee-validate' 
 import '../assets/style/BaseInput.css';
 import '../assets/style/FormPage.css';
+import httputils from "@/utils/httputils";
 
 export default {
   name: "LoginPage",
   data () {
-    return {
-      eMail: '',
-      password: '',
+    return {      
       errorMessage: ''
     }
   },
   setup() {
     const tokenStore = useTokenStore();
-    return { tokenStore };
+
+    const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
+      if (!value) return 'This field is required'
+
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (!regex.test(String(value).toLowerCase())) return 'Please enter a valid email address'
+
+      return true
+    })
+
+    const { value: password, errorMessage: passwordError } = useField('password', (value) => {
+      if (!value) return 'This field is required'
+
+      return true
+    })
+
+
+    return {
+      tokenStore,
+      eMail, 
+      eMailError,
+      password,
+      passwordError
+    }
   },
-  methods: {
+  methods: {  
     async signIn () {
-      if (this.tokenStore.loggedInUser === null) {
-        await this.tokenStore.getTokenAndSaveInStore(this.eMail, this.password);
+      let tokenPromise;
+      if (!this.eMail || !this.password) {
+          this.errorMessage = "Please fill in all filds"
+      } else if (this.tokenStore.loggedInUser === null) { 
+        try {
+          tokenPromise = await httputils.getToken(this.eMail, this.password);
+          console.log(tokenPromise)
+        } catch(error) {        
+          if (error.response.status === 401) {
+            this.errorMessage = "Crendtials is invalid"
+          }
+        }
+        await this.tokenStore.setTokenAndLoggedInUser(tokenPromise.data, this.eMail);
         if(this.tokenStore.jwtToken){
           router.push("/");
         } else {
