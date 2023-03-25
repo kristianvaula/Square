@@ -2,20 +2,21 @@ package ntnu.idatt2105.ecommerceapp.repositiories;
 
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.Profile;
+import org.springframework.dao.DataAccessException;
 
 import java.sql.Blob;
 import java.util.List;
 
 public interface ProductRepositoryInterface {
 
-    public int newProduct(Product product);
-    public int newSubcategorybinding(int productId, int subCategoryId);
-    public int newProductImage(Blob image, int productId);
+    int newProduct(Product product);
+    int newSubcategorybinding(int productId, int subCategoryId);
+    int newProductImage(byte[] image, int productId) throws DataAccessException;
 
-    public Product getProductById(int productId);
-    public int getProductId(String title, int sellerId);
-    public Product getProductByTitleSeller(String title, int sellerId);
-    public List<Product> getProducts();
+    Product getProductById(int productId);
+    int getProductId(String title, int sellerId);
+    Product getProductByTitleSeller(String title, int sellerId);
+    List<Product> getProducts();
 
     List<Product> getProductsByCategory(int categoryId);
 
