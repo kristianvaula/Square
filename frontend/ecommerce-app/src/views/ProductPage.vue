@@ -1,16 +1,16 @@
 <template>
     <div class="product-page">
-        <h1>{{ this.product.title }}</h1>
+        <h1>{{ product.title }}</h1>
             <div class="product-pictures">
                 <ImgCarouselComponent :images="this.images"/>
                 <h5>Last changed</h5>
-                <h5>{{ this.product.timeCreated }}</h5>
+                <h5>{{ product.timeCreated }}</h5>
             </div>
             <div class="product-information">
                 <div class="product-choices">
                     <div class="price">
                         <h3>Price</h3>
-                        <h3 class="price-view">{{ this.product.price + " NOK" }}</h3>
+                        <h3 class="price-view">{{ product.price + " NOK" }}</h3>
                     </div>
                     <div class="product-buttons">
                         <h3> Add to favourites</h3>
@@ -42,6 +42,7 @@
 import { store } from '@/store';
 import ImgCarouselComponent from '@/components/ImgCarouselComponent.vue';
 import router from '@/router';
+import ProductUtils from '@/utils/ProductUtils';
 export default {
     name: `ProductPage`,
 
@@ -51,15 +52,7 @@ export default {
             displayImage: false, 
             images: [],
             isInFavourites: false,
-            product: {
-                productID: 1,
-                title: "New Iphone",
-                description: "I have used this phone 4 times, but i want to sell it because i got a new one. it is almost brand new. Iphone 10s",
-                price: 4000,
-                sellerId: 1,
-                buyerId: 2,
-                timeCreated: "03/24.2023 12:43"
-            }
+            product: Object
         }
     },
 
@@ -87,6 +80,21 @@ export default {
 
 
     },
+
+    mounted () {
+        const productId = this.$route.params.productId
+        console.log(productId)
+            ProductUtils.getProductById(productId)
+                .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    this.product = response.data[0].product
+                }
+            })
+                .catch((err) => {
+                console.log(err)
+                })
+        },  
 }
 
 

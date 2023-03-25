@@ -62,8 +62,8 @@ import router from '@/router';
         },
 
         goToProductPage() {
-          this.store.CurrentProductId = this.ProductInfo.productId
-          router.push(`/productPage`)
+          const productId = this.ProductInfo.productId
+          router.push({name: "ProductPage", params: {productId}})
         }
     },
   };
