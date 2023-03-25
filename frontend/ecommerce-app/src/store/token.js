@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import httputils from "@/utils/httputils"
+import httputils from "@/utils/ProfileUtils"
 
 export const useTokenStore = defineStore("token", {
     state: () => ({

@@ -14,7 +14,7 @@
   import '@/assets/style/Pool.css';
   import { useTokenStore } from "@/store/token.js";
   import ChatUtils from '@/utils/ChatUtils.js'
-  import httputils from "@/utils/httputils";
+  import ProfileUtils from "@/utils/ProfileUtils";
   
   export default {
     name: 'ChatPool',
@@ -23,7 +23,7 @@
     },
     async setup() {  
       const tokenStore = useTokenStore();
-      let profileId = await httputils.getProfileId(tokenStore.loggedInUser);
+      let profileId = await ProfileUtils.getProfileId(tokenStore.loggedInUser);
       console.log("Chats for profileId " + profileId.data);
       let chatsPromise = await ChatUtils.getChats(profileId.data);
     

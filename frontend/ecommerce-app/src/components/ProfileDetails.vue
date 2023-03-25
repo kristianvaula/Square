@@ -24,7 +24,7 @@
   
   <script>
   import '@/assets/style/ProfileDetails.css'
-  import httputils from '@/utils/httputils';
+  import ProfileUtils from '@/utils/ProfileUtils';
   import { useTokenStore } from "@/store/token.js";
 
   export default {
@@ -41,12 +41,12 @@
       }
     },
     async mounted () {                  
-      let profilePromise = await httputils.getProfileByEmail(this.store.loggedInUser);      
+      let profilePromise = await ProfileUtils.getProfileByEmail(this.store.loggedInUser);      
       let profile = profilePromise.data;
 
       let locationPromise;
       if (profile) {    
-        locationPromise = await httputils.getLocation(profile.addressId);
+        locationPromise = await ProfileUtils.getLocation(profile.addressId);
       }
 
       let location = locationPromise.data;
