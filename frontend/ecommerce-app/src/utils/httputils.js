@@ -34,6 +34,19 @@ export default {
 
         return axios.post("http://localhost:8081/user/profile", JSON.stringify({eMail, password}), config);
     },
+    getProfileId(eMail) {
+        const tokenStore = useTokenStore();
+        
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": "Bearer " + tokenStore.jwtToken
+            },
+        };
+        console.log(eMail)
+        console.log(tokenStore.jwtToken)
+        return axios.get("http://localhost:8081/user/profile/" + eMail, config);
+    },
     getProfileByEmail(eMail) {
         const tokenStore = useTokenStore();
         

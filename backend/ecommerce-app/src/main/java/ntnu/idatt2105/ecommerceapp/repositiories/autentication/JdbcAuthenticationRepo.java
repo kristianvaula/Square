@@ -10,14 +10,23 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+/**
+ * The repository contains methods to get the profile type from a profile
+ */
 @Repository
 public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
     @Autowired
     private JdbcTemplate jdbcTemplate;
     Logger logger = LoggerFactory.getLogger(JdbcAuthenticationRepo.class);
 
+    /**
+     * Helper method for controlling profile type to a profile
+     * @param profile The profile to control the profile type to
+     * @param profileType The expected profile type
+     * @return Boolean value as represents if the profile is of the expected profile or not
+     */
     private boolean controlProfileType(Profile profile, ProfileType profileType) {
-        logger.debug("Controlling {} with password {} for profileType {}", profile.getEMail(), profile.getPassword(),  profileType.getProfileName());
+        logger.info("1: Controlling {} with password {} for profileType {}", profile.getEMail(), profile.getPassword(),  profileType.getProfileName());
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
@@ -31,8 +40,16 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         return profileDb != null;
     }
 
+
+    /**
+     * Helper method for controlling profile type to a profile
+     * @param email The email for the profile to control the profile type to
+     * @param password The password for the profile to control the
+     * @param profileType The expected profile type
+     * @return Boolean value as represents if the profile is of the expected profile or not
+     */
     private boolean controlProfileType(String email, String password, ProfileType profileType) {
-        logger.debug("Controlling {} with password {} for profileType {}", email, password, profileType.getProfileName());
+        logger.info("2: Controlling {} with password {} for profileType {}", email, password, profileType.getProfileName());
         Profile profileDb;
         try{
             String passwordSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
@@ -45,8 +62,14 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         return profileDb != null;
     }
 
+    /**
+     * Helper method for controlling profile type to an e-mail
+     * @param email The email for the profile to control the profile type to
+     * @param profileType The expected profile type
+     * @return Boolean value as represents if the profile is of the expected profile or not
+     */
     private boolean controlProfileType(String email, ProfileType profileType) {
-        logger.debug("Controlling {} for profileType {}", email, profileType.getProfileName());
+        logger.info("3: Controlling {} for profileType {}", email, profileType.getProfileName());
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
@@ -63,7 +86,7 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
     /**
      * {@inheritDoc}
      * @param profile The profile wanted profile type to
-     * @return Profile type to the user
+     * @return Profile type to the profile
      */
     @Override
     public ProfileType getProfileType(Profile profile) {
@@ -84,6 +107,12 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         return profileType;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param email The e-mail for the profile wanted profile type to
+     * @param password The password for the profile wanted the profile to
+     * @return Profile type to the profile
+     */
     public ProfileType getProfileType(String email, String password) {
         logger.info("Getting profile type for {}", email);
         ProfileType profileType;
@@ -102,6 +131,11 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         return profileType;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param email The e-mail for the profile wanted profile type to
+     * @return Profile type to the profile
+     */
     public ProfileType getProfileType(String email) {
         logger.info("Getting profile type for {}", email);
         ProfileType profileType;
