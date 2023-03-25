@@ -13,9 +13,9 @@ export default {
     return axios.get(baseurl + `/product/${id}`);
   },
   getProductByCategory(category) {
-    return axios.get(baseurl + `/product/${category}`);
+    return axios.get(baseurl + `/product/category/${category}`);
   },
   getProductBySubcategory(subcategory) {
-    return axios.get(baseurl + `/product/${subcategory}`);
+    return axios.get(baseurl + `/product/subcategory/${subcategory}`);
   },
 }

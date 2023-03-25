@@ -9,7 +9,7 @@
         <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="this.currentSubCategories"/>
       </div>
       <div>
-        <ProductPool/>
+        <ProductPool :products="products"/>
       </div>
       
     </div>
@@ -22,6 +22,7 @@ import ProductPool from '@/components/ProductPool.vue';
 import CategoryPool from '@/components/CategoryPool.vue';
 import SubCategories from '@/components/SubCategories.vue';
 import CategoryUtils from '@/utils/CategoryUtils';
+import ProductUtils from '@/utils/ProductUtils';
 
 export default {
   name: 'HomePage',
@@ -31,6 +32,7 @@ export default {
       selectedCategory: null,
       currentSubCategories: [],
       selectedSubCategory: null,
+      products: []
     }
   },
 
@@ -45,21 +47,44 @@ export default {
       this.selectedCategory = id
       var response = await CategoryUtils.getSubCategories(id)
       this.currentSubCategories = response.data
+      var data = await ProductUtils.getProductByCategory(id)
+      this.products = data.data
     },
 
-    deSelectCategoryToshow() {
+    async deSelectCategoryToshow() {
       this.selectedCategory = null
       this.currentSubCategories = null
+      var data = await ProductUtils.getProducts()
+      this.products = data.data
     },
 
-    selectSubCategory(id) {
+    async selectSubCategory(id) {
       if(this.selectedSubCategory == id) {
         this.selectedSubCategory = null
+        var data = await ProductUtils.getProducts()
+        this.products = data.data
       } else {
         this.selectedSubCategory = id
+        var response = await ProductUtils.getProductBySubcategory(this.selectedSubCategory)
+        this.products = response.data
       }
     }
   },
+
+  mounted () {
+            let vm = this
+            ProductUtils.getProducts()
+                .then((response) => {
+                if(response.data) {
+                    console.log(response.data)
+                    vm.products = response.data
+                   
+                }
+            })
+                .catch((err) => {
+                console.log(err)
+                })
+        }, 
 
 }
 </script>

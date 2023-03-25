@@ -2,7 +2,7 @@
     <div class="product-page">
         <h1>{{ product.title }}</h1>
             <div class="product-pictures">
-                <ImgCarouselComponent :images="this.images"/>
+                <ImgCarouselComponent :images="images"/>
                 <h5>Last changed</h5>
                 <h5>{{ product.timeCreated }}</h5>
             </div>
@@ -89,6 +89,7 @@ export default {
                 if(response.data) {
                     console.log(response.data)
                     this.product = response.data[0].product
+                    this.images = response.data[0].imageList
                 }
             })
                 .catch((err) => {
