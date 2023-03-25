@@ -21,7 +21,7 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ? AND profile.password = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ? AND profile.password = ?";
 
             profileDb = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class),
                     profile.getEMail(), profile.getPassword());
@@ -36,7 +36,7 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         Profile profileDb;
         try{
             String passwordSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ? AND profile.password = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ? AND profile.password = ?";
 
             profileDb = jdbcTemplate.queryForObject(passwordSql, BeanPropertyRowMapper.newInstance(Profile.class), email, password);
         }catch (EmptyResultDataAccessException e){
@@ -50,7 +50,7 @@ public class JdbcAuthenticationRepo implements IJdbcAuthenticationRepo{
         Profile profileDb;
         try{
             String profileSql = "SELECT * FROM profile, profiletype WHERE profile.profileTypeId = profiletype.profileTypeId" +
-                    " AND profiletype.roleName = \"" +  profileType.getProfileName() + "\" AND profile.eMail = ?";
+                    " AND profiletype.roleName = \'" +  profileType.getProfileName() + "\' AND profile.eMail = ?";
 
             profileDb = jdbcTemplate.queryForObject(profileSql, BeanPropertyRowMapper.newInstance(Profile.class),
                     email);
