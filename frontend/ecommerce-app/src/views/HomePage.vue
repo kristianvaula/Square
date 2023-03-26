@@ -23,6 +23,7 @@ import CategoryPool from '@/components/CategoryPool.vue';
 import SubCategories from '@/components/SubCategories.vue';
 import CategoryUtils from '@/utils/CategoryUtils';
 import ProductUtils from '@/utils/ProductUtils';
+import '@/assets/style/HomePage.css'
 
 export default {
   name: 'HomePage',
@@ -72,36 +73,15 @@ export default {
   },
 
   mounted () {
-            let vm = this
-            ProductUtils.getProducts()
-                .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    vm.products = response.data
-                   
-                }
-            })
-                .catch((err) => {
-                console.log(err)
-                })
-        }, 
+    ProductUtils.getProducts()
+      .then((response) => {
+        console.log(response)
+        this.products = response
+    })
+      .catch((err) => {
+      console.log(err)
+      })
+}, 
 
 }
 </script>
-
-<style>
-.product-menu {
-  display: flex;
-  flex-direction: row;
-}
-
-.sub-categories {
-  max-width: 200px;
-  min-width: 200px;
-  margin-top: 100px;
-  margin-left: 40px;
-  border-radius: 14px;
-    box-shadow:  7px 7px 14px #ebebeb,
-             -7px -7px 14px #ffffff;
-}
-</style>

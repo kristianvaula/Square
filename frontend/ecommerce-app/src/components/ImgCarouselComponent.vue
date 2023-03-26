@@ -3,7 +3,7 @@
     <div class="carousel">
       <div class="carousel-image-container">
         <p v-if="this.images.length===0">Your images will be displayed here</p>
-        <img v-if="loaded" :src="images[currentIndex]">
+        <img v-if="loaded" :src="images[currentIndex].src">
       </div>
     </div>
     <div class="carousel-controls">

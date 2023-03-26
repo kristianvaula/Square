@@ -1,18 +1,18 @@
 <template>
     <div class="profile-details">
-      <div>
+      <div class="profile-detail">
         <label for="name">Name:</label>
         <span id="name">{{ ProfileInfo?.firstName + " " + ProfileInfo?.lastName }}</span>
       </div>
-      <div>
+      <div class="profile-detail">
         <label for="email">Email:</label>
         <span id="email">{{ ProfileInfo?.eMail }}</span>
       </div>
-      <div>
+      <div class="profile-detail">
         <label for="location">Location:</label>
         <span id="location">{{ ProfileInfo?.location }}</span>
       </div>
-      <div>
+      <div class="profile-detail">
         <label for="address">Address:</label>
         <span id="address">{{ ProfileInfo?.address }}</span>
       </div>

@@ -1,7 +1,31 @@
-.edit-profile {
-    display: grid;
+.edit-page {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
+
+.edit-profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    margin: 15px;
+    padding: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    grid-template-rows: 4fr, 2fr;
+    border-radius: 14px;
+    box-shadow:  7px 7px 14px #ebebeb,
+             -7px -7px 14px #ffffff;
+}
+
+.profile-detail {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
 
 .detail-container {
     display:flex;
@@ -16,7 +40,7 @@
     font-size: 16px;
     border-radius: 20px;
     height: 30px;
-    width: 140px;
+    width: 160px;
 }
 
 .save-button:hover {
@@ -31,7 +55,7 @@
     font-size: 16px;
     border-radius: 20px;
     height: 30px;
-    width: 140px;
+    width: 160px;
 }
 
 .cancel-button:hover {

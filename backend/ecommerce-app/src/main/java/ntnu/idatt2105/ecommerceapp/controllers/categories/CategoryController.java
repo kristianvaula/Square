@@ -12,25 +12,24 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private CategoryService service;
     private static Logger logger = LoggerFactory.getLogger(CategoryController.class.getName());
 
-    @PostMapping("/new")
+    @PostMapping("/admin/new")
     public ResponseEntity<String> newCategory(@RequestBody Category category){
         logger.info("Received new category request");
         return service.newCategory(category);
     };
 
-    @DeleteMapping("/delete/{categoryId}")
+    @DeleteMapping("/admin/delete/{categoryId}")
     public ResponseEntity<String> removeCategory(@PathVariable("categoryId") int id){
         logger.info("Received remove category request");
         return service.removeCategory(id);
     };
 
-    @GetMapping("/")
+    @GetMapping("/unauthorized/category")
     public ResponseEntity<List<Category>> getCategories(){
         logger.info("Received get categories request");
       return service.getCategories();

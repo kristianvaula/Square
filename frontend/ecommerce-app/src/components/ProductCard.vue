@@ -5,7 +5,7 @@
         <img v-else class="icon-heart" src="@/assets/icons/heart.png" @click="favouriteProduct">
       </div>  
       <div class="image-wrapper">
-        <img :src="firstImage[0]" alt=""/>
+        <img :src="product.imageList[0].src" alt=""/>
       </div>
       <div class="product-info" @click="goToProductPage">
         <!--<div class="location">
@@ -13,11 +13,11 @@
         </div>-->
       
         <div>
-          <h3>{{ this.ProductInfo.title }}</h3>
+          <h3>{{ product.product.title }}</h3>
         </div>
         <div class="product-price">
             <span>Price:</span>
-            <span>{{ this.ProductInfo.price + " NOK" }}</span>
+            <span>{{ product.product.price + " NOK" }}</span>
         </div>
       </div>
     </div>
@@ -31,16 +31,10 @@ import router from '@/router';
   export default {
     name: "ProductCard",
     props: {
-        ProductInfo: {
+        product: {
             type: Object,
             required: true
         },
-
-        firstImage: {
-          type: Array,
-          required: true
-
-        }
     },
     data() {
       return {
@@ -48,7 +42,6 @@ import router from '@/router';
         isInFavourites: false,
       };
     },
-
     methods: {
         favouriteProduct() {
           this.isInFavourites = true;
@@ -62,10 +55,13 @@ import router from '@/router';
         },
 
         goToProductPage() {
-          const productId = this.ProductInfo.productId
+          const productId = this.product.product.productId
           router.push({name: "ProductPage", params: {productId}})
         }
     },
+    mounted(){
+      console.log(this.product.imageList[0])
+    }
   };
   </script>
   

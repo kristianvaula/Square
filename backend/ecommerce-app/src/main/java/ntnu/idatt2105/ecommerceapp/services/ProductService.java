@@ -1,5 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
+import ntnu.idatt2105.ecommerceapp.model.Image;
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
@@ -9,19 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
 
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -30,6 +29,8 @@ public class ProductService {
 
     private PlatformTransactionManager transactionManager;
     private static Logger logger = LoggerFactory.getLogger(ProductService.class);
+
+    public static String IMAGE_PATH = "src/main/resources/userImages/";
 
     @Autowired
     public ProductService(ProductRepository repository, PlatformTransactionManager transactionManager) {
@@ -43,10 +44,10 @@ public class ProductService {
      * @param product Product object
      * @param username username of seller
      * @param subcategories subcategories associated
-     * @param files image files
+     * @param images MultipartFile array of images
      * @return response for user
      */
-    public ResponseEntity<String> newProduct(Product product, String username,List<Integer> subcategories, List<byte[]> files) {
+    public ResponseEntity<String> newProduct(Product product, String username, List<Integer> subcategories, MultipartFile[] images) {
         if(product.getSellerId() < 0 ||
             product.getTitle() == null ||
             product.getDescription() == null ||
@@ -71,12 +72,17 @@ public class ProductService {
             repository.newProduct(product);
             int productId = repository.getProductId(product.getTitle(), product.getSellerId());
             logger.info("Adding subcategories");
-            addSubcategories(productId, subcategories);
-            logger.info("Adding images");
-            addImages(productId, files);
-            transactionManager.commit(status);
+            if(addSubcategories(productId, subcategories) != 1) {
+                removeById(productId);
+                return new ResponseEntity<>("Product could not be added", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if(addImages(productId, images) != 1){
+                removeById(productId);
+                return new ResponseEntity<>("Product could not be added", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             logger.info("All product successfully added");
-            return new ResponseEntity<>("Product successfully added", HttpStatus.OK);
+            transactionManager.commit(status);
+            return new ResponseEntity<>(String.valueOf(productId), HttpStatus.OK);
         }
         catch(Exception e) {
             transactionManager.rollback(status);
@@ -103,23 +109,27 @@ public class ProductService {
     /**
      * Calls to add images to database
      * @param productId product id associated
-     * @param images imagefiles
+     * @param images Multipartfile array
      * @return 1 if success
      * @throws DataAccessException
      */
-    private int addImages(int productId, List<byte[]> images) throws DataAccessException {
-        int response = -1;
-        try{
-            for (byte[] img : images) {
-                response = repository.newProductImage(img, productId);
-            }
-        }catch(DataAccessException e) {
-            logger.error("DAE while adding images: " + e.getMessage());
-        }catch(Exception e) {
-            logger.error("Exception while adding images: " + e.getMessage());
-        }
+    private int addImages(int productId, MultipartFile[] images){
+        for (MultipartFile image : images) {
+            StringBuilder fileNames = new StringBuilder();
+            String imageName = UUID.randomUUID().toString() + "." + image.getContentType().split("/")[1];
+            String fileNameAndPath = IMAGE_PATH+imageName;
 
-        return response;
+            File file = new File(fileNameAndPath);
+            try (OutputStream os = new FileOutputStream(file)) {
+                os.write(image.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return -1;
+            }
+            int response = repository.newProductImage(productId, imageName);
+            if(response == -1) return -1;
+        }
+        return 1;
     }
 
     /**
@@ -135,7 +145,13 @@ public class ProductService {
         logger.info("Fetching images");
         ArrayList<ProductResponse> responses = new ArrayList();
         for (int i = 0; i < products.size(); i++) {
-            ProductResponse resp = getProductResponse(products.get(i));
+            List<String> filenames = repository.getProductImagenames(products.get(i));
+            ProductResponse resp = null;
+            try {
+                resp = new ProductResponse(products.get(i), getProductImages(filenames));
+            } catch (IOException e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             if(resp == null){
                 logger.warn("Failed to load images for: " + products.get(i));
                 continue;
@@ -143,7 +159,19 @@ public class ProductService {
             responses.add(resp);
         }
         logger.info("Returning products list of length " + responses.size());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"files.zip\"");
         return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    /**
+     * Gets productImages repository
+     * @param filenames all filenames
+     * @return List of Image objects for response
+     * @throws IOException
+     */
+    public List<Image> getProductImages(List<String> filenames) throws IOException {
+        return repository.getProductImages(filenames);
     }
 
     /**
@@ -195,18 +223,21 @@ public class ProductService {
     }
 
     /**
-     * Creates ProductResponse to return to client
-     * @param product Product
-     * @return the ProductResponse
+     * Removes product by id
+     * @param id product id
+     * @return result response
      */
-    public ProductResponse getProductResponse(Product product){
-        int productId = product.getProductId();
+    public ResponseEntity<String> removeById(int id){
         try{
-            List<Blob> blobImgs = repository.getProductImages(productId);
-            return new ProductResponse(product, blobImgs);
-        } catch (SQLException throwables) {
-            System.out.println(throwables);
-            return null;
+            int result = repository.removeById(id);
+            if (result == 0) {
+                logger.info("No match found");
+                return new ResponseEntity<>("Could not clean up failed image uplaod with productId=" + id, HttpStatus.OK);
+            }
+            logger.info("Successfully deleted product");
+            return new ResponseEntity<>("Product was deleted successfully.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Cannot delete product.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

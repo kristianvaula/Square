@@ -1,6 +1,30 @@
 .profile-page {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+.details-card {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    width: 500px;
+    margin: 15px;
+    padding: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    grid-template-rows: 4fr, 2fr;
+    border-radius: 14px;
+    box-shadow:  7px 7px 14px #ebebeb,
+             -7px -7px 14px #ffffff;
+}
+
+.details-card img {
+    max-width: 100%;
+    height: auto;
+  }
 
 .my-button {
     margin-top: 20px;

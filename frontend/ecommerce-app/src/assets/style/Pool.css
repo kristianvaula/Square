@@ -8,6 +8,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
     width: 100%;
     margin: 15px;
     padding: 40px;
@@ -17,6 +18,28 @@
     border-radius: 14px;
     box-shadow:  7px 7px 14px #ebebeb,
              -7px -7px 14px #ffffff;
+}
+
+.product-pool {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin: 15px;
+    padding: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    grid-template-rows: 4fr, 2fr;
+}
+
+.no-products-message {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 40px;
+    margin: 105px
 }
 
 .pool-vertical {

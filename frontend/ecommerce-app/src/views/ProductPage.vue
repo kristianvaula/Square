@@ -2,7 +2,7 @@
     <div class="product-page">
         <h1>{{ product.title }}</h1>
             <div class="product-pictures">
-                <ImgCarouselComponent :images="images"/>
+                <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
                 <h5>Last changed</h5>
                 <h5>{{ product.timeCreated }}</h5>
             </div>
@@ -58,7 +58,8 @@ export default {
             isInFavourites: false,
             loggedInUserId: -1,
             sellerId: -1,
-            product: Object
+            product: Object,
+            imageLoaded: false 
         }
     },
     setup() {
@@ -109,16 +110,15 @@ export default {
 
     mounted () {
         const productId = this.$route.params.productId
-        console.log(productId)
             ProductUtils.getProductById(productId)
                 .then((response) => {
                 if(response.data) {
-                    console.log(response.data[0])
+                    console.log(response.data)
                     this.product = response.data[0].product
                     this.images = response.data[0].imageList
+                    this.imageLoaded = true 
                     this.sellerId = response.data[0].product.sellerId
                     console.log("Setting sellerId to " + this.sellerId)
-
                 }
             })
                 .catch((err) => {

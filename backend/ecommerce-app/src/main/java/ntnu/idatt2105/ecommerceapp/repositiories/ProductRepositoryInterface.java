@@ -4,14 +4,13 @@ import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import org.springframework.dao.DataAccessException;
 
-import java.sql.Blob;
 import java.util.List;
 
 public interface ProductRepositoryInterface {
 
     int newProduct(Product product);
     int newSubcategorybinding(int productId, int subCategoryId);
-    int newProductImage(byte[] image, int productId) throws DataAccessException;
+    int newProductImage(int productId, String image) throws DataAccessException;
 
     Product getProductById(int productId);
     int getProductId(String title, int sellerId);
@@ -22,8 +21,7 @@ public interface ProductRepositoryInterface {
 
     List<Product> getProductsBySubcategory(int subcategoryId);
 
-    public List<Blob> getProductImages(int productId);
-    public Profile getUser(String eMail);
-
-    public int removeById(int productId);
+    List<String> getProductImagenames(Product product);
+    Profile getUser(String eMail);
+    int removeById(int productId);
 }
