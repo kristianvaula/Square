@@ -2,7 +2,7 @@
     <div class="product-page">
         <h1>{{ product.title }}</h1>
             <div class="product-pictures">
-                <ImgCarouselComponent :images="images"/>
+                <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
                 <h5>Last changed</h5>
                 <h5>{{ product.timeCreated }}</h5>
             </div>
@@ -52,7 +52,8 @@ export default {
             displayImage: false, 
             images: [],
             isInFavourites: false,
-            product: Object
+            product: Object,
+            imageLoaded: false 
         }
     },
 
@@ -83,13 +84,12 @@ export default {
 
     mounted () {
         const productId = this.$route.params.productId
-        console.log(productId)
             ProductUtils.getProductById(productId)
                 .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    this.product = response.data[0].product
-                    this.images = response.data[0].imageList
+                if(response) {
+                    this.product = response[0].product
+                    this.images = response[0].imageList
+                    this.imageLoaded = true 
                 }
             })
                 .catch((err) => {

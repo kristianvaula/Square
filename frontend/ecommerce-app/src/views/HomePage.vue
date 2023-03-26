@@ -72,19 +72,15 @@ export default {
   },
 
   mounted () {
-            let vm = this
-            ProductUtils.getProducts()
-                .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    vm.products = response.data
-                   
-                }
-            })
-                .catch((err) => {
-                console.log(err)
-                })
-        }, 
+    ProductUtils.getProducts()
+      .then((response) => {
+        console.log(response)
+        this.products = response
+    })
+      .catch((err) => {
+      console.log(err)
+      })
+}, 
 
 }
 </script>

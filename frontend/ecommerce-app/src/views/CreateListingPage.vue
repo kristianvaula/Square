@@ -100,27 +100,24 @@ export default {
   },
   methods: {
     handleImage(image){
-      this.uploadedImagesuploadedImages = image.slice()
+      this.uploadedImages = image.slice()
     },
     handleFileUpload() {
       this.file = this.$refs.fileInput.files[0]
       // For previewing purpose
       const readerBase64 = new FileReader();
       readerBase64.onload = () => { 
-        this.images.push(readerBase64.result);
+        let image = {
+          name: this.file.name,
+          src : readerBase64.result,
+        }
+        this.images.push(image);
         this.displayImage = true; 
       };
       readerBase64.readAsDataURL(this.file); 
 
       // For post-purpose
-      const readerByte = new FileReader();
-      readerByte.onload = () => {
-        const arrayBuffer = readerByte.result;  
-        const uint8Array = new Uint8Array(arrayBuffer); 
-        const blob = new Blob([uint8Array], {type: this.file.type});
-        this.uploadedImages.push(blob);
-      };
-      readerByte.readAsArrayBuffer(this.file);
+      this.uploadedImages.push(this.file); 
     },
     rerouteList(list) {
       let arr = JSON.parse(JSON.stringify(list))
@@ -157,6 +154,7 @@ export default {
     } 
     
     const uploadedImages = reactive([])
+    const imageData = new FormData(); 
   
     const list = reactive([]);
     const updateList = (emittedList) => {
@@ -227,10 +225,10 @@ export default {
       formData.append('product', JSON.stringify(product)); 
       formData.append('username', username); 
       formData.append('subcategories', subcategories)
-      for (let i = 0; i < uploadedImages.length; i++){
-        formData.append('files', uploadedImages[i])
-      }  
-      sendForm(formData) 
+      for(let i = 0; i < uploadedImages.length; i++) {
+        formData.append('images', uploadedImages[i])
+      }
+      sendForm(formData, imageData)
     })
 
     return {
@@ -241,6 +239,7 @@ export default {
       errors,
       submit,
       uploadedImages,
+      imageData,
       updateList
     }
   }

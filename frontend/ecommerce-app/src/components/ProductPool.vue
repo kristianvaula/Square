@@ -1,7 +1,7 @@
 <template>
     <h3 class="title"> {{ title }}</h3>
     <div class="pool">
-        <ProductCard class="item" v-for="instance in this.products" :key="instance.id" :ProductInfo="instance.product" :firstImage="instance.imageList"></ProductCard>
+        <ProductCard class="item" v-for="instance in products" :key="instance.id" :product="instance"></ProductCard>
     </div>
 
 </template>
@@ -15,23 +15,18 @@ import '@/assets/style/Pool.css'
         components: {
             ProductCard,
         },
-
         data() {
             return {
                 title: "New Products",
                 store,
             }
         },
-
         props: {
             products: {
-                type: Object,
+                type: Array,
                 required: true
             }
         },
-
-
-
     }
 
 
