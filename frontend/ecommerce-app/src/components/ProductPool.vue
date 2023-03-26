@@ -1,6 +1,11 @@
 <template>
     <div class="pool">
+        <div class="no-products-message" v-if="products.length === 0">
+            <h3>There are no products in this category yet</h3>
+        </div>
+        <div v-else class="product-pool">
         <ProductCard class="item" v-for="instance in this.products" :key="instance.id" :ProductInfo="instance.product" :firstImage="instance.imageList"></ProductCard>
+        </div>
     </div>
 
 </template>
