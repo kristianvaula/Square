@@ -175,7 +175,7 @@ export default {
     }
 
     const textVal = value => {
-      const regex = /^[A-Za-z0-9",/\-+.#\s]+$/;
+      const regex = /^[A-Za-z0-9",/\-+'.#\s]+$/;
       if(!regex.test(String(value)) || value === undefined || String(value).length == 0){
         return 'Input invalid, only letters, numbers and simple symbols.'; 
       }
