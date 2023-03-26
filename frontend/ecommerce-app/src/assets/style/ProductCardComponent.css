@@ -19,6 +19,7 @@
     border-radius: 14px;
     box-shadow:  9px 9px 18px #e6e6e6,
              -9px -9px 18px var(on-hover);
+    cursor: pointer;
   }
   
   
@@ -40,7 +41,7 @@
     padding: 8px;
     display: grid;
     grid-template-rows: 0.5fr, 2fr, 1fr;
-    cursor: pointer;
+    
   }
   
   

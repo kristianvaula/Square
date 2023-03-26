@@ -1,5 +1,5 @@
 <template>
-    <div class="product-card">
+    <div class="product-card" @click="goToProductPage">
       <div>
         <img v-if="this.isInFavourites" class="icon-heart" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
         <img v-else class="icon-heart" src="@/assets/icons/heart.png" @click="favouriteProduct">
@@ -7,7 +7,7 @@
       <div class="image-wrapper">
         <img :src="product.imageList[0].src" alt=""/>
       </div>
-      <div class="product-info" @click="goToProductPage">
+      <div class="product-info" >
         <!--<div class="location">
             <span> {{ this.ProductInfo.location }} </span>
         </div>-->
@@ -25,7 +25,7 @@
   
   <script>
   import '@/assets/style/ProductCardComponent.css'
-import router from '@/router';
+  import router from '@/router';
   import { store } from '@/store/index.js'
   
   export default {
