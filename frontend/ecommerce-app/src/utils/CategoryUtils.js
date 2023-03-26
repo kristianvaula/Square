@@ -9,26 +9,28 @@ const defaultConfig = {
     }
 }
   
-const getUserConfig = () => {
-let tokenStore = useTokenStore(); 
-
-return {
-    headers: {
-    "Content-type" : "application/json",
-    "Authorization" : "Bearer " + tokenStore.jwtToken,
+function getUserConfig(){
+    let tokenStore = useTokenStore();
+    console.log(tokenStore.jwtToken) 
+    return {
+      headers: {
+        "Content-type" : "application/json",
+        "Authorization": "Bearer " + tokenStore.jwtToken
+    },
     }
-}
-}
+  }
 
 export default {
     getCategories() {
         return axios.get(baseurl + "/unauthorized/category", defaultConfig)
     },
     createCategory(category) {
-        return axios.post(baseurl + "/unauthorized/category/new",category, getUserConfig)
+        let config = getUserConfig()
+        return axios.post(baseurl + "/admin/category/new",category, config)
     },
     removeCategory(id) {
-        return axios.delete(`${baseurl}/unauthorized/category/delete/${id}`, getUserConfig)
+        let config = getUserConfig()
+        return axios.delete(`${baseurl}/admin/category/delete/${id}`, config)
     }, 
     getAllSubCategories() {
         return axios.get(baseurl + "/unauthorized/sub-category", defaultConfig)
@@ -37,9 +39,11 @@ export default {
         return axios.get(`${baseurl}/unauthorized/sub-category/${id}`, defaultConfig)
     },
     createSubCategory(category) {
-        return axios.post(baseurl + "/unauthorized/sub-category/new", category, getUserConfig)
+        let config = getUserConfig()
+        return axios.post(baseurl + "/unauthorized/sub-category/new", category, config)
     },
     removeSubCategory(id) {
-        return axios.delete(`${baseurl}/unauthorized/sub-category/delete/${id}`, getUserConfig)
+        let config = getUserConfig()
+        return axios.delete(`${baseurl}/unauthorized/sub-category/delete/${id}`, config)
     }
 }
