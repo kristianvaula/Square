@@ -4,11 +4,11 @@ import ntnu.idatt2105.ecommerceapp.model.*;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
 import ntnu.idatt2105.ecommerceapp.model.profiles.RegisterProfileRequest;
+import ntnu.idatt2105.ecommerceapp.model.profiles.UpdateProfileRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -195,6 +195,29 @@ public class ProfileDao implements IProfileDao {
             profileEmail = null;
         }
         return profileEmail;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param updateProfileRequest The profile to update in the database
+     * returns the newly updated profile.
+     */
+    public Profile updateProfile(UpdateProfileRequest updateProfileRequest) {
+        String getProfileSql = "SELECT * FROM profile WHERE eMail=?";
+        String updateProfileSql = "UPDATE profile SET password = ?, addressId = ? WHERE email = ?";
+        Profile profile;
+
+        int countyId = getCounty(updateProfileRequest.getCounty());
+        int cityId = addCity(updateProfileRequest.getCity(), countyId);
+        int addressId = addAddress(updateProfileRequest.getAddress(), cityId);
+
+        logger.info(updateProfileRequest.getFirstName() + ", " + updateProfileRequest.getLastName() + ", " + updateProfileRequest.geteMail() + ", " + updateProfileRequest.getPassword() + ", " + addressId);
+        int rowAffected = jdbcTemplate.update(updateProfileSql, new Object[] {updateProfileRequest.getPassword(), addressId, updateProfileRequest.geteMail()});
+
+        logger.debug("Rows affected after added new user: {}", rowAffected);
+        profile = jdbcTemplate.queryForObject(getProfileSql, BeanPropertyRowMapper.newInstance(Profile.class), updateProfileRequest.geteMail());
+
+        return profile;
     }
 
     /**
