@@ -1,10 +1,10 @@
 <template>
     <div class="pool">
-        <div class="no-products-message" v-if="products.length === 0">
+        <div class="no-products-message" v-if="products.length === 0 || empty">
             <h3>There are no products in this category yet</h3>
         </div>
         <div v-else class="product-pool">
-        <ProductCard class="item" v-for="instance in products" :key="instance.id" :product="instance"></ProductCard>
+            <ProductCard class="item" v-for="instance in products" :key="instance.id" :product="instance"></ProductCard>
         </div>
     </div>
 
@@ -28,18 +28,14 @@ import '@/assets/style/Pool.css'
             products: {
                 type: Array,
                 required: true
+            },
+            empty : {
+                type: Boolean, 
+                required: false,
+                default: false
             }
         },
     }
 
 
 </script>
-
-<style>
-    .product-pool {
-        display:flex;
-        flex-direction:row;
-        flex-wrap:wrap;
-        padding: 5px;
-    }
-</style>

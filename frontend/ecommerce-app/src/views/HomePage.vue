@@ -9,7 +9,7 @@
         <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="this.currentSubCategories"/>
       </div>
       <div>
-        <ProductPool :products="products"/>
+        <ProductPool :empty="empty" :products="products"/>
       </div>
       
     </div>
@@ -33,7 +33,8 @@ export default {
       selectedCategory: null,
       currentSubCategories: [],
       selectedSubCategory: null,
-      products: []
+      products: [], 
+      empty: true
     }
   },
 
@@ -48,26 +49,74 @@ export default {
       this.selectedCategory = id
       var response = await CategoryUtils.getSubCategories(id)
       this.currentSubCategories = response.data
-      var data = await ProductUtils.getProductByCategory(id)
-      this.products = data.data
+      ProductUtils.getProductByCategory(id)
+        .then((response) => {
+          if(response === undefined){
+            this.empty = true
+          }
+          else {
+            this.products = response
+            this.empty = false
+          }
+          
+        })
+        .catch((err) => {
+        console.log(err)
+        })
     },
 
     async deSelectCategoryToshow() {
       this.selectedCategory = null
       this.currentSubCategories = null
-      var data = await ProductUtils.getProducts()
-      this.products = data.data
+      ProductUtils.getProducts()
+        .then((response) => {
+          if(response === undefined){
+            this.empty = true
+          }
+          else {
+            this.products = response
+            this.empty = false
+          }
+          
+        })
+        .catch((err) => {
+        console.log(err)
+        })
     },
 
     async selectSubCategory(id) {
       if(this.selectedSubCategory == id) {
         this.selectedSubCategory = null
-        var data = await ProductUtils.getProductByCategory(this.selectedCategory)
-        this.products = data.data
+        ProductUtils.getProductByCategory(this.selectedCategory)
+          .then((response) => {
+            if(response === undefined){
+              this.empty = true
+            }
+            else {
+              this.products = response
+              this.empty = false
+            }
+            
+          })
+          .catch((err) => {
+          console.log(err)
+          })
       } else {
         this.selectedSubCategory = id
-        var response = await ProductUtils.getProductBySubcategory(this.selectedSubCategory)
-        this.products = response.data
+        ProductUtils.getProductBySubcategory(this.selectedSubCategory)
+          .then((response) => {
+            if(response === undefined){
+              this.empty = true
+            }
+            else {
+              this.products = response
+              this.empty = false
+            }
+            
+          })
+          .catch((err) => {
+          console.log(err)
+          })
       }
     }
   },
@@ -75,9 +124,15 @@ export default {
   mounted () {
     ProductUtils.getProducts()
       .then((response) => {
-        console.log(response)
-        this.products = response
-    })
+        if(response === undefined){
+          this.empty = true
+        }
+        else {
+          this.products = response
+          this.empty = false
+        }
+        
+      })
       .catch((err) => {
       console.log(err)
       })
