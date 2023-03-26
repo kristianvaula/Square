@@ -184,6 +184,19 @@ public class ProfileDao implements IProfileDao {
         return profile;
     }
 
+    @Override
+    public String getProfileEmail(int profileId) {
+        String profileSql = "SELECT eMail FROM profile WHERE profileId=?";
+        String profileEmail;
+        try {
+            profileEmail = jdbcTemplate.queryForObject(profileSql, String.class, profileId);
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("Could not find a e-mail for profileId: {}", profileId);
+            profileEmail = null;
+        }
+        return profileEmail;
+    }
+
     /**
      * {@inheritDoc}
      * @return List with all profiles registered in the database
@@ -211,6 +224,4 @@ public class ProfileDao implements IProfileDao {
         return jdbcTemplate.queryForObject("SELECT * FROM county WHERE countyId = ?",
                 BeanPropertyRowMapper.newInstance(County.class), countyId);
     }
-
-
 }

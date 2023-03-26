@@ -1,9 +1,11 @@
 <template>
   <div class="main-chat">
-    <h1 class="title"> {{ selectedChat ? selectedChat.title : "Select a Chat" }}</h1>
+    <h1 class="title" v-if="participantEmail"> {{ participantEmail }}</h1>
+    <h1 class="title" v-else> {{ "Select a Chat" }}</h1>
+
     <div class="messages-container" id="chatbox">
       <div class="messages">
-        <div v-for="message in messages" :key="message.id" :class="['message', message.sender === loggedInUser ? 'sent' : 'received']">
+        <div v-for="message in messages" :key="message.messageId" :class="['message', message.senderId === loggedInUserId ? 'sent' : 'received']">
           <div class="message-text">{{ message.text }}</div>
           <div class="message-time">{{ formatDate(message.timeStamp) }}</div>
         </div>
@@ -19,42 +21,54 @@
 <script>
 import '@/assets/style/MainChat.css'
 import ChatUtils from '@/utils/ChatUtils.js'
-//import httputils from '@/utils/httputils';
+import { useTokenStore } from "@/store/token.js";
+import ProfileUtils from '@/utils/ProfileUtils';  
 
 export default {
   name: 'MainChat',
   props: {
-    chatId: {
-      type: String,
-      required: true,
-    },
-    loggedInUser: {
+    ChatInfo: {
       type: Object,
       required: true,
-    },
-    otherUser: {
-      type: Object,
-      required: true,
-    },
-    isUnread: {
-      type: Boolean,
-      required: true,
-    },
-    selectedChat: {
-      type: Object,
-      required: true,
-    },
+    }
+  },
+  watch: {
+    async ChatInfo() {
+      if(this.ChatInfo) {
+        console.log("Retrieved chatInfo:")
+        console.log(this.ChatInfo)
+
+        console.log("participantEmail: " + this.participantEmail)
+        this.participantEmail = this.ChatInfo.participantEmail;
+        console.log("participantEmail: " + this.participantEmail)
+
+        this.loggedInUser = this.tokenStore.loggedInUser
+        
+        let loggedInUserPromise = await ProfileUtils.getProfileId(this.loggedInUser);
+        
+        console.log(loggedInUserPromise)
+        this.loggedInUserId = loggedInUserPromise.data;
+        console.log("userId is now set to: " + this.loggedInUserId);
+          
+        this.loadMessages();
+      }
+    }
   },
   data() {
     return {
+      participantEmail: '',
       messageText: '',
       messages: [],
+      loggedInUser: '',
+      loggedInUserId: -1
     };
   },
-  watch: { //er hentet for chatGPT - ikke sikker på om det fungerer
-    chatId() {
-      this.loadMessages();
-    },
+  setup() {
+    const tokenStore = useTokenStore();
+
+    return {
+      tokenStore
+    }
   },
   computed: {
     otherUsersName() {
@@ -64,47 +78,18 @@ export default {
   },
   methods: {
     async sendMessage() {
-      /*
-      let responesePromise = await ChatUtils.getChats(33); //gets array with chats
-      let chatArray = responesePromise.data;
-      console.log(chatArray)
-      let chat = chatArray[0];
+      const loggedInProfileId = this.loggedInUserId;
+      console.log("The logged in profileId is " + loggedInProfileId);
       
-      let message = {
-        "chatId": 1,
-        "text": 'Message from frontend',
-        "senderId": 34
-      }
-
-      await ChatUtils.newMessage(message);
-
-      let promise = await ChatUtils.getMessages(chat.chatId);
-      console.log(promise.data)
-
-      let newChat = {
-        "profile1": 34,
-        "profile2": 33
-      }
-
-      await ChatUtils.newChat(newChat)
-
-      let responesePromise1 = await ChatUtils.getChats(33); //gets array with chats
-      let chatArray1 = responesePromise1.data;
-      console.log(chatArray1)
-
-      //let promise2 = await ChatUtils.getMessages(chatArray1.length - 1);
-      //console.log(promise2.data)
-      */
- 
       const newMessage = {
-        chatId: this.chatId,
-        sender: this.loggedInUser,
+        chatId: this.ChatInfo.chatId,
+        senderId: loggedInProfileId,
         text: this.messageText.trim(),
-        timeStamp: new Date().toISOString()
       };
       if (newMessage.text.trim() !== '') {
         await ChatUtils.newMessage(newMessage);
         this.loadMessages();
+        this.messageText = '';
       }
     },
     scrollToBottom() {
@@ -117,29 +102,18 @@ export default {
       const minutes = "0" + date.getMinutes();
       return `${hours}:${minutes.substr(-2)}`;
     },
-    /*
     async loadMessages() {
       try {
-        const response = await ChatUtils.getMessages(this.chatId);
+        console.log("Retrieving getMessages")
+        const response = await ChatUtils.getMessages(this.ChatInfo.chatId);
+        console.log("Result from retrieving getMessages")
+        console.log(response)
         this.messages = response.data;
         this.scrollToBottom();
       } catch (e) {
         console.log(e)
       }
-    },
-    async loadLoggedInUser() {
-      try {
-        const response = await httputils.getProfileByEmail("email");
-        this.$emit('update:loggedInUser', response.data);
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    */
-  },
-  mounted() {
-    //this.loadMessages();
-    //this.loadLoggedInUser();
-  },
+    }
+  }
 }
 </script>

@@ -1,5 +1,16 @@
 <template>
     <div class="pool-vertical">
+      <h2>Chats</h2>      
+        <ChatCard v-for="chat in chats"
+        :key="chat.chatId"
+        :ChatInfo="chat"
+        @selected-chat-card="selectChat"       
+        ></ChatCard>
+    </div>
+</template>
+  <!--
+    <template>
+    <div class="pool-vertical">
       <h2>Chats</h2>
       <ul>
         <li v-for="chat in chats" :key="chat.id">
@@ -8,6 +19,7 @@
       </ul>
     </div>
   </template>
+  -->
   
   <script>
   import ChatCard from '@/components/ChatCard.vue';
@@ -19,30 +31,43 @@
   export default {
     name: 'ChatPool',
     components: {
-      ChatCard,
+      ChatCard
     },
-    async setup() {  
+    data () {
+      return {
+        chats: []
+      }
+    },
+    async mounted() {
+      //chatId, eMail to participant, lastMessage, isUnread, lastMessageTime
+
       const tokenStore = useTokenStore();
       let profileId = await ProfileUtils.getProfileId(tokenStore.loggedInUser);
       console.log("Chats for profileId " + profileId.data);
       let chatsPromise = await ChatUtils.getChats(profileId.data);
     
-      console.log(chatsPromise.data);
-      let chats = chatsPromise.data;
-      
+      let chatArray = chatsPromise.data;//chatId, profile1, profile2, isUnread
+      console.log(chatArray)
+
+      this.chats = chatArray;
       return {
-        tokenStore,
-        chats
+        tokenStore
       }
     },
     methods: {
       //should emit to mainChat
+      
       selectChat(chat) {
-        this.$emit('selected', chat);
+        console.log("Emiting from chatPool:")
+        console.log(chat)
+        this.$emit('selectedChatEvent', chat);
       },
+    
+     /*
       onChatSelected(chat) {
         this.selectedChat = chat;
       },
+      */
     },
   };
   </script>

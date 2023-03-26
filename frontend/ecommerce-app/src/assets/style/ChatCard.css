@@ -34,7 +34,7 @@
     bottom: 12px;
     left: 10px;
     position: absolute;
-    max-width: 350px;
+    max-width: 60%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

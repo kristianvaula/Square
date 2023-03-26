@@ -67,6 +67,8 @@ public interface IProfileDao {
      */
     Profile getProfile(String eMail);
 
+    String getProfileEmail(int profileId);
+
     /**
      * Method for getting all profiles
      * @return List with all profiles registered in the database

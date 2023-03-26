@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,8 +67,25 @@ public class ChatRepo implements IChatRepo {
 
     @Override
     public int getParticipantId(int chatId, int myProfileId) {
-        return -1;
+        List<int[]> profileIdsList = jdbcTemplate.query("SELECT profile1, profile2 FROM chat WHERE chatId=?", rs -> {
+            List<int[]> idsList = new ArrayList<>();
+            while (rs.next()) {
+                int[] ids = new int[2];
+                ids[0] = rs.getInt("profile1");
+                ids[1] = rs.getInt("profile2");
+                idsList.add(ids);
+            }
+            return idsList;
+        }, chatId);
+
+        if (profileIdsList == null ||profileIdsList.isEmpty()) {
+            logger.info("The array profileIds is empty... returning profileId -1");
+            return -1;
+        }
+
+        int[] profileIds = profileIdsList.get(0);
+        logger.info("profile1 has profileId {}", profileIds[0]);
+        logger.info("profile2 has profileId {}", profileIds[1]);
+        return profileIds[0] == myProfileId ? profileIds[1] : profileIds[0];
     }
-
-
 }

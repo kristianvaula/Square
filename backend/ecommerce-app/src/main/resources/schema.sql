@@ -59,8 +59,8 @@ CREATE TABLE chat(
      profile1 INT,
      profile2 INT,
      PRIMARY KEY (chatId),
-     FOREIGN KEY (profile1) REFERENCES chat(chatId),
-     FOREIGN KEY (profile2) REFERENCES chat(chatId)
+     FOREIGN KEY (profile1) REFERENCES profile(profileId),
+     FOREIGN KEY (profile2) REFERENCES profile(profileId)
 );
 
 CREATE TABLE message(
