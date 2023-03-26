@@ -11,6 +11,7 @@
     border-radius: 14px;
       box-shadow:  7px 7px 14px #ebebeb,
                -7px -7px 14px #ffffff;
+    border:1px solid #f1f0f0
   }
 
   .sub-categories h3 {

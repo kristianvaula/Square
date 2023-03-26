@@ -30,16 +30,14 @@ import '@/assets/style/Pool.css'
                 categories: null
             }
         },
-
         mounted () {
-            let vm = this
             CategoryUtils.getCategories()
                 .then((response) => {
                 if(response.data) {
                     console.log(response.data)
-                    vm.categories = response.data
+                    this.categories = response.data
                 }
-            })
+                })
                 .catch((err) => {
                 console.log(err)
                 })

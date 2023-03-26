@@ -34,8 +34,8 @@
   }
 
   .category-size {
-    display: grid;
-    grid-template-rows: 0.5fr, 2fr, 1fr;
+    position:relative; 
+    bottom:2px; 
   }
 
   .category-selected {

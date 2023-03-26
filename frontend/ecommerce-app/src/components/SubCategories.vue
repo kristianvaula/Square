@@ -54,6 +54,7 @@ export default {
   margin: 0;
   padding: 0;
   list-style: none;
+  align-items:left;
 }
 #subcategory-list li {
   margin: 10px 0;

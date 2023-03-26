@@ -2,10 +2,10 @@
     <div class="category-card" @click="handleSelect" :class="{'category-selected': this.CategoryInfo.categoryId === this.store.CurrentCategoryID}">
       <div class="category-info">
         <div class="category-title">
-          <h3>{{ this.CategoryInfo.description }}</h3>
+          <h3>{{ CategoryInfo.description }}</h3>
         </div>
-        <div class="category-size">
-            <span>{{ "(" + this.CategoryInfo.categorySize + ")" }}</span>
+        <div v-if="CategoryInfo.size !== undefined" class="category-size">
+            <span>{{ "(" + CategoryInfo.size + ")" }}</span>
         </div>
       </div>
     </div>
@@ -20,8 +20,13 @@
 
     props: {
         CategoryInfo: {
-            type: Object,
-            required: true
+          type: Object,
+          required: true,
+        },
+        size: {
+          type: String, 
+          required: false,
+          default : undefined
         }
     },
   
