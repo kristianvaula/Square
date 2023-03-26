@@ -1,6 +1,8 @@
 package ntnu.idatt2105.ecommerceapp.controllers;
 
 import ntnu.idatt2105.ecommerceapp.model.Location;
+import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
+import ntnu.idatt2105.ecommerceapp.model.profiles.UpdateProfileRequest;
 import ntnu.idatt2105.ecommerceapp.services.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,5 +31,23 @@ public class ProfileController {
         }
         logger.info("Could not find any location for addressId {}", id);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping("/unauthorized/update-profile")
+    public ResponseEntity<Profile> updateProfile(@RequestBody UpdateProfileRequest profileRequest) {
+        try {
+            UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest(profileRequest);
+            logger.info("Received request to update profile with profileId: {}", updateProfileRequest.getProfileId());
+
+            Profile profile = profileService.updateProfile(updateProfileRequest);
+            if (profile != null) {
+                logger.info("Returned user: {}", profile);
+                return new ResponseEntity<>(profile, HttpStatus.OK);
+            }
+        } catch (NullPointerException e) {
+            logger.warn(e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
