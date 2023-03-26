@@ -12,31 +12,30 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/sub-category")
 public class SubCategoryController {
     @Autowired
     private SubCategoryService service;
     private static Logger logger = LoggerFactory.getLogger(SubCategoryController.class.getName());
 
-    @PostMapping("/new")
+    @PostMapping("/admin/sub-category/new")
     public ResponseEntity<String> newSubCategory(@RequestBody SubCategory category){
         logger.info("Received new subcategory request");
         return service.newSubCategory(category);
     };
 
-    @DeleteMapping("/delete/{subCategoryId}")
+    @DeleteMapping("/admin/sub-category/delete/{subCategoryId}")
     public ResponseEntity<String> removeSubCategory(@PathVariable("subCategoryId") int id){
         logger.info("Received remove subcategory request");
         return service.removeSubCategory(id);
     };
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/unauthorized/sub-category/{categoryId}")
     public ResponseEntity<List<SubCategory>> getSubCategories(@PathVariable("categoryId") int categoryId){
         logger.info("Received new subcategory request");
         return service.getSubCategories(categoryId);
     };
 
-    @GetMapping("/")
+    @GetMapping("/unauthorized/sub-category/")
     public ResponseEntity<List<SubCategory>> getSubCategories(){
         logger.info("Received new subcategory get request");
         return service.getAllSubCategories();
