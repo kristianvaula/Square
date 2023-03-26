@@ -3,6 +3,7 @@ package ntnu.idatt2105.ecommerceapp.repositiories.profile;
 import ntnu.idatt2105.ecommerceapp.model.*;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.RegisterProfileRequest;
+import ntnu.idatt2105.ecommerceapp.model.profiles.UpdateProfileRequest;
 
 import java.util.List;
 
@@ -66,6 +67,15 @@ public interface IProfileDao {
      * @return Profile object
      */
     Profile getProfile(String eMail);
+
+    String getProfileEmail(int profileId);
+
+    /**
+     * The method updates a profile in the database with information provided by the user
+     * @param updateProfileRequest The profile to add update, and the data that should be updated
+     * returns the newly updated profile.
+     */
+    Profile updateProfile(UpdateProfileRequest updateProfileRequest);
 
     /**
      * Method for getting all profiles

@@ -3,6 +3,7 @@ package ntnu.idatt2105.ecommerceapp.services.chat;
         import ntnu.idatt2105.ecommerceapp.model.chat.Chat;
         import ntnu.idatt2105.ecommerceapp.model.chat.Message;
         import ntnu.idatt2105.ecommerceapp.model.chat.MessageRequest;
+        import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
         import ntnu.idatt2105.ecommerceapp.repositiories.chat.ChatRepo;
         import ntnu.idatt2105.ecommerceapp.repositiories.profile.IProfileDao;
         import org.slf4j.Logger;
@@ -46,11 +47,7 @@ public class ChatService {
     public List<Message> getMessages(int chatId) {
         logger.info("Retrieving messages for chatId {}", chatId);
         List<Message> messages = chatRepo.getMessages(chatId);
-        logger.info("Messages is retrieved from chatId {}", chatId);
-        boolean statusReading = chatRepo.readChat(chatId);
-        logger.info("Status for reading messages in chat {} is {}", chatId, statusReading);
-
-        logger.info("Logging message info {}, {}, {}, {}", messages.get(0).getChatId(), messages.get(0).getText(), messages.get(0).getTimeStamp(), messages.get(0).getSenderId() );
+        logger.info("Messages is retrieved from chatId {} the size for the message list is {}", chatId, messages.size());
         return messages;
     }
 
@@ -63,11 +60,33 @@ public class ChatService {
         logger.info("Adding message with text {} to chatId {}, the message is from profileId {}", message.getText(), message.getChatId(), message.getSenderId());
         boolean status = chatRepo.addMessage(message);
         logger.info("Status for adding message with message with text {} to chatId {} is {}", message.getText(), message.getChatId(), status);
+        logger.info("Retrieving chat with chatId {}", message.getChatId());
+        Chat chat = chatRepo.getChat(message.getChatId());
+        logger.info("Get status for the chat with chatId {} is {}", message.getChatId(), chat != null);
         return message.getChatId();
     }
 
+    /**
+     *
+     * @param chatId
+     * @return The new value for isUnread
+     */
+    public boolean readChat(int chatId) {
+        logger.info("Reading chat with chatId {}", chatId);
+        boolean statusReading = chatRepo.readChat(chatId);
+        logger.info("The readingStatus is: {}", statusReading);
+        return !statusReading;
+    }
+
     public String getParticipant(int chatId, String myEmail) {
-        return null;
+        int myProfileId = profileDao.getProfile(myEmail).getProfileId();
+        logger.info("Retrieving profileId for the participant");
+        int participantId = chatRepo.getParticipantId(chatId, myProfileId);
+        logger.info("Retrieved participantId {}", participantId);
+        logger.info("Retrieving eMail for the participant with id {}", participantId);
+        String participantEmail = profileDao.getProfileEmail(participantId);
+        logger.info("Got following e-mail {} for profileId {}", participantEmail, participantId);
+        return participantEmail;
     }
 }
 

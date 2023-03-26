@@ -4,10 +4,7 @@ import ntnu.idatt2105.ecommerceapp.model.Address;
 import ntnu.idatt2105.ecommerceapp.model.City;
 import ntnu.idatt2105.ecommerceapp.model.County;
 import ntnu.idatt2105.ecommerceapp.model.Location;
-import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
-import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
-import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
-import ntnu.idatt2105.ecommerceapp.model.profiles.RegisterProfileRequest;
+import ntnu.idatt2105.ecommerceapp.model.profiles.*;
 import ntnu.idatt2105.ecommerceapp.repositiories.autentication.JdbcAuthenticationRepo;
 import ntnu.idatt2105.ecommerceapp.repositiories.profile.IProfileDao;
 import org.slf4j.Logger;
@@ -58,6 +55,18 @@ public class ProfileService {
         }
         logger.info("It already exists a profile for eMail "  + profileRequest.geteMail());
         return null;
+    }
+
+    /**
+     * The method adds a profile to the database if it does not exist a profile with the e-mail in the profile request
+     * @param updateProfileRequest The profile to add to the database
+     * @return Null if it already exists a profile with the e-mail in the profile request. Otherwise, the newly added
+     * profile
+     */
+    public Profile updateProfile(UpdateProfileRequest updateProfileRequest) {
+        logger.info("Updating profile with profileId " + updateProfileRequest.getProfileId());
+        return profileDao.updateProfile(updateProfileRequest);
+
     }
 
     /**

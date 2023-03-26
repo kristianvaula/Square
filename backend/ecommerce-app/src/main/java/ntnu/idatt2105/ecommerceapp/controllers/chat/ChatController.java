@@ -21,7 +21,7 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
-    Logger logger = LoggerFactory.getLogger(ntnu.idatt2105.ecommerceapp.controllers.RegisterProfileController.class);
+    Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     /**
      * Returns an empty list if chats is null...
@@ -58,13 +58,28 @@ public class ChatController {
     public ResponseEntity<List<Message>> getMessages(@PathVariable int chatId) {
         logger.info("Received a request to get messages in chat with chatId {}", chatId);
         List<Message> messages = chatService.getMessages(chatId);
-        if (messages == null) {
-            logger.info("Could not find any messages in chat with chatId {}", chatId);
+        if (messages != null && !messages.isEmpty()) {
+            logger.info("Returned list with messages for chat with chatId {}", chatId);
+            return new ResponseEntity<>(messages, HttpStatus.OK);
+        }
+        logger.info("Could not find any messages in chat with chatId {}", chatId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/read-chat/{chatId}")
+    public ResponseEntity<Boolean> readChat(@PathVariable int chatId) {
+        logger.info("Received a request to set isUnread to false in chat with chatId {}", chatId);
+        boolean isUnread = chatService.readChat(chatId);
+        logger.info("The new value for isUnread for chatId {}, is {}", chatId, isUnread);
+        if (isUnread) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Returned list with messages for chat with chatId {}", chatId);
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+        return new ResponseEntity<>(false, HttpStatus.OK);
+
+
     }
+
+
 
     /**
      * Create a new message and add it to the database
@@ -73,6 +88,7 @@ public class ChatController {
     @PostMapping("/new-message")
     public void newMessage(@RequestBody MessageRequest message){
         logger.info("Received a request to create a new message for chatId {}, the messageTxt is {}", message.getChatId(), message.getText());
+        logger.info("Information about the new message: chatId: " + message.getChatId() + " message content: " + message.getText() + ", senderId " + message.getSenderId());
         int messageId = chatService.addMessage(message);
         logger.info("Message with messageId {} is added to chatId {}", messageId, message.getChatId());
     }

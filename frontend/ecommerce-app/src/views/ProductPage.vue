@@ -36,6 +36,10 @@ import { store } from '@/store';
 import ImgCarouselComponent from '@/components/ImgCarouselComponent.vue';
 import router from '@/router';
 import ProductUtils from '@/utils/ProductUtils';
+import ChatUtils from '@/utils/ChatUtils.js'
+import ProfileUtils from '@/utils/ProfileUtils';  
+import { useTokenStore } from "@/store/token.js";
+
 export default {
     name: `ProductPage`,
 
@@ -45,8 +49,17 @@ export default {
             displayImage: false, 
             images: [],
             isInFavourites: false,
+            loggedInUserId: -1,
+            sellerId: -1,
             product: Object,
             imageLoaded: false 
+        }
+    },
+    setup() {
+        const tokenStore = useTokenStore();
+
+        return {
+            tokenStore
         }
     },
 
@@ -68,7 +81,20 @@ export default {
             alert(`added to favourites!`)
         },
 
-        contactSeller() {
+        async contactSeller() {
+
+            let loggedInUserPromise = await ProfileUtils.getProfileId(this.tokenStore.loggedInUser);
+        
+            console.log(loggedInUserPromise)
+            const loggedInUserId = loggedInUserPromise.data;
+            const sellerId = this.sellerId;
+            const newChat = {
+                profile1: loggedInUserId,
+                profile2: sellerId
+            }
+            console.log("Sending chat:")
+            console.log(newChat)
+            await ChatUtils.newChat(newChat);
             router.push('/my-messages')
         }
 
@@ -79,10 +105,13 @@ export default {
         const productId = this.$route.params.productId
             ProductUtils.getProductById(productId)
                 .then((response) => {
-                if(response) {
-                    this.product = response[0].product
-                    this.images = response[0].imageList
+                if(response.data) {
+                    console.log(response.data)
+                    this.product = response.data[0].product
+                    this.images = response.data[0].imageList
                     this.imageLoaded = true 
+                    this.sellerId = response.data[0].product.sellerId
+                    console.log("Setting sellerId to " + this.sellerId)
                 }
             })
                 .catch((err) => {

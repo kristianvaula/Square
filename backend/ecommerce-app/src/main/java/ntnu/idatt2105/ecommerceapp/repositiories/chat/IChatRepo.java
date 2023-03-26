@@ -17,6 +17,8 @@ public interface IChatRepo {
      */
     boolean addChat(Chat chat);
 
+    Chat getChat(int chatId);
+
     /**
      *
      * @param chatId

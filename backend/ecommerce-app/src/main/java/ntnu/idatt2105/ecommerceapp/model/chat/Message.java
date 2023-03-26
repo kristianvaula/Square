@@ -2,6 +2,7 @@ package ntnu.idatt2105.ecommerceapp.model.chat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Message {
@@ -21,6 +22,16 @@ public class Message {
         this.messageId = messageId;
         this.text = text;
         this.timeStamp = timeStamp;
+        this.chatId = chatId;
+        this.senderId = senderId;
+    }
+
+    public Message(@JsonProperty("messageId") int messageId, @JsonProperty("text") String text,
+                   @JsonProperty("timeStamp") Timestamp timeStamp, @JsonProperty("chatId") int chatId,
+                   @JsonProperty("senderId") int senderId) {
+        this.messageId = messageId;
+        this.text = text;
+        this.timeStamp = new Date(timeStamp.getTime());
         this.chatId = chatId;
         this.senderId = senderId;
     }
@@ -58,8 +69,12 @@ public class Message {
         this.text = text;
     }
 
-    public void setTimeStamp(Date timeStamp) {
+    public void setTimeStamp(Date date) {
         this.timeStamp = timeStamp;
+    }
+
+    public void setTimeStamp(Timestamp timeStamp) {
+        this.timeStamp = new Date(timeStamp.getTime());
     }
 
     public void setChatId(int chatId) {
@@ -68,5 +83,10 @@ public class Message {
 
     public void setSenderId(int senderId) {
         this.senderId = senderId;
+    }
+
+    @Override
+    public String toString() {
+        return "chatId: " + chatId + "message: " + text + ", " + timeStamp + ", " + ", senderId " + senderId;
     }
 }

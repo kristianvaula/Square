@@ -1,7 +1,11 @@
 <template>
   <div class="my-messages">
-    <ChatPool @chatSelected="onChatSelected"/>
-    <MainChat :selectedChat="selectedChat"/>
+    <ChatPool
+      @selected-chat-event="selectedChatToShow"
+    ></ChatPool>
+    <MainChat
+     :ChatInfo="chatInfo"
+     ></MainChat>
   </div>
 </template>
 
@@ -18,12 +22,12 @@ export default {
   },
   data() {
     return {
-      selectedChatId: null,
+      chatInfo: null,
     };
   },
   methods: {
-    onChatSelected(chatId) {
-      this.selectedChatId = chatId;
+    selectedChatToShow (chat) {      
+      this.chatInfo = chat;
     },
   },
 };

@@ -1,30 +1,27 @@
 <template>
-    <div class="edit-page">
+    <div class="profile-page">
         <img src="@/assets/images/profileicon.png" alt="Profile Picture">
         <div class="edit-profile">
             <form @submit.prevent="saveChanges">
                 <div>
                     <legend>Change your Location Data:</legend>
                     <BaseSelect
-                        v-model="location.county"
+                        v-model="locationInfo.county"
                         :options="counties"
                         label="County:"
                     />
-                    <h5>Current County: ...</h5>
                     <BaseInput
-                        v-model="location.city"
+                        v-model="locationInfo.city"
                         label="City:"
                         placeholder=""
                         type="text"
                     />
-                    <h5>Current City: ...</h5>
                     <BaseInput
-                        v-model="location.address"
+                        v-model="locationInfo.address"
                         label="Address:"
                         placeholder=""
                         type="text"
                     />
-                    <h5>Current Address: ...</h5>
                 </div>
                 <div>
                     <legend>Change your Password:</legend>
@@ -61,27 +58,65 @@
   
   <script>
   import '../assets/style/EditProfile.css';
+  import ProfileUtils from '@/utils/ProfileUtils';
+  import { useTokenStore } from "@/store/token.js";
+import router from '@/router';
   
   export default {
     data () {
     return {
-      firstName: '',
-      lastName: '',
-      eMail: '',
-      location: {
+      locationInfo: {
         county: '',
         city: '',
         address: ''
       },
       password: '',
-      counties: []
+      counties: [],
+      ProfileInfo: null,
+      profileToUpdate: null
     }
   },
   methods: {
-    saveChanges() {
-      // implement the saveChanges method 
+    async saveChanges() {
+
+
+      this.ProfileInfo = {
+        profileId: this.profileToUpdate.profileId,
+        firstName: this.profileToUpdate.firstName,
+        lastName: this.profileToUpdate.lastName,
+        eMail: this.profileToUpdate.eMail,
+        county: this.locationInfo.county,
+        city: this.locationInfo.city,
+        address: this.locationInfo.address,
+        password: this.profileToUpdate.password, // implement for password and update to be this.password (instead of profileInfo.password)
+      }
+
+      await ProfileUtils.updateUser(this.ProfileInfo);          
+        
+      router.push("/my-profile")
+
+    }
+  },
+  setup() {
+      const store = useTokenStore()
+      return {
+          store
+      }
+    },
+    async mounted () {    
+      let countiesPromise = await ProfileUtils.getCounties();
+      countiesPromise.data.forEach(conty => {
+        this.counties.push(conty.countyName)
+      });
+
+      let profilePromise = await ProfileUtils.getProfileByEmail(this.store.loggedInUser);      
+      this.profileToUpdate = profilePromise.data;
+      let locationPromise;
+      if (this.profileToUpdate) {    
+        locationPromise = await ProfileUtils.getLocation(this.profileToUpdate.addressId);
+      }
+      this.locationInfo = locationPromise.data;
     }
   }
-}
   </script>
   

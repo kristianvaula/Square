@@ -99,8 +99,8 @@ public class RegisterProfileController {
     }
 
     @CrossOrigin("http://localhost:8080")
-    @GetMapping("/user/profile/{profileEMail}")
-    public ResponseEntity<Integer> getProfileById(@PathVariable String profileEMail) {
+    @GetMapping("/user/profileId/{profileEMail}")
+    public ResponseEntity<Integer> getProfileIdByEmail(@PathVariable String profileEMail) {
         logger.info("Received a request to get profile for {}", profileEMail);
         int profileId = profileService.getProfile(profileEMail);
 
