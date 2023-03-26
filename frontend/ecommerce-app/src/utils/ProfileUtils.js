@@ -26,6 +26,9 @@ export default {
     createUser(profile) {
         return axios.post(`${baseurl}/unauthorized/new-profile`, JSON.stringify(profile), configBasic);
     },
+    updateUser(profile) {
+        return axios.post(`${baseurl}/unauthorized/update-profile`, JSON.stringify(profile), configBasic);
+    },
 
     getJwtToken(profile) {
         return axios.post(`${baseurl}/unauthorized/token`, JSON.stringify(profile), configBasic);
