@@ -1,41 +1,34 @@
 <template>
     <div class="product-page">
+        <div class="product-pictures">
+            <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
+            <!--<h5>Last changed</h5>
+            <h5>{{ product.timeCreated }}</h5>-->
+        </div>
         <h1>{{ product.title }}</h1>
-            <div class="product-pictures">
-                <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
-                <h5>Last changed</h5>
-                <h5>{{ product.timeCreated }}</h5>
-            </div>
-            <div class="product-information">
-                <div class="product-choices">
-                    <div class="price">
-                        <h3>Price</h3>
-                        <h3 class="price-view">{{ product.price + " NOK" }}</h3>
-                    </div>
-                    <div class="product-buttons">
-                        <h3> Add to favourites</h3>
-                            <img v-if="this.isInFavourites" class="favourite-icon" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
-                            <img v-else class="favourite-icon" src="@/assets/icons/heart.png" @click="favouriteProduct">
-                    </div>
-                    <div class="product-buttons">
-                        <h3>Contact seller</h3>
-                        <img src="@/assets/icons/message.png" class="favourite-icon" @click="contactSeller">
-                    </div>
-                    
+        <div class="product-information">
+            <div class="product-choices">
+                <div class="price">
+                    <h3>Price</h3>
+                    <h3 class="price-view">{{ product.price + " NOK" }}</h3>
                 </div>
-                <div>
-                    <h3>Description</h3>
-                    <h5 class="price-view">{{ this.product.description }}</h5>
+                <div class="product-buttons">
+                    <h3> Add to favourites</h3>
+                        <img v-if="this.isInFavourites" class="favourite-icon" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
+                        <img v-else class="favourite-icon" src="@/assets/icons/heart.png" @click="favouriteProduct">
                 </div>
-
+                <div class="product-buttons">
+                    <h3>Contact seller</h3>
+                    <img src="@/assets/icons/message.png" class="favourite-icon" @click="contactSeller">
+                </div>
+                
             </div>
-        
-            
-
+            <div>
+                <h3>Description</h3>
+                <h5 class="price-view">{{ this.product.description }}</h5>
+            </div>
+        </div>
     </div>
-
-
-
 </template>
 
 <script>
@@ -102,6 +95,15 @@ export default {
 </script>
 
 <style>
+.product-page{
+    width:60%;
+    margin:10px;
+    padding-bottom:50px; 
+    border:1px solid #e4e9ed;
+    box-shadow:  7px 7px 14px #ebebeb,
+             -7px -7px 14px #ffffff;
+}
+
 .product-pictures {
     display: flex;
     justify-content: center;
@@ -119,7 +121,7 @@ export default {
 }
 
 .favourite-icon {
-    cursor: pointer;
+    
     max-width: 60px;
     max-height: 60px;
 }
@@ -129,6 +131,7 @@ export default {
 }
 
 .product-buttons {
+    cursor: pointer;
     margin: 30px;
 } 
 
