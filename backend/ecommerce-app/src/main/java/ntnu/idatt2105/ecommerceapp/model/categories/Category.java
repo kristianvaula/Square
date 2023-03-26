@@ -10,6 +10,8 @@ public class Category {
     private int categoryId;
     @Column
     private String description;
+    @Column
+    private String size;
 
     @Autowired
     public Category() {}
@@ -28,5 +30,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

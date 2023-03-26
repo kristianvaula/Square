@@ -46,6 +46,9 @@ public class CategoryService {
     public ResponseEntity<List<Category>> getCategories(){
         List<Category> categories = new ArrayList<>();
         categories.addAll(repository.getCategories());
+        for (Category category : categories) {
+            category.setSize(repository.getSize(category.getCategoryId()));
+        }
         logger.info("Returning list of length " + categories.size());
         return new ResponseEntity<>(categories, HttpStatus.OK);
     };

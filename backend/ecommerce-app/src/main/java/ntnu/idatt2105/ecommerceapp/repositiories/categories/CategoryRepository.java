@@ -27,4 +27,20 @@ public class CategoryRepository implements CategoryRepositoryInterface{
     public List<Category> getCategories() {
         return jdbcTemplate.query("SELECT DISTINCT * FROM category", BeanPropertyRowMapper.newInstance(Category.class));
     }
+
+    @Override
+    public String getSize(int categoryId) {
+        List<String> count = jdbcTemplate.query("SELECT title FROM product p,subcategory s,category c, product_subcategory ps " +
+                        "WHERE c.categoryId=s.categoryId " +
+                        "AND c.categoryId = ? " +
+                        "AND p.productId = ps.productId " +
+                        "AND ps.subcategoryId = s.subcategoryId"
+                ,BeanPropertyRowMapper.newInstance(String.class),categoryId);
+        try{
+            return String.valueOf(count.size());
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

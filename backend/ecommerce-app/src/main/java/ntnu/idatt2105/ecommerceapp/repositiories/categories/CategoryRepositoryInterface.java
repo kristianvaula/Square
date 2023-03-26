@@ -11,4 +11,6 @@ public interface CategoryRepositoryInterface {
     public int removeCategory(int id);
 
     public List<Category> getCategories();
+
+    public String getSize(int categoryId);
 }
