@@ -1,9 +1,12 @@
 <template>
     <div class="profile-page">
-        <img src="@/assets/images/profileicon.png" alt="Profile Picture">
         <div>
-            <ProfileDetails />
+            <img src="@/assets/images/profileicon.png" alt="Profile Picture">
+            <div class="details-card">
+                <ProfileDetails />
+            </div>
         </div>
+        
         <div>
             <router-link to="/my-favorites">
                 <Button class="my-button">My Favorites</Button>
