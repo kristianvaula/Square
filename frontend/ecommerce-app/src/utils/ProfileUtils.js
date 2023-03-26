@@ -39,7 +39,7 @@ export default {
     },
     getProfileId(eMail) {
         let config = getAxiosConfig();
-        return axios.get(`${baseurl}/user/profile/${eMail}`, config);
+        return axios.get(`${baseurl}/user/profileId/${eMail}`, config);
     },
     getProfileByEmail(eMail) {
         let config = getAxiosConfig();

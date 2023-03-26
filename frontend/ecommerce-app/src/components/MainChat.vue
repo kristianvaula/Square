@@ -35,20 +35,11 @@ export default {
   watch: {
     async ChatInfo() {
       if(this.ChatInfo) {
-        console.log("Retrieved chatInfo:")
-        console.log(this.ChatInfo)
-
-        console.log("participantEmail: " + this.participantEmail)
         this.participantEmail = this.ChatInfo.participantEmail;
-        console.log("participantEmail: " + this.participantEmail)
 
-        this.loggedInUser = this.tokenStore.loggedInUser
+        let loggedInUserPromise = await ProfileUtils.getProfileId(this.tokenStore.loggedInUser);
         
-        let loggedInUserPromise = await ProfileUtils.getProfileId(this.loggedInUser);
-        
-        console.log(loggedInUserPromise)
         this.loggedInUserId = loggedInUserPromise.data;
-        console.log("userId is now set to: " + this.loggedInUserId);
           
         this.loadMessages();
       }
@@ -59,7 +50,6 @@ export default {
       participantEmail: '',
       messageText: '',
       messages: [],
-      loggedInUser: '',
       loggedInUserId: -1
     };
   },
@@ -72,14 +62,18 @@ export default {
   },
   computed: {
     otherUsersName() {
-      const otherUser = this.messages.find((message) => message.sender !== this.loggedInUser);
+      const otherUser = this.messages.find((message) => message.sender !== this.tokenStore.loggedInUser);
       return otherUser ? otherUser.sender : '';
     },
   },
   methods: {
     async sendMessage() {
+      console.log("Emails getProfileId is called with " + this.tokenStore.loggedInUser)
+      let loggedInUserPromise = await ProfileUtils.getProfileId(this.tokenStore.loggedInUser);
+        
+      this.loggedInUserId = loggedInUserPromise.data;
+
       const loggedInProfileId = this.loggedInUserId;
-      console.log("The logged in profileId is " + loggedInProfileId);
       
       const newMessage = {
         chatId: this.ChatInfo.chatId,
@@ -103,11 +97,8 @@ export default {
       return `${hours}:${minutes.substr(-2)}`;
     },
     async loadMessages() {
-      try {
-        console.log("Retrieving getMessages")
+      try {        
         const response = await ChatUtils.getMessages(this.ChatInfo.chatId);
-        console.log("Result from retrieving getMessages")
-        console.log(response)
         this.messages = response.data;
         this.scrollToBottom();
       } catch (e) {

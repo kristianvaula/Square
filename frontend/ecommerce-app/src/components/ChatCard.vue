@@ -36,13 +36,9 @@
       }
     },
     async mounted () {  
-      console.log(this.ChatInfo)
       this.readStatus = this.ChatInfo.isUnread;
       
-      console.log("Sending an request to get particiapnt e-mail for chatId " + this.ChatInfo.chatId + " and where my e-mail is " + this.tokenStore.loggedInUser)
       const participantEmailPromise = await ChatUtils.getParticipant(this.ChatInfo.chatId, this.tokenStore.loggedInUser)
-      console.log(participantEmailPromise)
-      console.log(participantEmailPromise.data)
       this.participantEmail = participantEmailPromise.data;
       
       const messagePromise = await ChatUtils.getMessages(this.ChatInfo.chatId);
@@ -55,10 +51,8 @@
     methods: {
         async openChat() {
           let readPromise = await ChatUtils.readChat(this.ChatInfo.chatId);
-          console.log("Reading status");
-          console.log(readPromise.data);
           this.readStatus = readPromise.data;
-          //todo: call method from backend which get messages and emit them
+
           const selectedChat = {
             chatId: this.ChatInfo.chatId,
             profile1: this.ChatInfo.profile1,
@@ -67,9 +61,6 @@
             participantEmail: this.participantEmail
           };
 
-
-          console.log("Emiting from chatCard: ")
-          console.log(selectedChat)
           this.$emit("selectedChatCard", selectedChat);//chat object som man kan hente alt fra...            
         }
     }

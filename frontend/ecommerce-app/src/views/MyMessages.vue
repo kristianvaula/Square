@@ -26,9 +26,7 @@ export default {
     };
   },
   methods: {
-    selectedChatToShow (chat) {
-      console.log("Emit is recieved:")
-      console.log(chat)
+    selectedChatToShow (chat) {      
       this.chatInfo = chat;
     },
   },
