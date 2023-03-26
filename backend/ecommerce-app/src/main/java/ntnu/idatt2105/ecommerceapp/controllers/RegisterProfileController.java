@@ -99,8 +99,23 @@ public class RegisterProfileController {
     }
 
     @CrossOrigin("http://localhost:8080")
-    @PostMapping("/profile/by-email")
-    public ResponseEntity<Profile> getProfileByEmail(@RequestParam String email) {
+    @GetMapping("/user/profile/{profileEMail}")
+    public ResponseEntity<Integer> getProfileById(@PathVariable String profileEMail) {
+        logger.info("Received a request to get profile for {}", profileEMail);
+        int profileId = profileService.getProfile(profileEMail);
+
+        if (profileId != -1) {
+            logger.info("Returned user for profileId {}", profileId);
+            return new ResponseEntity<>(profileId, HttpStatus.OK);
+        }
+        logger.info("Could not find any user for the given email");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @CrossOrigin("http://localhost:8080")
+    @GetMapping ("/profile/by-email/{email}")
+    public ResponseEntity<Profile> getProfileByEmail(@PathVariable("email") String email) {
         logger.info("Received a request to get profile with email: {}", email);
         Profile profile = profileService.getProfileByEmail(email);
         if (profile == null) {

@@ -44,12 +44,12 @@ const routes = [
   {
     path: '/my-favorites',
     name: 'myFavorites',
-    component: HomeView
+    component: () => import('../views/MyFavourites.vue')
   },
   {
     path: '/my-listings',
     name: 'myListings',
-    component: HomeView
+    component: () => import('../views/MyListings.vue')
   },
   {
     path: '/admin',

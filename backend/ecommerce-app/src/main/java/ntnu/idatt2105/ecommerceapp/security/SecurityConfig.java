@@ -4,12 +4,18 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Configuration for security
+ * The configuration uses JWTAuthorizationFilter for validation of the token
+ * Support profile types USER and ADMIN, UNAUTHORIZED profiles is allowed to use any url with the prefix "/unauthorized"
+ */
 @Configuration
 @EnableAutoConfiguration
 public class SecurityConfig {
@@ -38,13 +44,17 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**@Bean
+    //todo: slette?
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().anyRequest();
     }
-    **/
 
-    //todo: slette?
+
+    /**
+     * Configuration for cors and allowed methods
+     * @return
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

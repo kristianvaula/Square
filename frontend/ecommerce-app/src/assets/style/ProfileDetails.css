@@ -9,6 +9,12 @@
     font-weight: bold;
   }
 
+  .profile-detail {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
   .edit-profile-button {
     margin-top: 20px;
     background-color: #ffffff;

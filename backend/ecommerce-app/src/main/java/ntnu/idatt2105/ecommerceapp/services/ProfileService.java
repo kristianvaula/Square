@@ -1,6 +1,9 @@
 package ntnu.idatt2105.ecommerceapp.services;
 
+import ntnu.idatt2105.ecommerceapp.model.Address;
+import ntnu.idatt2105.ecommerceapp.model.City;
 import ntnu.idatt2105.ecommerceapp.model.County;
+import ntnu.idatt2105.ecommerceapp.model.Location;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileRequest;
 import ntnu.idatt2105.ecommerceapp.model.profiles.ProfileType;
@@ -24,7 +27,7 @@ import java.util.List;
 public class ProfileService {
 
     @Autowired
-    private IProfileDao IProfileDao;
+    private IProfileDao profileDao;
     @Autowired
     private JdbcAuthenticationRepo jdbcAuthenticationRepo;
     private Logger logger = LoggerFactory.getLogger(ProfileService.class);
@@ -36,7 +39,7 @@ public class ProfileService {
      * @return List with counties
      */
     public List<County> getCounties() {
-        return IProfileDao.getCounties();
+        return profileDao.getCounties();
     }
 
     /**
@@ -46,12 +49,12 @@ public class ProfileService {
      * profile
      */
     public Profile addProfile(RegisterProfileRequest profileRequest) {
-        Profile existingProfile = IProfileDao.getProfile(profileRequest.geteMail());
+        Profile existingProfile = profileDao.getProfile(profileRequest.geteMail());
         if (existingProfile == null) {
             logger.info("Creating profile for " + profileRequest.geteMail() + " with password " + profileRequest.getPassword());
             String encodedPassword = passwordEncoder.encode(profileRequest.getPassword());
             profileRequest.setPassword(encodedPassword);
-            return IProfileDao.addProfile(profileRequest);
+            return profileDao.addProfile(profileRequest);
         }
         logger.info("It already exists a profile for eMail "  + profileRequest.geteMail());
         return null;
@@ -66,8 +69,8 @@ public class ProfileService {
      */
     public boolean checkProfileCredentials(String eMail, String password, boolean isPasswordEncrypted) {
         logger.info("Controlling credentials for "  + eMail + " password " + password);
-        List<Profile> profiles = IProfileDao.getProfiles();
-        Profile profile = IProfileDao.getProfile(eMail);
+        List<Profile> profiles = profileDao.getProfiles();
+        Profile profile = profileDao.getProfile(eMail);
         boolean correctPassword = false;
 
         if (profile != null && profiles.contains(profile)) {
@@ -89,10 +92,17 @@ public class ProfileService {
     public Profile getProfile(ProfileRequest profileRequest) {
         if (checkProfileCredentials(profileRequest.getEMail(), profileRequest.getPassword(), false)) {
             logger.info("Credentials is correct! Returning profile for " + profileRequest.getEMail());
-            return IProfileDao.getProfile(profileRequest.getEMail());
+            return profileDao.getProfile(profileRequest.getEMail());
         }
         logger.info("Credentials is invalid for " + profileRequest.getEMail());
         return null;
+    }
+
+    public int getProfile(String eMail) {
+        logger.info("Returning profile for " + eMail);
+        int profileId = profileDao.getProfile(eMail).getProfileId();
+        logger.info("Profile is returned for {} is {}", eMail, profileId);
+        return profileId;
     }
 
     public ProfileType getProfileType(Profile profile) {
@@ -116,6 +126,20 @@ public class ProfileService {
      * @return Profile if the credentials is correct, otherwise null
      */
     public Profile getProfileByEmail(String email) {
-        return IProfileDao.getProfile(email);
+        return profileDao.getProfile(email);
+    }
+
+    public Location getLocation(int addressId){
+        logger.info("Retrieving address for addressId {}", addressId);
+        Address address = profileDao.getAddress(addressId);
+        logger.info("Received address {} with cityId {}", address.getAddress(), address.getCityId());
+        City city = profileDao.getCity(address.getCityId());
+        logger.info("Received city {} with countyId {}", city.getCityName(), city.getCountyId());
+        County county = profileDao.getCounty(city.getCountyId());
+        logger.info("Received county {}", county.getCountyName());
+
+        Location location = new Location(address.getAddress(), city.getCityName(), county.getCountyName());
+        logger.info("Returns location {} ", location);
+        return location;
     }
 }

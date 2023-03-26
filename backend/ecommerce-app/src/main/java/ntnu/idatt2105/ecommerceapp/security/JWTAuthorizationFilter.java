@@ -23,6 +23,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * Custom authorization filter
+ */
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LogManager.getLogger(JWTAuthorizationFilter.class);
@@ -30,6 +33,14 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     public JdbcAuthenticationRepo jdbcAuthenticationRepo;
 
+    /**
+     * The filter controls the token given in the request
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -68,9 +79,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     }
 
     /**
-     *
+     * The method validates the token and subtracts e-mail and the authorization for the profile assosiated with the token
      * @param token
-     * @return An array with email on index 0 and profileType on index 1
+     * @return If the token is valid: an array with e-mail on index 0 and profileType on index 1, else null
      */
     public String[] validateTokenAndGetProfileInfo(final String token) {
         String[] profileInfo = new String[2];

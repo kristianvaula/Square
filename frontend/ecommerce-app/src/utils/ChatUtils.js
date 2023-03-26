@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const baseurl = "http://localhost:8081/chat";
+const baseurl = "http://localhost:8081/unauthorized/chat";
 const config = {
     headers: {
         "Content-type": "application/json"
+        //"Authorization": "Bearer " + jwtToken // todo: add jwtToken!!!
     },
 };
 
@@ -17,7 +18,10 @@ export default {
     getMessages(chatId) {
         return axios.get(`${baseurl}/messages/${chatId}`, config)
     }, 
-    newMessage(chatId, message) {
-        return axios.post(`${baseurl}/new-message/${chatId}`, message, config)
-    },    
+    newMessage(message) {
+        return axios.post(`${baseurl}/new-message`, message, config)
+    }, 
+    getParticipant(chatId, eMail) {
+        return axios.post(`${baseurl}/participant`, JSON.stringify({chatId, eMail}), config)
+    }
 }

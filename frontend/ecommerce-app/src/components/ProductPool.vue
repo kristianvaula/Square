@@ -1,7 +1,11 @@
 <template>
-    <h3 class="title"> {{ title }}</h3>
     <div class="pool">
+        <div class="no-products-message" v-if="products.length === 0">
+            <h3>There are no products in this category yet</h3>
+        </div>
+        <div v-else class="product-pool">
         <ProductCard class="item" v-for="instance in products" :key="instance.id" :product="instance"></ProductCard>
+        </div>
     </div>
 
 </template>
@@ -17,7 +21,6 @@ import '@/assets/style/Pool.css'
         },
         data() {
             return {
-                title: "New Products",
                 store,
             }
         },

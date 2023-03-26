@@ -31,15 +31,15 @@
 
       <li v-if="!user">
         <router-link to="/login">
-          <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
+          <img class="icon-medium" src="@/assets/images/profileicon.png" alt="">
           <h1 class="button-medium">Log In</h1>
         </router-link>
       </li>
 
       <li class="dropdown-container" v-if="user">
         <router-link to="/my-profile">
-          <img class="icon-medium" src="@/assets/icons/profile.png" alt="">
-          <h1>{{ user.firstName }}</h1>
+          <img class="icon-medium" src="@/assets/images/profileicon.png" alt="">
+          <h1> My profile</h1>
         </router-link>
         <ul class="dropdown">
           <li><router-link to="/my-profile">My Profile</router-link></li>

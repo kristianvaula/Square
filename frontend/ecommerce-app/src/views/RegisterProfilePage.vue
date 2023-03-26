@@ -83,12 +83,13 @@
 </template>
 
 <script>
-import httputils from "@/utils/httputils";
+import ProfileUtils from "@/utils/ProfileUtils";
 import "../assets/style/RegisterProfilePage.css"
 import "../assets/style/BaseInput.css"
 import { useField } from 'vee-validate' 
 import { useTokenStore } from "@/store/token.js";
 import router from "@/router/index"
+import { emailValidation, textValidation, passwordValidation } from "@/validations/validations";
 
 export default {
   name: "RegsiterProfilePage",
@@ -103,7 +104,7 @@ export default {
     }
   },
   async mounted () {
-    let countiesPromise = await httputils.getCounties();
+    let countiesPromise = await ProfileUtils.getCounties();
 
     countiesPromise.data.forEach(conty => {
       this.counties.push(conty.countyName)
@@ -113,64 +114,9 @@ export default {
 
     const tokenStore = useTokenStore();
 
-    function textValidation(value) {      
-      if (!value) return 'This field is required'
-      const regex = /^[a-z ,.'-]+$/i
-      if (!regex.test((String(value)))) {
-        return 'Please enter a valid name'
-      }
-      return true
-    }
-
-    function passwordValidation(value) {
-      if(!value) {
-        return "This field is required.";
-      }
-      
-      const isWhitespace = /^(?=.*\s)/;
-      if (isWhitespace.test(value)) {
-        return "Password must not contain whitespaces.";
-      }
-  
-      const isContainsUppercase = /^(?=.*[A-Z])/;
-      if (!isContainsUppercase.test(value)) {
-        return "Password must have at least one uppercase character.";
-      }
-  
-      const isContainsLowercase = /^(?=.*[a-z])/;
-      if (!isContainsLowercase.test(value)) {
-        return "Password must have at least one lowercase character.";
-      }
-  
-      const isContainsNumber = /^(?=.*[0-9])/;
-      if (!isContainsNumber.test(value)) {
-        return "Password must contain at least one digit.";
-      }
-  
-      const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_₹])/;
-      if (!isContainsSymbol.test(value)) {
-        return "Password must contain at least one special character.";
-      }
-  
-      const isValidLength = /^.{8,16}$/;
-      if (!isValidLength.test(value)) {
-        return "Password must be 8-16 characters long.";
-      }
-
-      return true
-    }
-
-    const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => {
-      if (!value) return 'This field is required'
-
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      if (!regex.test(String(value).toLowerCase())) return 'Please enter a valid email address'
-
-      return true
-    })
-    
     const { value: firstName, errorMessage: firstNameError } = useField('firstName', (value) => textValidation(value));
     const { value: lastName, errorMessage: lastNameError } = useField('lastName', (value) => textValidation(value));
+    const { value: eMail, errorMessage: eMailError } = useField('eMail', (value) => emailValidation(value));
     const { value: city, errorMessage: cityError } = useField('city', (value) => textValidation(value));
     const { value: password, errorMessage: passwordError} = useField('password', (value) => passwordValidation(value));
     
@@ -203,7 +149,7 @@ export default {
       if (this.hasAllFiledsInput) {    
         let profilePromise;
         try {
-          profilePromise = await httputils.createUser(profile);          
+          profilePromise = await ProfileUtils.createUser(profile);          
         } catch (error) {          
           if (error.response.status === 409) {
             this.errorMessage = "It already exist a user with e-mail: " + this.eMail;
