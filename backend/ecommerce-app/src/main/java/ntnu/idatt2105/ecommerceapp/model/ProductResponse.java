@@ -1,22 +1,18 @@
 package ntnu.idatt2105.ecommerceapp.model;
 
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Base64;
+
 import java.util.List;
 
+/**
+ * Model class for formatting a product response
+ */
 public class ProductResponse {
     private Product product;
-    private List<String> imageList;
+    private List<Image> imageList;
 
-    public ProductResponse(Product product, List<Blob> blobList) throws SQLException {
+    public ProductResponse(Product product, List<Image> imageList) {
         this.product = product;
-        this.imageList = new ArrayList<>();
-        for (Blob blob : blobList) {
-            String base64Image = Base64.getEncoder().encodeToString(blob.getBytes(1, (int)blob.length()));
-            this.imageList.add("data:image/png;base64,"+base64Image);
-        }
+        this.imageList = imageList;
     }
 
     public Product getProduct() {
@@ -27,11 +23,11 @@ public class ProductResponse {
         this.product = product;
     }
 
-    public List<String> getImageList() {
+    public List<Image> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<String> imageList) {
+    public void setImageList(List<Image> imageList) {
         this.imageList = imageList;
     }
 }

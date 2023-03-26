@@ -1,5 +1,6 @@
 package ntnu.idatt2105.ecommerceapp.repositiories;
 
+import ntnu.idatt2105.ecommerceapp.model.Image;
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import org.slf4j.Logger;
@@ -9,14 +10,15 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
+
+import static ntnu.idatt2105.ecommerceapp.services.ProductService.IMAGE_PATH;
 
 @Repository
 public class ProductRepository implements ProductRepositoryInterface {
@@ -28,7 +30,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     //INSERT
     private static final String INSERT_PRODUCT_SQL = "INSERT INTO product(title, description, price, used, sellerId, timeCreated) VALUES(?,?,?,?,?,NOW())";
     private static final String INSERT_PRODUCT_SUBCAT_SQL = "INSERT INTO product_subCategory (productId, subCategoryId) VALUES(?,?)";
-    private static final String INSERT_IMAGE_SQL = "INSERT INTO prodImage(image, productId) VALUES(?,?)";
+    private static final String INSERT_IMAGE_SQL = "INSERT INTO prodImage(productId, image) VALUES(?,?)";
 
     //SELECT
     private static final String SELECT_PRODUCT_SUBCAT_SQL = "SELECT productId FROM product_subCategory WHERE productId = ? AND subCategoryId = ?";
@@ -38,11 +40,13 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String SELECT_PRODUCTS_CATEGORY_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps, subcategory s WHERE p.productId = ps.productId AND ps.subcategoryId = s.subcategoryId AND s.categoryId = ?";
     private static final String SELECT_PRODUCTS_SUBCATEGORY_SQL = "SELECT p.productId, description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps WHERE p.productId = ps.productId AND ps.subcategoryId = ?";
     private static final String SELECT_PRODUCTID_SQL = "SELECT productId FROM product WHERE title = ? AND sellerId=?;";
-    private static final String SELECT_IMAGES_SQL = "SELECT * FROM prodImage WHERE productId = ?;";
+    private static final String SELECT_IMAGES_SQL = "SELECT image FROM prodImage WHERE productId = ?;";
     private static final String SELECT_PROFILE_SQL ="SELECT * FROM profile WHERE email=?";
     //private static final String SELECT_SUBCATEGORIES_SQL = "SELECT * FROM product_subCategory WHERE productId = ?;";
 
-    private static final String DELETE_BY_ID_SQL = "DELETE FROM users WHERE id=?";
+    private static final String DELETE_IMAGE_SQL = "DELETE FROM prodImage WHERE productId=?";
+    private static final String DELETE_SUBCAT_SQL = "DELETE FROM product_subcategory WHERE productId=?";
+    private static final String DELETE_BY_ID_SQL = "DELETE FROM product WHERE productId=?";
 
     @Override
     public int newProduct(Product product) throws DataAccessException{
@@ -66,8 +70,8 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public int newProductImage(byte[] image, int productId) throws DataAccessException{
-        return jdbcTemplate.update(INSERT_IMAGE_SQL, image, productId);
+    public int newProductImage(int productId, String image) throws DataAccessException{
+        return jdbcTemplate.update(INSERT_IMAGE_SQL, productId, image);
     }
 
     @Override
@@ -142,28 +146,53 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public List<Blob> getProductImages(int productId) {
+    public List<String> getProductImagenames(Product product) {
         try {
-            return jdbcTemplate.query(SELECT_IMAGES_SQL, new ResultSetExtractor<List<Blob>>() {
-                @Override
-                public List<Blob> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                    List<Blob> images = new ArrayList<>();
-                    while (rs.next()) {
-                        Blob image = rs.getBlob("image");
-                        images.add(image);
-                    }
-                    return images;
-                }
-            }, productId);
-        }
-        catch (EmptyResultDataAccessException e) {
-            logger.warn("Get product returned 0: " + e);
+            return jdbcTemplate.query("SELECT image FROM prodImage WHERE productId = ?;",
+                    (rs, rowNum) -> rs.getString("image"), product.getProductId());
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
+    /**
+     * Gets productImages. Reads from resources and creates
+     * a list of Image objects where imagedata is base64 encoded
+     * @param filenames all filenames
+     * @return Images
+     * @throws IOException
+     */
+    public List<Image> getProductImages(List<String> filenames) throws IOException {
+        ArrayList<Image> images = new ArrayList<>();
+        for(String filename : filenames) {
+            File file = new File(IMAGE_PATH+filename);
+            String encodedString = Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
+
+            Image img = new Image();
+            img.setName(filename);
+            img.setImage(encodedString);
+            images.add(img);
+        }
+        return images;
+    }
+
+    /**
+     * Deletes subcategory binding and product by id
+     * @param productId product id
+     * @return 1 if success
+     */
     @Override
     public int removeById(int productId) {
-        return jdbcTemplate.update(DELETE_BY_ID_SQL, productId);
+        try{
+            try{
+                jdbcTemplate.update(DELETE_IMAGE_SQL, productId);
+            }catch(Exception e) {logger.warn("Images might not be deleted");}
+            jdbcTemplate.update(DELETE_SUBCAT_SQL, productId);
+            jdbcTemplate.update(DELETE_BY_ID_SQL, productId);
+        }catch(Exception e){
+            logger.warn(e.getMessage());
+            return 0;
+        }
+        return 1;
     }
 }
