@@ -35,7 +35,7 @@ public class SubCategoryController {
         return service.getSubCategories(categoryId);
     };
 
-    @GetMapping("/unauthorized/sub-category/")
+    @GetMapping("/unauthorized/sub-category")
     public ResponseEntity<List<SubCategory>> getSubCategories(){
         logger.info("Received new subcategory get request");
         return service.getAllSubCategories();

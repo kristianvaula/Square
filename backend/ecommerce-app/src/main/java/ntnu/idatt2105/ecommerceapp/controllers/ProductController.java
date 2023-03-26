@@ -52,13 +52,13 @@ public class ProductController {
         return service.getAllProducts();
     }
 
-    @GetMapping("/unauthorized/product//category/{category}")
+    @GetMapping("/unauthorized/product/category/{category}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable("category") int categoryId) {
         logger.info("Received request for all products in a category");
         return service.getProductsByCategory(categoryId);
     }
 
-    @GetMapping("/unauthorized/product//subcategory/{subcategory}")
+    @GetMapping("/unauthorized/product/subcategory/{subcategory}")
     public ResponseEntity<List<ProductResponse>> getProductsBySubcategory(@PathVariable("subcategory") int subcategoryId) {
         logger.info("Received request for all products");
         return service.getProductsBySubCategory(subcategoryId);
