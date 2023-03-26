@@ -23,5 +23,8 @@ export default {
     }, 
     getParticipant(chatId, eMail) {
         return axios.post(`${baseurl}/participant`, JSON.stringify({chatId, eMail}), config)
+    },
+    readChat(chatId) {
+        return axios.post(`${baseurl}/read-chat/${chatId}`, config)
     }
 }

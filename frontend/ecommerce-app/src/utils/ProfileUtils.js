@@ -7,6 +7,7 @@ const configBasic = {
         "Content-type": "application/json"
     },
 };
+
 function getAxiosConfig() {
     let tokenStore = useTokenStore(); 
 

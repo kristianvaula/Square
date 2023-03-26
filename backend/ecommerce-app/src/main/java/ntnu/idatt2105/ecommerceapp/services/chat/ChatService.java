@@ -48,9 +48,6 @@ public class ChatService {
         logger.info("Retrieving messages for chatId {}", chatId);
         List<Message> messages = chatRepo.getMessages(chatId);
         logger.info("Messages is retrieved from chatId {} the size for the message list is {}", chatId, messages.size());
-        if (messages.size() > 0) {
-            logger.info("Logging message info {}, {}, {}, {}", messages.get(2).getChatId(), messages.get(2).getText(), messages.get(2).getTimeStamp(), messages.get(2).getSenderId() );
-        }
         return messages;
     }
 
@@ -63,7 +60,22 @@ public class ChatService {
         logger.info("Adding message with text {} to chatId {}, the message is from profileId {}", message.getText(), message.getChatId(), message.getSenderId());
         boolean status = chatRepo.addMessage(message);
         logger.info("Status for adding message with message with text {} to chatId {} is {}", message.getText(), message.getChatId(), status);
+        logger.info("Retrieving chat with chatId {}", message.getChatId());
+        Chat chat = chatRepo.getChat(message.getChatId());
+        logger.info("Get status for the chat with chatId {} is {}", message.getChatId(), chat != null);
         return message.getChatId();
+    }
+
+    /**
+     *
+     * @param chatId
+     * @return The new value for isUnread
+     */
+    public boolean readChat(int chatId) {
+        logger.info("Reading chat with chatId {}", chatId);
+        boolean statusReading = chatRepo.readChat(chatId);
+        logger.info("The readingStatus is: {}", statusReading);
+        return !statusReading;
     }
 
     public String getParticipant(int chatId, String myEmail) {

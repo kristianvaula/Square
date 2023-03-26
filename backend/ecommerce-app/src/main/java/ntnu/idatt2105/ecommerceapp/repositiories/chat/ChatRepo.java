@@ -29,39 +29,44 @@ public class ChatRepo implements IChatRepo {
     }
 
     @Override
+    public Chat getChat(int chatId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM chat WHERE chatId=?",
+                BeanPropertyRowMapper.newInstance(Chat.class), chatId);
+    }
+
+    @Override
     public boolean addChat(Chat chat) {
         chat.setIsUnread(1);//setting the new chat to be unread
         logger.info("The new chat has isUnread set to {}", chat.isUnread());
         int rowsAffected = jdbcTemplate.update("INSERT INTO chat (isUnread, profile1, profile2) VALUES(?,?,?)",
                 chat.isUnread(), chat.getProfile1(), chat.getProfile2());
+        if (rowsAffected == 1) {
+            rowsAffected = jdbcTemplate.update("UPDATE chat SET isUnread = 1 WHERE chatId = ?", chat.getChatId());
+        }
         return rowsAffected == 1;
     }
 
     @Override
     public boolean readChat(int chatId) {
         logger.info("Reading from chatId {}", chatId);
-        Chat chat = jdbcTemplate.queryForObject("SELECT * FROM chat WHERE chatId=?",
-                BeanPropertyRowMapper.newInstance(Chat.class), chatId);
-        logger.info("Chat received from query is {}", chat);
-        if (chat != null) {
-            chat.setIsUnread(0);
-        }
-        return chat != null;
+        int rowsAffected = jdbcTemplate.update("UPDATE chat SET isUnread = 0 WHERE chatId = ?", chatId);
+        logger.info("Reading status for chat with chatId {} is {}", chatId, rowsAffected == 1);
+        return rowsAffected == 1;
     }
-
 
     @Override
     public List<Message> getMessages(int chatId) {
-        //todo: should only be possible ot get messages from a chat if the profile is a member of the chat
         return jdbcTemplate.query("SELECT * FROM message WHERE chatId=?",
                 BeanPropertyRowMapper.newInstance(Message.class), chatId);
     }
 
     @Override
     public boolean addMessage(MessageRequest message) {
-        //todo: should only be possible ot send a chat if the profile is a member of the chat
         int rowsAffected = jdbcTemplate.update("INSERT INTO message (text, timeStamp, chatId, senderId) VALUES(?,?,?,?)",
                 message.getText(), new Timestamp(new Date().getTime()), message.getChatId(), message.getSenderId());
+        if (rowsAffected == 1) {
+            rowsAffected = jdbcTemplate.update("UPDATE chat SET isUnread = 1 WHERE chatId = ?", message.getChatId());
+        }
         return rowsAffected == 1;
     }
 

@@ -66,6 +66,21 @@ public class ChatController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/read-chat/{chatId}")
+    public ResponseEntity<Boolean> readChat(@PathVariable int chatId) {
+        logger.info("Received a request to set isUnread to false in chat with chatId {}", chatId);
+        boolean isUnread = chatService.readChat(chatId);
+        logger.info("The new value for isUnread for chatId {}, is {}", chatId, isUnread);
+        if (isUnread) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
+
+
+    }
+
+
+
     /**
      * Create a new message and add it to the database
      * @param message
