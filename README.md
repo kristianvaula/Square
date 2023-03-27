@@ -41,9 +41,16 @@ To purchase a product, users can view listing details and initiate a chat with t
 
 
 ## IN CASE OF PROBLEMS
+
 If you run into error messages when trying to run the application, you might have to change the first letter of the following files to uppercase letters:
 
 - `baseInput.css → Baseinput.css`
 - `formPage.css → FormPage.css`
 
 The files are located under src/assets/style.
+
+## Team members
+- `Thomas Iversen`
+- `Espen Justad`
+- `Kristian Vaula Jensen`
+- `Hans Magne Asheim`
