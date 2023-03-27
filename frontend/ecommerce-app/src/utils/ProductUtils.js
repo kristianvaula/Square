@@ -14,7 +14,6 @@ function getUserConfig(){
   console.log(tokenStore.jwtToken) 
   return {
     headers: {
-      "Content-type": "application/json",
       "Authorization": "Bearer " + tokenStore.jwtToken
   },
   }
@@ -51,11 +50,11 @@ const getProductsWithImages = response => response.data.map(productResponse => (
 export default {
   
   createProduct(formData) {
-    return axios.post(baseurl + "/unauthorized/product/new", formData, getUserConfig()); 
+    let config = getUserConfig();
+    return axios.post(baseurl + "/user/product/new", formData, config); 
   }, 
   getProducts() {
-    let config = getUserConfig()
-    return axios.get(baseurl + "/unauthorized/product/all", config)
+    return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
     .then(getProductsWithImages)
   },
   getProductById(id) {
