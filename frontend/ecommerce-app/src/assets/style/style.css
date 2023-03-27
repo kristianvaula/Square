@@ -3,6 +3,7 @@
   --secondary-color:#FFFFFF;
   --on-hover:#e4e9ed; 
   --wine-red: #702632; 
+  --product-card-width:250px; 
 }
 
 * {
@@ -108,4 +109,20 @@ button:disabled {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.lowkey-h3{
+  font-size:0.5em;
+  opacity:0.8;
+} 
+
+.sixty-pool {
+  width:60%;
+  min-width:var(--product-card-width + 50px);
+  max-width:60%;
+}
+
+.flex-centered {
+  display:flex;
+  justify-content:center;
 }
