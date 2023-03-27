@@ -22,7 +22,7 @@
             placeholder="Norman"
             type="text"   
             :error="lastNameError"   
-            data-test="firstLast"
+            data-test="lastName"
         />
       </fieldset>
 

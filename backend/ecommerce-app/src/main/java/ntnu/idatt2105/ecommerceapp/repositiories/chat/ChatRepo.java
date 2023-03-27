@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repository for a chat
+ */
 @Repository
 public class ChatRepo implements IChatRepo {
 
@@ -22,18 +25,33 @@ public class ChatRepo implements IChatRepo {
     private JdbcTemplate jdbcTemplate;
     private Logger logger = LoggerFactory.getLogger(ChatRepo.class);
 
+    /**
+     * {@inheritDoc}
+     * @param profileId the profileId
+     * @return a list containing the chats
+     */
     @Override
     public List<Chat> getChats(int profileId) {
         return jdbcTemplate.query("SELECT * FROM chat WHERE profile1=? OR profile2=?",
                 BeanPropertyRowMapper.newInstance(Chat.class), profileId, profileId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chatId the id of the chat you want to get
+     * @return the chat with the specified chatId
+     */
     @Override
     public Chat getChat(int chatId) {
         return jdbcTemplate.queryForObject("SELECT * FROM chat WHERE chatId=?",
                 BeanPropertyRowMapper.newInstance(Chat.class), chatId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chat the chat to add
+     * @return Boolean value representing if the chat was added or not
+     */
     @Override
     public boolean addChat(Chat chat) {
         chat.setIsUnread(1);//setting the new chat to be unread
@@ -46,6 +64,11 @@ public class ChatRepo implements IChatRepo {
         return rowsAffected == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chatId the id of the chat
+     * @return the isUnread status
+     */
     @Override
     public boolean readChat(int chatId) {
         logger.info("Reading from chatId {}", chatId);
@@ -54,12 +77,22 @@ public class ChatRepo implements IChatRepo {
         return rowsAffected == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chatId the id of the chat
+     * @return a list containing the messages
+     */
     @Override
     public List<Message> getMessages(int chatId) {
         return jdbcTemplate.query("SELECT * FROM message WHERE chatId=?",
                 BeanPropertyRowMapper.newInstance(Message.class), chatId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param message the message to add
+     * @return Boolean value representing whether the message was added or not
+     */
     @Override
     public boolean addMessage(MessageRequest message) {
         int rowsAffected = jdbcTemplate.update("INSERT INTO message (text, timeStamp, chatId, senderId) VALUES(?,?,?,?)",
@@ -70,6 +103,12 @@ public class ChatRepo implements IChatRepo {
         return rowsAffected == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param chatId the id of the chat
+     * @param myProfileId the id of the profile
+     * @return the participantId
+     */
     @Override
     public int getParticipantId(int chatId, int myProfileId) {
         List<int[]> profileIdsList = jdbcTemplate.query("SELECT profile1, profile2 FROM chat WHERE chatId=?", rs -> {
@@ -83,7 +122,7 @@ public class ChatRepo implements IChatRepo {
             return idsList;
         }, chatId);
 
-        if (profileIdsList == null ||profileIdsList.isEmpty()) {
+        if (profileIdsList == null || profileIdsList.isEmpty()) {
             logger.info("The array profileIds is empty... returning profileId -1");
             return -1;
         }

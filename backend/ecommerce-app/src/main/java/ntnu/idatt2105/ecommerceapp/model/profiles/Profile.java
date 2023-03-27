@@ -159,8 +159,6 @@ public class Profile {
         return password;
     }
 
-    //todo: when editing password should the old one be given before the change is made
-
     /**
      * Setter for password
      * @param password new password
