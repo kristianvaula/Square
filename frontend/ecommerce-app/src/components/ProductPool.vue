@@ -58,7 +58,6 @@ import '@/assets/style/style.css'
         methods: {
             enableFavourites(product){
                 try {
-                    console.log(product.sellerId + "=" + this.userId); 
                     return product.sellerId !== this.userId;
                 } catch (error) {
                     return true;

@@ -135,7 +135,6 @@ export default {
     CategoryUtils.getCategories()
       .then((response) => {
         if(response.data) {
-          console.log(response.data)
           vm.categories = response.data
         }
       })
@@ -162,7 +161,6 @@ export default {
     };
 
     let sendForm = (formData) => {
-      console.log(formData)
       ProductUtils.createProduct(formData)
           .then((response) => {
             console.log(response)

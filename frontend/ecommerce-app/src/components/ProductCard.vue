@@ -57,9 +57,7 @@
     },
     methods: {
         favouriteProduct() {
-          console.log("favourcall")
           if(this.tokenStore.jwtToken){
-            console.log(this.product.product)
             ProductUtils.favouriteProduct(this.product.product.productId, this.tokenStore.loggedInUser)
               .then(() => {
                 this.$emit("favouritedEvent", this.product)
@@ -76,7 +74,6 @@
             
         },
         unfavouriteProduct() {
-          console.log("Unfavour call")
           if(this.tokenStore.jwtToken){
             ProductUtils.unfavourProduct(this.product.product.productId, this.tokenStore.loggedInUser)
               .then(() => {

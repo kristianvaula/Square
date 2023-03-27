@@ -28,9 +28,7 @@
     },
     async mounted() {      
       const tokenStore = useTokenStore();
-      console.log(tokenStore.loggedInUser)
       let profileId = await ProfileUtils.getProfileId(tokenStore.loggedInUser);
-      console.log("Chats for profileId " + profileId.data);
       let chatsPromise = await ChatUtils.getChats(profileId.data);
     
       let chatArray = chatsPromise.data;
