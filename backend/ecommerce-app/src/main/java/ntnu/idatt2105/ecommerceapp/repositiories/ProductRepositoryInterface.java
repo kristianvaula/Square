@@ -16,6 +16,13 @@ public interface ProductRepositoryInterface {
      * @return 1 if success
      */
     int newProduct(Product product);
+
+    /**
+     * Method to add a product to favorites
+     * @param productId the id of the product to be favorited
+     * @param userId the id of the user favoriting the product
+     * @return -1 if operation fails
+     */
     int addToFavourites(int productId, int userId);
 
     /**
@@ -35,10 +42,28 @@ public interface ProductRepositoryInterface {
      */
     int newProductImage(int productId, String image) throws DataAccessException;
 
+    /**
+     * Method to check whether a product is favorited or not by a specific profile
+     * @param productId the id of the product
+     * @param profileId the id of the profile
+     * @return -1 if operation fails
+     */
     int checkFavourite(int productId, int profileId);
 
+    /**
+     * Method to get a list with productIds representing products the profile has liked
+     * @param userId the user´s id
+     * @return the list holding the productIds
+     */
     List<Integer> getFavouriteIds(int userId);
+
+    /**
+     * Method to get a list with products which the profile has liked
+     * @param userId the user´s id
+     * @return the list holding the products
+     */
     List<Product> getFavourites(int userId);
+
     /**
      * Method to get a product by its id
      * @param productId the id of the product
@@ -103,7 +128,14 @@ public interface ProductRepositoryInterface {
      */
     Profile getUser(String eMail);
 
+    /**
+     * Method to remove a product from the user´s favorite-list
+     * @param productId the id of the product to remove
+     * @param profileId the id of the profile unliking the product
+     * @return 1 if success, -1 if not
+     */
     int removeFavourite(int productId, int profileId);
+
     /**
      * Deletes subcategory binding and product by id
      * @param productId the id of the product to be removed

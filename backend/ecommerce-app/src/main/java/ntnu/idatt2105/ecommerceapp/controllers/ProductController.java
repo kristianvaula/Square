@@ -73,7 +73,6 @@ public class ProductController {
         return service.getFavourites(username);
     }
 
-
     /**
      * Gets products by seller username
      * @param username String seller-username

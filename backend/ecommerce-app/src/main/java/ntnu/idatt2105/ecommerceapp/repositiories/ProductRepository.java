@@ -73,6 +73,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product to be favorited
+     * @param userId the id of the user favoriting the product
+     * @return -1 if operation fails
+     */
     @Override
     public int addToFavourites(int productId, int userId) {
         try {
@@ -114,6 +120,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         return jdbcTemplate.update(INSERT_IMAGE_SQL, productId, image);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product
+     * @param profileId the id of the profile
+     * @return -1 if operation fails
+     */
     @Override
     public int checkFavourite(int productId, int profileId){
         try {
@@ -123,6 +135,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param profileID the profile´s id
+     * @return the list holding the productIds
+     */
     @Override
     public List<Integer> getFavouriteIds(int profileID) {
         try {
@@ -133,6 +150,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param profileID the profile´s id
+     * @return the list holding the products
+     */
     @Override
     public List<Product> getFavourites(int profileID) {
         try {
@@ -299,6 +321,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         return images;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product to remove
+     * @param profileId the id of the profile unliking the product
+     * @return 1 if success, -1 if not
+     */
     @Override
     public int removeFavourite(int productId, int profileId) {
         try{
