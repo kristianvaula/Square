@@ -81,7 +81,7 @@ beforeEach(() => {
     wrapper.unmount()
   })
 
-  it(' Navigate to my-listings page', async () => {
+  it('Navigate to my-listings page', async () => {
     await router.push('/my-listings')
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent(MyListings))

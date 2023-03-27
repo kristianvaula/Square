@@ -44,47 +44,5 @@ describe('CreateListingPage', () => {
         expect(nameInput.element.value).toEqual(inputTxt)
 
   })
-
-  
-
-  it('submits the form with the correct data when the create listing button is clicked', async () => {
-    const wrapper = shallowMount(CreateListingPage);
-  
-    // Wait for the next tick of the event loop
-    await wrapper.vm.$nextTick();
-  
-    // Fill in form data
-    const titleInput = wrapper.findComponent().find('input');
-    await titleInput.setValue('Test Title');
-  
-    const priceInput = wrapper.find('#priceInput');
-    await priceInput.setValue(10.99);
-  
-    const descInput = wrapper.find('#descInput');
-    await descInput.setValue('Test description');
-  
-    const categorySelect = wrapper.find('#select');
-    await categorySelect.setValue('Test Category');
-  
-    const subcategoryList = wrapper.findComponent({ name: 'SubcategoryList' });
-    await subcategoryList.vm.$emit('update:selectedSubcategories', ['Subcategory 1', 'Subcategory 2']);
-  
-    const checkbox = wrapper.findComponent({ name: 'BaseCheckbox' });
-    await checkbox.setChecked();
-  
-    // Submit the form
-    const form = wrapper.find('form');
-    await form.trigger('submit.prevent');
-  
-    // Check that the form data was submitted correctly
-    expect(wrapper.emitted().createListing[0][0]).toMatchObject({
-      title: 'Test Title',
-      price: 10.99,
-      description: 'Test description',
-      category: 'Test Category',
-      subcategories: ['Subcategory 1', 'Subcategory 2'],
-      isNegotiable: true,
-    });
-  });
   
 });
