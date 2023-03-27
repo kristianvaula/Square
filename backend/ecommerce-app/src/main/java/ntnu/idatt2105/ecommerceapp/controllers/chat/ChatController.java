@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for handling calls regarding chats
+ */
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/unauthorized/chat") //todo: add user to url - only users should have the ability to send chats
@@ -24,8 +27,8 @@ public class ChatController {
     Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     /**
-     * Returns an empty list if chats is null...
-     * @return chats. A list holding all active chats
+     * Returns all chats related to a specific profile. Returns an empty list if chats is null
+     * @return chats. A list containing all active chats
      */
     @GetMapping("/my-chats/{profileId}")
     public ResponseEntity<List<Chat>> getChats(@PathVariable int profileId) {

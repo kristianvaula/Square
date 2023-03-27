@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for subCategory
+ * Provides mechanism to control, add and get subCategories.
+ */
 @Service
 public class SubCategoryService {
 
@@ -19,6 +23,12 @@ public class SubCategoryService {
     private SubCategoryRepository repository;
     private static Logger logger = LoggerFactory.getLogger(SubCategoryService.class.getName());
 
+    /**
+     * The method adds a subCategory to the database if the given subCategory has a description,
+     * and the categoryId to the category it belongs to is equal to, or larger than, zero
+     * @param category The subCategory to add to the database
+     * @return a String with information about the operation, and the HttpStatus
+     */
     public ResponseEntity<String> newSubCategory(SubCategory category){
         try {
             if (category.getDescription() != null && category.getCategoryId() >= 0) {
@@ -35,6 +45,11 @@ public class SubCategoryService {
         }
     };
 
+    /**
+     * The method removes a subCategory from the database if a valid id is provided
+     * @param id The id of the subCategory to remove from the database
+     * @return a String with information about the operation, and the HttpStatus
+     */
     public ResponseEntity<String> removeSubCategory(int id){
         int response = repository.removeSubCategory(id);
         if (response == 1) {
@@ -44,6 +59,10 @@ public class SubCategoryService {
         return new ResponseEntity<>("No match found", HttpStatus.BAD_REQUEST);
     };
 
+    /**
+     * The method gets all the subCategories with a specified categoryId
+     * @return a list containing the subCategories, and the HttpStatus
+     */
     public ResponseEntity<List<SubCategory>> getSubCategories(int categoryId){
         List<SubCategory> categories = new ArrayList<>();
         categories.addAll(repository.getSubCategories(categoryId));
@@ -51,6 +70,10 @@ public class SubCategoryService {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     };
 
+    /**
+     * The method gets all the subCategories
+     * @return a list containing the subCategories, and the HttpStatus
+     */
     public ResponseEntity<List<SubCategory>> getAllSubCategories(){
         List<SubCategory> categories = new ArrayList<>();
         categories.addAll(repository.getAllSubCategories());
