@@ -60,7 +60,7 @@
   import '../assets/style/EditProfile.css';
   import ProfileUtils from '@/utils/ProfileUtils';
   import { useTokenStore } from "@/store/token.js";
-import router from '@/router';
+  import router from '@/router';
   
   export default {
     data () {

@@ -1,8 +1,17 @@
 <template>
     <div class="product-card" @click="goToProductPage">
       <div>
-        <img v-if="this.isInFavourites" class="icon-heart" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
-        <img v-else class="icon-heart" src="@/assets/icons/heart.png" @click="favouriteProduct">
+        <img 
+          v-if="this.isInFavourites && enableFavouritesProp" 
+          class="icon-heart" 
+          src="@/assets/icons/heartfilled.png" 
+          @click="unfavouriteProduct"
+          @click.stop="unfavouriteProduct">
+        <img 
+          v-else-if="enableFavouritesProp" class="icon-heart" 
+          src="@/assets/icons/heart.png" 
+          @click="favouriteProduct"
+          @click.stop="favouriteProduct">
       </div>  
       <div class="image-wrapper">
         <img :src="product.imageList[0].src" alt=""/>
@@ -26,7 +35,7 @@
   <script>
   import '@/assets/style/ProductCardComponent.css'
   import router from '@/router';
-  import { store } from '@/store/index.js'
+  import { useTokenStore } from '@/store/token';
   
   export default {
     name: "ProductCard",
@@ -35,32 +44,32 @@
             type: Object,
             required: true
         },
+        enableFavouritesProp: {
+          type: Boolean, 
+          required: false, 
+          default: true
+        }
     },
     data() {
       return {
-        store,
+        tokenStore : useTokenStore(),
         isInFavourites: false,
       };
     },
     methods: {
-        favouriteProduct() {
+        favoriteProduct() {
           this.isInFavourites = true;
-          alert(`${this.ProductInfo.title} added to favourites!`)
+          //stored as favorite 
             
         },
-
         unfavouriteProduct() {
-            this.isInFavourites = false;
-            alert(`${this.ProductInfo.title} removed from favourites!`)
+          this.isInFavourites = false;
+          
         },
-
         goToProductPage() {
           const productId = this.product.product.productId
           router.push({name: "ProductPage", params: {productId}})
         }
-    },
-    mounted(){
-      console.log(this.product.imageList[0])
     }
   };
   </script>
