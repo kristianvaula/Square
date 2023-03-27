@@ -2,7 +2,6 @@ package ntnu.idatt2105.ecommerceapp.repositiories;
 
 import ntnu.idatt2105.ecommerceapp.model.Image;
 import ntnu.idatt2105.ecommerceapp.model.Product;
-import ntnu.idatt2105.ecommerceapp.model.ProductResponse;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +37,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String INSERT_IMAGE_SQL = "INSERT INTO prodImage(productId, image) VALUES(?,?)";
 
     //SELECT
+    private static final String SELECT_PRODUCTS_SEARCH_SQL = "SELECT * FROM product WHERE title LIKE ? OR description = ?";
     private static final String SELECT_PRODUCT_SUBCAT_SQL = "SELECT productId FROM product_subCategory WHERE productId = ? AND subCategoryId = ?";
     private static final String SELECT_PRODUCT_BY_ID_SQL = "SELECT * FROM product WHERE productId = ?;";
     private static final String SELECT_PRODUCT_SQL = "SELECT * FROM product WHERE title = ? AND sellerId=?;";
@@ -131,6 +131,21 @@ public class ProductRepository implements ProductRepositoryInterface {
             return jdbcTemplate.queryForObject(SELECT_FAVORITE_SQL,int.class, productId, profileId);
         } catch (EmptyResultDataAccessException e) {
             return -1;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param searchString search string
+     * @return products
+     */
+    @Override
+    public List<Product> searchString(String searchString) {
+        try {
+            String searchTermWithWildcards = "%" + searchString + "%";
+            return jdbcTemplate.query(SELECT_PRODUCTS_SEARCH_SQL, BeanPropertyRowMapper.newInstance(Product.class), searchTermWithWildcards,searchTermWithWildcards);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 

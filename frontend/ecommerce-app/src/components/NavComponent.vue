@@ -8,8 +8,8 @@
       </div>
     
       <div class="search-bar-container">
-        <input placeholder="Search..." class="search-bar" type="text">
-        <button class="search-button" >Go</button>
+        <input placeholder="Search..." class="search-bar" type="text" v-model="searchString">
+        <button class="search-button" @click="search">Go</button>
       </div>
     </div>
     
@@ -76,7 +76,7 @@ export default {
   name: 'NavComponent',
   setup() {
     const tokenStore = useTokenStore();
-    return { tokenStore };
+    return { tokenStore, searchString: '' };
   },
   mounted () {  
 
@@ -90,13 +90,22 @@ export default {
     }
   },
   methods: {
-        signOut() {
-            const tokenStore = useTokenStore();
-            tokenStore.jwtToken = null;
-            tokenStore.loggedInUser = null;
-            router.push("/").then(() => location.reload());
-        }
+    signOut() {
+      const tokenStore = useTokenStore();
+      tokenStore.jwtToken = null;
+      tokenStore.loggedInUser = null;
+      router.push("/").then(() => location.reload());
+    },
+    search() {
+      if (this.searchString.length < 3) {
+        return;
+      }
+      const searchString = this.searchString 
+      router.push({name: "SearchResults", params: {searchString}}).catch(error => {
+        console.error(error);
+      });
     }
+  }
 }
 
 </script>

@@ -4,7 +4,8 @@
         <ChatCard v-for="chat in chats"
         :key="chat.chatId"
         :ChatInfo="chat"
-        @selected-chat-card="selectChat"       
+        @selected-chat-card="selectChat" 
+        class="item"      
         ></ChatCard>
     </div>
 </template>
@@ -28,9 +29,7 @@
     },
     async mounted() {      
       const tokenStore = useTokenStore();
-      console.log(tokenStore.loggedInUser)
       let profileId = await ProfileUtils.getProfileId(tokenStore.loggedInUser);
-      console.log("Chats for profileId " + profileId.data);
       let chatsPromise = await ChatUtils.getChats(profileId.data);
     
       let chatArray = chatsPromise.data;

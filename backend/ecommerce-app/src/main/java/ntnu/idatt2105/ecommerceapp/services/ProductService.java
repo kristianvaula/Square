@@ -100,6 +100,52 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<List<ProductResponse>> searchProducts(String searchString){
+        List<Product> list = repository.searchString(searchString);
+        return getProducts(list);
+    }
+
+    /**
+     * Performs call to add a subcategory
+     * @param productId product id
+     * @param subcategories subcategory ids
+     * @return 1 if success
+     * @throws DataAccessException e
+     */
+    public int addSubcategories(int productId, List<Integer> subcategories) throws DataAccessException {
+        int response = -1;
+        for (Integer sub : subcategories) {
+            response = repository.newSubcategorybinding(productId, sub);
+        }
+        return response;
+    }
+
+    /**
+     * Calls to add images to database
+     * @param productId product id associated
+     * @param images Multipartfile array
+     * @return 1 if success
+     * @throws DataAccessException e
+     */
+    private int addImages(int productId, MultipartFile[] images){
+        for (MultipartFile image : images) {
+            StringBuilder fileNames = new StringBuilder();
+            String imageName = UUID.randomUUID().toString() + "." + image.getContentType().split("/")[1];
+            String fileNameAndPath = IMAGE_PATH+imageName;
+
+            File file = new File(fileNameAndPath);
+            try (OutputStream os = new FileOutputStream(file)) {
+                os.write(image.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return -1;
+            }
+            int response = repository.newProductImage(productId, imageName);
+            if(response == -1) return -1;
+        }
+        return 1;
+    }
+
     /**
      * Adds a product to favourites. Check if products exists,
      * and that the user is not the seller of the product.
@@ -167,66 +213,6 @@ public class ProductService {
     }
 
     /**
-     * Adds a product to favourites. Check if products exists,
-     * and that the user is not the seller of the product.
-     * @param productId Id of product
-     * @param username username of user
-     * @return Response
-     */
-    public ResponseEntity<String> removeFromFavourites(int productId, String username){
-        int profileId;
-        Product product;
-        try {
-            profileId = repository.getUser(username).getProfileId();
-        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
-        if(repository.removeFavourite(productId, profileId) == -1) {
-            return new ResponseEntity<>("Product not on favourite list", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>("Product removed from favourites successfully", HttpStatus.OK);
-    }
-
-    /**
-     * Performs call to add a subcategory
-     * @param productId product id
-     * @param subcategories subcategory ids
-     * @return 1 if success
-     * @throws DataAccessException e
-     */
-    public int addSubcategories(int productId, List<Integer> subcategories) throws DataAccessException {
-        int response = -1;
-        for (Integer sub : subcategories) {
-            response = repository.newSubcategorybinding(productId, sub);
-        }
-        return response;
-    }
-
-    /**
-     * Calls to add images to database
-     * @param productId product id associated
-     * @param images Multipartfile array
-     * @return 1 if success
-     * @throws DataAccessException e
-     */
-    private int addImages(int productId, MultipartFile[] images){
-        for (MultipartFile image : images) {
-            StringBuilder fileNames = new StringBuilder();
-            String imageName = UUID.randomUUID().toString() + "." + image.getContentType().split("/")[1];
-            String fileNameAndPath = IMAGE_PATH+imageName;
-
-            File file = new File(fileNameAndPath);
-            try (OutputStream os = new FileOutputStream(file)) {
-                os.write(image.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return -1;
-            }
-            int response = repository.newProductImage(productId, imageName);
-            if(response == -1) return -1;
-        }
-        return 1;
-    }
-
-    /**
      * Creates a response to return to client.
      * Takes a list of product objects and fetches necessary data and converts to a response
      * @param products list of products
@@ -277,7 +263,6 @@ public class ProductService {
      * @return product
      */
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(int categoryId){
-        logger.info("Fetching products by category");
         List<Product> products = repository.getProductsByCategory(categoryId);
         return getProducts(products);
     }
@@ -340,6 +325,25 @@ public class ProductService {
         } catch (Exception e) {
             return new ResponseEntity<>("Cannot delete product.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Adds a product to favourites. Check if products exists,
+     * and that the user is not the seller of the product.
+     * @param productId Id of product
+     * @param username username of user
+     * @return Response
+     */
+    public ResponseEntity<String> removeFromFavourites(int productId, String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        if(repository.removeFavourite(productId, profileId) == -1) {
+            return new ResponseEntity<>("Product not on favourite list", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product removed from favourites successfully", HttpStatus.OK);
     }
 
     /**
