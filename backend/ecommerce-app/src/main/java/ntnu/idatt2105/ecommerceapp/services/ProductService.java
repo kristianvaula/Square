@@ -118,6 +118,14 @@ public class ProductService {
         return new ResponseEntity<>("Product added to favourites successfully", HttpStatus.OK);
     }
 
+    /**
+     * Gets a list of productIds of all
+     * favourites of a given user. Checks
+     * if user exists and fetches id. Then gets
+     * productIds.
+     * @param username Use username
+     * @return List of integer productIds
+     */
     public ResponseEntity<List<Integer>> getFavouriteIds(@PathVariable("username") String username){
         int profileId;
         Product product;
@@ -130,6 +138,13 @@ public class ProductService {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    /**
+     * Gets favourites of a given user. Checks
+     * if user exists and fetches id. Then gets
+     * products and calls for the response generator
+     * @param username User username
+     * @return Responses
+     */
     public ResponseEntity<List<ProductResponse>> getFavourites(@PathVariable("username") String username){
         int profileId;
         Product product;
