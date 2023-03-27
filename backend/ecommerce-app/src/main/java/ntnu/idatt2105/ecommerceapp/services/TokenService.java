@@ -18,7 +18,7 @@ public class TokenService {
     @Autowired
     private ProfileService profileService;
     public static final String KEY = UUID.randomUUID().toString();
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(30); //token is valid for 30 minutes
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(60); //token is valid for 30 minutes
     Logger logger = LoggerFactory.getLogger(TokenService.class);
 
 
