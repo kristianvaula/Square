@@ -1,6 +1,11 @@
 package ntnu.idatt2105.ecommerceapp.model.profiles;
 
+/**
+ * The class updates a profile based on the information given in the edit profile page
+ * UpdateProfileRequest contains getter and setter for the attributes given in the registration form
+ */
 public class UpdateProfileRequest {
+
     private int profileId;
     private String firstName;
     private String lastName;
@@ -16,6 +21,10 @@ public class UpdateProfileRequest {
     public UpdateProfileRequest() {
     }
 
+    /**
+     * Getter for profileId
+     * @return profileId
+     */
     public int getProfileId() {
         return profileId;
     }
@@ -45,13 +54,13 @@ public class UpdateProfileRequest {
     /**
      * Constructor with all attributes
      * The constructor validates string attributes and throws a NullPointerException if one of these is not defined
-     * @param firstName
-     * @param lastName
-     * @param eMail
-     * @param county
-     * @param city
-     * @param address
-     * @param password
+     * @param firstName firstName of the user creating the profile
+     * @param lastName lastName of the user creating the profile
+     * @param eMail email of the user creating the profile
+     * @param county what county the user creating the profile lives in
+     * @param city what city the user creating the profile lives in
+     * @param address the address where the user creating the profile lives
+     * @param password the profile´s password
      */
     public UpdateProfileRequest(int profileId, String firstName, String lastName, String eMail, String county, String city,
                                   String address, String password) {

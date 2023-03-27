@@ -8,7 +8,7 @@ import ntnu.idatt2105.ecommerceapp.model.profiles.UpdateProfileRequest;
 import java.util.List;
 
 /**
- * Interface for a profile dao
+ * Interface for a profile repository
  */
 public interface IProfileDao {
 
@@ -27,9 +27,9 @@ public interface IProfileDao {
 
     /**
      * Method to add a new city
-     * It is not added a new city if it already exists a city with the given params, then is the cityId for the
-     * registered city returned
-     * @param cityName Name of the city adding to the database
+     * If the city already exists, it is not added a city with the given params,
+     * instead the cityId for the registered city is returned
+     * @param cityName Name of the city being adding to the database
      * @param countyId id for the county the city is in.
      * @return cityId for the city
      */
@@ -37,8 +37,8 @@ public interface IProfileDao {
 
     /**
      * Method to add a new address
-     * It is not added a new address if it already exists an address with the given params, then is the addressId for the
-     * registered address returned
+     * If the address already exists, it is not added an address with the given params,
+     * instead the addressId for the registered address is returned
      * @param addressName Name of the address adding to the database
      * @param cityId id for the city the address is in.
      * @return addressId for the address
@@ -47,18 +47,18 @@ public interface IProfileDao {
 
     /**
      * Method to add a new profile type
-     * It is not added a new profile type if it already exists a profile type with the given name, then is the profile type
-     * for the registered profile type returned
+     * If the profileType already exists, it is not added a profileType with the given params,
+     * instead the profileTypeId for the registered profileType is returned
      * @param profileTypeName Name of the profile type adding to the database
      * @return profileTypeId for the profile type
      */
     int addProfileType(String profileTypeName);
 
     /**
-     * The method adds a profile to the database if it does not already exist a profile for the given e-mail
+     * The method adds a new profile to the database if it does not already exist a profile for the given e-mail
      * @param profile The profile to add to the database
-     * @return Null is returned if it already exists a profile with the e-mail given in the profile request. Otherwise,
-     * returns the newly added profile.
+     * @return Null if there already exists a profile with the e-mail given in the profile request.
+     * Otherwise, return the newly added profile.
      */
     Profile addProfile(RegisterProfileRequest profile);
 
@@ -71,15 +71,15 @@ public interface IProfileDao {
 
     /**
      * Getter for the profiles´ email
-     * @param profileId The users´ profileId
-     * @return profiles´ email
+     * @param profileId The user´s profileId
+     * @return profile´s email
      */
     String getProfileEmail(int profileId);
 
     /**
      * The method updates a profile in the database with information provided by the user
      * @param updateProfileRequest The profile to add update, and the data that should be updated
-     * returns the newly updated profile.
+     * @return the newly updated profile.
      */
     Profile updateProfile(UpdateProfileRequest updateProfileRequest);
 

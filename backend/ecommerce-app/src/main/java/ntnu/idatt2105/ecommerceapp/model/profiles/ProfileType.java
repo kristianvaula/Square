@@ -5,6 +5,7 @@ package ntnu.idatt2105.ecommerceapp.model.profiles;
  * Each profile type constant has a string representation
  */
 public enum ProfileType {
+
     UNAUTHORIZED("ROLE_UNAUTHORIZED"),
     USER("ROLE_USER"),
     ADMIN("ROLE_ADMIN");
@@ -13,14 +14,14 @@ public enum ProfileType {
 
     /**
      * Constructor for profile type
-     * @param profileName The role assosiated with the constant
+     * @param profileName The role associated with the constant
      */
     ProfileType(String profileName) {
         this.profileName = profileName;
     }
 
     /**
-     * Getter for the role assosiated with the constant
+     * Getter for the role associated with the constant
      * @return
      */
     public String getProfileName() {
@@ -30,7 +31,7 @@ public enum ProfileType {
     /**
      * Method to get the constant saved for a role
      * @param profileName The role for a constant
-     * @return The constant assosiated with the role given in the param or UNAUTHORIZED
+     * @return The constant associated with the role given in the param or UNAUTHORIZED
      */
     public ProfileType getProfileType(String profileName) {
         if (profileName.equalsIgnoreCase(ADMIN.profileName)) {
@@ -41,4 +42,5 @@ public enum ProfileType {
             return UNAUTHORIZED;
         }
     }
+
 }
