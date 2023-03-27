@@ -120,7 +120,13 @@ methods: {
     }  
   },
   markAsSold(){
-
+    if(confirm("Are you sure you want to mark as sold?") == true){
+      ProductUtils.sellProduct(this.product.productId)
+      .then(() => alert("Product Sold!")).catch((error) => {
+        alert("Product could not be sold, please try again")
+        console.log(error)
+        })
+      }
   },
   unfavouriteProduct() {
     if(this.tokenStore.jwtToken){

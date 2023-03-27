@@ -22,7 +22,7 @@ public class Product {
     @Column
     private int price;
     @Column
-    private boolean used;
+    private int used;
     @Column
     private int sellerId;
     @Column
@@ -137,7 +137,7 @@ public class Product {
      * Getter for isUsed
      * @return isUsed
      */
-    public boolean isUsed() {
+    public int isUsed() {
         return used;
     }
 
@@ -145,7 +145,7 @@ public class Product {
      * Setter for isUsed
      * @param used new used value
      */
-    public void setUsed(boolean used) {
+    public void setUsed(int used) {
         this.used = used;
     }
 

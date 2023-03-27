@@ -310,6 +310,13 @@ public class ProductService {
         return getProducts(repository.getProductsBySeller(sellerId));
     }
 
+    public ResponseEntity<String> setSold(int productId){
+        if(repository.setProductSold(productId) == -1){
+            return new ResponseEntity<>("Product could not be sold", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product sold", HttpStatus.OK);
+    }
+
     /**
      * Removes product by id
      * @param id product id

@@ -63,6 +63,12 @@ export default {
     const config = getUserConfig()
     return axios.delete(baseurl + `/user/product/remove/favourite/${productId}/${username}`, config )
   },
+  sellProduct(productId){
+    let formData = new FormData()
+    formData.append('productId', productId)
+    const config = getUserConfig()
+    return axios.post(baseurl + `/user/product/sold`, formData, config )
+  },
   getProducts() {
     return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
     .then(response => {

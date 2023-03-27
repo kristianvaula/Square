@@ -134,6 +134,23 @@ public class ProductController {
         return service.getProductById(id);
     }
 
+    /**
+     * Sets product sold
+     * @param productId
+     * @return product
+     */
+    @PostMapping("/user/product/sold")
+    public ResponseEntity<String> setProductSold(@RequestParam("productId") int productId) {
+        logger.info("Received request to sell product");
+        return service.setSold(productId);
+    }
+
+    /**
+     * Removes from favourite
+     * @param productId
+     * @param username
+     * @return
+     */
     @DeleteMapping("user/product/remove/favourite/{productId}/{username}")
     public ResponseEntity<String> removeFromFavourites(@PathVariable("productId") int productId,
                                                     @PathVariable("username") String username) {

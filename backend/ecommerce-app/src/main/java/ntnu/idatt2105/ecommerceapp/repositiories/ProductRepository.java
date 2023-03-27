@@ -51,6 +51,8 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String SELECT_FAVORITEIDS_SQL = "SELECT DISTINCT f.productId FROM favourite f WHERE f.profileId = ?";
     private static final String SELECT_FAVORITES_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p,favourite f WHERE p.productId = f.productId AND f.profileId = ?";
 
+    private static final String UPDATE_SOLD_SQL = "UPDATE product SET sold = 1 WHERE productId = ? ";
+
     private static final String DELETE_FAVOURITE_SQL = "DELETE FROM favourite WHERE productId = ? AND profileId = ?";
     private static final String DELETE_IMAGE_SQL = "DELETE FROM prodImage WHERE productId=?";
     private static final String DELETE_SUBCAT_SQL = "DELETE FROM product_subcategory WHERE productId=?";
@@ -225,6 +227,17 @@ public class ProductRepository implements ProductRepositoryInterface {
             return null;
         }
         return response;
+    }
+
+    @Override
+    public int setProductSold(int productId) {
+        try{
+            jdbcTemplate.update(UPDATE_SOLD_SQL, productId);
+        }catch(Exception e){
+            logger.warn(e.getMessage());
+            return -1;
+        }
+        return 1;
     }
 
     /**

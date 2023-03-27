@@ -136,6 +136,13 @@ public interface ProductRepositoryInterface {
     Profile getUser(String eMail);
 
     /**
+     * Sets the sold column of product
+     * @param productId
+     * @return -1 if fail
+     */
+    int setProductSold(int productId);
+
+    /**
      * Method to remove a product from the user´s favorite-list
      * @param productId the id of the product to remove
      * @param profileId the id of the profile unliking the product
