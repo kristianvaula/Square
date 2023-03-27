@@ -56,7 +56,6 @@
 <script>
 import { useTokenStore } from '@/store/token.js'
 import '@/assets/style/NavComponent.css'
-//import httputils from '@/utils/httputils.js'
 
 export default {
   name: 'NavComponent',
@@ -68,19 +67,6 @@ export default {
 
     if(this.tokenStore.jwtToken) {
       this.user = this.tokenStore.loggedInUser
-      /*
-      let response = null;
-      try {
-        console.log("loggedInUser: " + this.tokenStore.loggedInUser + " token: " + this.tokenStore.jwtToken)
-        response = await httputils.getProfile(this.tokenStore.loggedInUser, this.tokenStore.jwtToken);
-        this.loggedInUser = response.data;
-      } catch (err) {
-        if (err.response.status === 403) { //error code 403 is forbidden access. Therefor setting token an loggedIn User to null when this error occurs
-          this.tokenStore.jwtToken = null;
-          this.tokenStore.loggedInUser = null;
-        }
-      }
-      */
     }
   },
   data() {
