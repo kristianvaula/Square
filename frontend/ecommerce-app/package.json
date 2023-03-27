@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vitest --environment jsdom --root src/",
     "test:coverage": "vitest run --coverage --environment jsdom",
-    "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e": "cypress run --config baseUrl=http://localhost:8080",
+    "cypress:open": "CYPRESS_configFile=config/application-test.properties\ncypress open",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -35,7 +36,7 @@
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "@vue/test-utils": "^2.0.0-0",
-    "cypress": "^9.7.0",
+    "cypress": "^12.8.1",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3"
   }
