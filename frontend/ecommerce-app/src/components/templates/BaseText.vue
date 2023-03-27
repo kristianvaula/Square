@@ -39,6 +39,7 @@
 import UniqueID from '@/features/UniqueID';
 
   export default {
+    name: 'BaseText',
     props: {
       label: {
         type: String, 
