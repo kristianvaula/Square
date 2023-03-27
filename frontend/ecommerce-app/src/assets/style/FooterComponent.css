@@ -2,9 +2,31 @@
     padding: 30px;
     background-color: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .all-rights-reserved {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 200px;
   }
   
-  .logo {
-    width: 6em;
+  .square-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; 
+  }
+
+  .square-logo img {
+    max-width: 120px;
+  }
+
+  .contact-us {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 200px;
   }

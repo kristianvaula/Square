@@ -4,7 +4,8 @@
         <ChatCard v-for="chat in chats"
         :key="chat.chatId"
         :ChatInfo="chat"
-        @selected-chat-card="selectChat"       
+        @selected-chat-card="selectChat" 
+        class="item"      
         ></ChatCard>
     </div>
 </template>

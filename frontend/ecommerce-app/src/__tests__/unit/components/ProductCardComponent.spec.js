@@ -2,8 +2,12 @@ import { useTokenStore } from '@/store/token';
 import { mount } from '@vue/test-utils'
 import ProductCard from '@/components/ProductCard.vue'
 import { nextTick } from 'vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import router from '@/router';
 
 describe('ProductCard tests', () => {
+
   let wrapper
 
   const productInfo = {
@@ -16,6 +20,19 @@ describe('ProductCard tests', () => {
     imageList: [{ src: 'image-source' }],
   }
 
+  beforeEach(() => {
+    const app = createApp({})
+    const pinia = createPinia()
+    app.use(router).use(pinia)
+    wrapper = mount(ProductCard, {
+      global: {
+        plugins: [pinia],
+      },
+      props: {
+        product: productInfo,
+      },
+    })
+  })
 
   it('renders the product title', async () => {
     wrapper = mount(ProductCard, {
