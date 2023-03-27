@@ -20,13 +20,15 @@
         </div>
         <div>
             <router-link to="/">
-               <Button class="sign-out-button">Sign Out</Button> 
+               <Button class="sign-out-button" @click="signOut">Sign Out</Button> 
             </router-link>
         </div>
   </div>
   </template>
   
   <script>
+  import { useTokenStore } from "@/store/token";
+  import router from "@/router";
   import ProfileDetails from '@/components/ProfileDetails.vue'
   import '../assets/style/ProfilePage.css';
   
@@ -39,6 +41,14 @@
         password: '',
       }
     },
+    methods: {
+        signOut() {
+            const tokenStore = useTokenStore();
+            tokenStore.jwtToken = null;
+            tokenStore.loggedInUser = null;
+            router.push("/").then(() => location.reload());
+        }
+    }
 
   }
   </script>

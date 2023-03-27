@@ -60,7 +60,7 @@
           <li><router-link to="/my-favorites">My Favorites</router-link></li>
           <li><router-link to="/my-listings">My Listings</router-link></li>
           <li><router-link to="/my-purchases">My Purchases</router-link></li>
-          <li><a href="/user/sign-out">Sign Out</a></li>
+          <li><a @click="signOut">Sign Out</a></li>
         </ul>
       </li>
     </div>
@@ -69,6 +69,7 @@
 
 <script>
 import { useTokenStore } from '@/store/token.js'
+import router from "@/router";
 import '@/assets/style/NavComponent.css'
 
 export default {
@@ -87,7 +88,15 @@ export default {
     return {  
       user: ''
     }
-  }
+  },
+  methods: {
+        signOut() {
+            const tokenStore = useTokenStore();
+            tokenStore.jwtToken = null;
+            tokenStore.loggedInUser = null;
+            router.push("/").then(() => location.reload());
+        }
+    }
 }
 
 </script>
