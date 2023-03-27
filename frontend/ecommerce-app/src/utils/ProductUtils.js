@@ -11,7 +11,6 @@ const defaultConfig = {
 
 function getUserConfig(){
   let tokenStore = useTokenStore();
-  console.log(tokenStore.jwtToken) 
   return {
     headers: {
       "Authorization": "Bearer " + tokenStore.jwtToken
@@ -53,8 +52,28 @@ export default {
     let config = getUserConfig()
     return axios.post(baseurl + "/user/product/new", formData, config); 
   }, 
+  async favouriteProduct(productId, username){
+    const data = new FormData; 
+    data.append('productId', productId) 
+    data.append('username', username)
+    const config = getUserConfig()
+    return axios.post(baseurl + "/user/product/favourite",data, config )
+  },
   getProducts() {
     return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  },
+  getFavorites(id) {
+    return axios.get(baseurl + `/unauthorized/product/favorites/${id}`, defaultConfig)
     .then(response => {
       if (response.status === 200) {
         return getProductsWithImages(response);
