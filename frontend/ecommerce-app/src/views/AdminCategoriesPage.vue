@@ -35,6 +35,8 @@
   </template>
   
   <script>
+    import { useTokenStore } from '@/store/token.js'
+    import router from "@/router";
     import CategoryUtils from '@/utils/CategoryUtils';
     import CategoryForm from '@/components/CategoryForm.vue';
     import SubCategoryForm from '@/components/SubCategoryForm.vue';
@@ -45,7 +47,10 @@
   
   export default {
     name: 'AdminCategoriesPage',
-
+    setup() {
+        const tokenStore = useTokenStore();
+        return { tokenStore };
+    },
     data() {
         return {
             store,
@@ -108,6 +113,21 @@
     },
 
     mounted () {
+            
+            if(this.tokenStore.jwtToken) {
+                this.user = this.tokenStore.loggedInUser
+                if (this.user === "admin@square.org") {
+                    console.log("Admin accessed AdminPage")
+                }
+                else {
+                    window.alert("User not authorized to access AdminPage")
+                    router.push("/")
+                }
+            } else {
+                window.alert("Not authorized to access AdminPage")
+                router.push("/")
+            }
+
             let vm = this
             CategoryUtils.getAllSubCategories()
                 .then((response) => {

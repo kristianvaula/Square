@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import CreateListingPage from '@/views/CreateListingPage.vue';
+import { mount } from '@vue/test-utils'
 
 describe('CreateListingPage', () => {
   it('renders all the components', () => {
@@ -25,6 +26,25 @@ describe('CreateListingPage', () => {
     expect(wrapper.find('button[type="submit"]').text()).toMatch('Create Listing');
   });
 
+  it("is tittel set to expected value", () => {
+        const wrapper = mount(CreateListingPage, {
+            global: {
+                stubs: {
+                    BaseText: {
+                        template: '<input data-test="textInput" type="text">'
+                    }
+                }
+            }
+        });
+        const inputTxt = "test input";
+        const nameInput = wrapper.find("[data-test='textInput']");
+
+        nameInput.setValue(inputTxt);
+
+        expect(nameInput.element.value).toEqual(inputTxt)
+
+  })
+
   
 
   it('submits the form with the correct data when the create listing button is clicked', async () => {
@@ -34,7 +54,7 @@ describe('CreateListingPage', () => {
     await wrapper.vm.$nextTick();
   
     // Fill in form data
-    const titleInput = wrapper.findComponent({ name: 'BaseText' }).find('input');
+    const titleInput = wrapper.findComponent().find('input');
     await titleInput.setValue('Test Title');
   
     const priceInput = wrapper.find('#priceInput');

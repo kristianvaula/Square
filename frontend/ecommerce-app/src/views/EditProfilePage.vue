@@ -23,27 +23,6 @@
                         type="text"
                     />
                 </div>
-                <div>
-                    <legend>Change your Password:</legend>
-                    <BaseInput
-                        v-model="password"
-                        label="Current Password:"
-                        placeholder=""
-                        type="password"
-                    />
-                    <BaseInput
-                        v-model="password"
-                        label="New Password:"
-                        placeholder=""
-                        type="password"
-                    />
-                    <BaseInput
-                        v-model="password"
-                        label="Repeat New Password:"
-                        placeholder=""
-                        type="password"
-                    />
-                </div>
                 
                 <button class="save-button" type="submit">Save Changes</button>
             </form>
@@ -70,7 +49,6 @@
         city: '',
         address: ''
       },
-      password: '',
       counties: [],
       ProfileInfo: null,
       profileToUpdate: null
@@ -88,7 +66,7 @@
         county: this.locationInfo.county,
         city: this.locationInfo.city,
         address: this.locationInfo.address,
-        password: this.profileToUpdate.password, // implement for password and update to be this.password (instead of profileInfo.password)
+        password: this.profileToUpdate.password,
       }
 
       await ProfileUtils.updateUser(this.ProfileInfo);          
