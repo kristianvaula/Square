@@ -2,25 +2,19 @@
     <div class="product-card" @click="goToProductPage">
       <div>
         <img 
-          v-if="this.isInFavourites && enableFavouritesProp" 
+          v-if="isInFavourites && enableFavouritesProp" 
           class="icon-heart" 
           src="@/assets/icons/heartfilled.png" 
-          @click="unfavouriteProduct"
           @click.stop="unfavouriteProduct">
         <img 
           v-else-if="enableFavouritesProp" class="icon-heart" 
           src="@/assets/icons/heart.png" 
-          @click="favouriteProduct"
           @click.stop="favouriteProduct">
       </div>  
       <div class="image-wrapper">
         <img :src="product.imageList[0].src" alt=""/>
       </div>
       <div class="product-info" >
-        <!--<div class="location">
-            <span> {{ this.ProductInfo.location }} </span>
-        </div>-->
-      
         <div>
           <h3>{{ product.product.title }}</h3>
         </div>
@@ -36,6 +30,7 @@
   import '@/assets/style/ProductCardComponent.css'
   import router from '@/router';
   import { useTokenStore } from '@/store/token';
+  import ProductUtils from '@/utils/ProductUtils';
   
   export default {
     name: "ProductCard",
@@ -48,22 +43,54 @@
           type: Boolean, 
           required: false, 
           default: true
+        },
+        isInFavourites: {
+          type: Boolean, 
+          required: false, 
+          default: false
         }
     },
     data() {
       return {
         tokenStore : useTokenStore(),
-        isInFavourites: false,
       };
     },
     methods: {
-        favoriteProduct() {
-          this.isInFavourites = true;
-          //stored as favorite 
+        favouriteProduct() {
+          console.log("favourcall")
+          if(this.tokenStore.jwtToken){
+            console.log(this.product.product)
+            ProductUtils.favouriteProduct(this.product.product.productId, this.tokenStore.loggedInUser)
+              .then(() => {
+                this.$emit("favouritedEvent", this.product)
+                alert("Product added to favourites"); 
+              })
+              .catch((error) => {
+                console.log(error); 
+                alert("There was an error adding the product to favourites")
+              })
+          }
+          else{
+            alert("You have to log in to favourite a product."); 
+          }
             
         },
         unfavouriteProduct() {
-          this.isInFavourites = false;
+          console.log("Unfavour call")
+          if(this.tokenStore.jwtToken){
+            ProductUtils.unfavourProduct(this.product.product.productId, this.tokenStore.loggedInUser)
+              .then(() => {
+                this.$emit("unfavouredEvent", this.product)
+                alert("Product removed from favourites"); 
+              })
+              .catch((error) => {
+                console.log(error); 
+                alert("There was an error adding the product to favourites")
+              })
+          }
+          else{
+            alert("You have to log in to favourite a product."); 
+          }
           
         },
         goToProductPage() {

@@ -1,15 +1,24 @@
 <template>
   <div class="home">
     <div>
-      <CategoryPool @selected-category-event="selectCategoryToShow" @deselect-category-event="deSelectCategoryToshow"/>
+      <CategoryPool 
+        @selected-category-event="selectCategoryToShow" 
+        @deselect-category-event="deSelectCategoryToshow"
+      />
     </div>
     <div class="product-menu">
       <div  class="sub-categories">
         <h3 v-if="selectedCategory !== null" class="margin-top">SubCategories</h3>
-        <SubCategories @sub-category-selected="selectSubCategory" :SubCategories="this.currentSubCategories"/>
+        <SubCategories 
+          @sub-category-selected="selectSubCategory" 
+          :SubCategories="this.currentSubCategories"
+        />
       </div>
       
-      <ProductPool :empty="empty" :products="products"/>
+      <ProductPool 
+        :empty="empty" 
+        :products="products"
+      />
       
       
     </div>

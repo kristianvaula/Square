@@ -4,7 +4,11 @@
   </div>
   <div class="flex-centered">
     <div class="sixty-pool">
-      <ProductPool :products="products"/>
+      <ProductPool 
+        :products="products"
+        :pass-favourite-event="true"
+        @unfavoured-event="fetchFavourites"
+      />
     </div>
   </div>
 </template>
@@ -25,8 +29,9 @@ export default {
   components: {
     ProductPool
   },
-  mounted () {
-    if(this.store.jwtToken){
+  methods: {
+    fetchFavourites() {
+      if(this.store.jwtToken){
       ProductUtils.getFavourites(this.store.loggedInUser)
         .then((response) => {
         if(response ) {
@@ -36,9 +41,13 @@ export default {
         .catch((err) => {
         console.log(err)
         })
-    }else {
-      router.push("/")
+      }else {
+        router.push("/")
+      }
     }
+  },
+  mounted () {
+    this.fetchFavourites(); 
   }
     
 }

@@ -61,7 +61,7 @@ export default {
   },
   unfavourProduct(productId, username){
     const config = getUserConfig()
-    return axios.delete(baseurl + `user/product/remove/favourite/${productId}/${username}`, config )
+    return axios.delete(baseurl + `/user/product/remove/favourite/${productId}/${username}`, config )
   },
   getProducts() {
     return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
@@ -90,17 +90,7 @@ export default {
     });
   },
   getFavouriteIds(id){
-    return axios.get(baseurl + `/user/product/favourite/ids/${id}`, defaultConfig)
-    .then(response => {
-      if (response.status === 200) {
-        return getProductsWithImages(response);
-      } else {
-        return undefined; 
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    return axios.get(baseurl + `/user/product/favourite/ids/${id}`, defaultConfig); 
   },
   getProductById(id) {
     return axios.get(baseurl + `/unauthorized/product/${id}`, defaultConfig)
