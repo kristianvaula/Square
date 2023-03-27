@@ -2,6 +2,7 @@ package ntnu.idatt2105.ecommerceapp.model;
 
 /**
  * The class represents a county object as it is stored in the database
+ * County contains getters and setters for all attributes
  */
 public class County {
 

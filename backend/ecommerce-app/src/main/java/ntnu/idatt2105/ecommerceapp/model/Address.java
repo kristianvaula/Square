@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonAppend;
  * Each attribute have setters and getters
  */
 public class Address {
+
     private int addressId;
     private String address;
     private int cityId;
@@ -20,9 +21,9 @@ public class Address {
 
     /**
      * Constructor for an address
-     * @param addressId
-     * @param address
-     * @param cityId
+     * @param addressId the id of the address
+     * @param address the name of the address
+     * @param cityId the id of the cty the address belongs to
      */
     public Address(@JsonProperty("addressId") int addressId, @JsonProperty("address") String address,
                    @JsonProperty("cityId") int cityId) {
