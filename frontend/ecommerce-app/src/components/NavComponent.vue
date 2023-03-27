@@ -15,15 +15,29 @@
     
     <div class="nav-links">
 
-      <li>      
+      <li v-if="user">
         <router-link to="/create-listing">
           <img class="icon-medium" src="@/assets/icons/plus.png" alt="">
           <h1 class="title-medium">New Listing</h1>
-        </router-link>
+        </router-link>    
       </li>
 
-      <li>
+      <li v-if="!user">
+        <router-link to="/not-logged-in">
+          <img class="icon-medium" src="@/assets/icons/plus.png" alt="">
+          <h1 class="title-medium">New Listing</h1>
+        </router-link>    
+      </li>
+
+      <li v-if="user">
         <router-link to="/my-messages">
+          <img class="icon-medium" src="@/assets/icons/message.png" alt="">
+          <h1 class="title-medium">Messages</h1>
+        </router-link>  
+      </li>
+
+      <li v-if="!user">
+        <router-link to="/not-logged-in">
           <img class="icon-medium" src="@/assets/icons/message.png" alt="">
           <h1 class="title-medium">Messages</h1>
         </router-link>  
