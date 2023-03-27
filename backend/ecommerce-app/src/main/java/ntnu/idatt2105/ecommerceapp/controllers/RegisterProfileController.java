@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for handling calls regarding profile-registrations
+ */
 @RestController
 public class RegisterProfileController {
 
@@ -22,8 +25,8 @@ public class RegisterProfileController {
     Logger logger = LoggerFactory.getLogger(RegisterProfileController.class);
 
     /**
-     * Returns an empty list if counties is null...
-     * @return
+     * Gets a list of registered counties from the database, or an empty list if counties is null
+     * @return the list containing the counties, and the HttpStatus
      */
     @CrossOrigin("http://localhost:8080")
     @GetMapping("/unauthorized/counties")
@@ -38,6 +41,12 @@ public class RegisterProfileController {
         return new ResponseEntity<>(counties, HttpStatus.OK);
     }
 
+    /**
+     * Adds a profile to the database if a profile with the e-mail in the profile-request does not already exist
+     * @param profileRequest The profile to add to the database
+     * @return Null if it already exists a profile with the e-mail in the profile request, and the HttpStatus
+     * Otherwise, the newly added profile, and the HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @PostMapping("/unauthorized/new-profile")
     public ResponseEntity<Profile> addProfile(@RequestBody RegisterProfileRequest profileRequest) {
@@ -57,27 +66,10 @@ public class RegisterProfileController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    /*
-    @CrossOrigin("http://localhost:8080")
-    @PostMapping("/admin/new-admin")
-    public ResponseEntity<Profile> addNewAdmin(@RequestBody RegisterProfileRequest registerProfileRequest) {
-        logger.info("Received request to create a admin profile for: " + registerProfileRequest.getFirstName());
-        Profile profile = profileService.addProfile(registerProfileRequest);
-        if (profile == null) {
-            logger.info("E-mail is already used for another user");
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        logger.info("Returned user:" + profile);
-        return new ResponseEntity<>(profile, HttpStatus.OK);
-    }
-     */
-
-    //todo: add in another controller?
-
     /**
-     * This endpoint requires that the password is in raw text
-     * @param request
-     * @return
+     * Gets a profile from a profileRequest (requires that the password is in raw text)
+     * @param request the profileRequest of the requested profile
+     * @return the profile from the profileRequest, and the HttpStatus
      */
     @CrossOrigin("http://localhost:8080")
     @PostMapping("/user/profile")
@@ -98,6 +90,11 @@ public class RegisterProfileController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Gets a profileId based on its email
+     * @param profileEMail the profile´s email
+     * @return profileId of the profile with the provided email, and the HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @GetMapping("/user/profileId/{profileEMail}")
     public ResponseEntity<Integer> getProfileIdByEmail(@PathVariable String profileEMail) {
@@ -112,7 +109,11 @@ public class RegisterProfileController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
+    /**
+     * Gets the profile for the parameters if the credentials are correct
+     * @param email Profile-request for requested profile
+     * @return Profile if the credentials is correct, and the HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @GetMapping ("/profile/by-email/{email}")
     public ResponseEntity<Profile> getProfileByEmail(@PathVariable("email") String email) {
@@ -125,4 +126,5 @@ public class RegisterProfileController {
         logger.info("Returned user:" + profile);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
+
 }

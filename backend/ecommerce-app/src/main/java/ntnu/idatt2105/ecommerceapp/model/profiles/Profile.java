@@ -43,12 +43,12 @@ public class Profile {
 
     /**
      * Constructor for creating a profile object
-     * @param profileId
-     * @param firstName
-     * @param lastName
-     * @param eMail
-     * @param addressId
-     * @param password
+     * @param profileId the profile´s id
+     * @param firstName firstName of the user creating the profile
+     * @param lastName lastName of the user creating the profile
+     * @param eMail email of the user creating the profile
+     * @param addressId id of the user´s address
+     * @param password the profile´s password
      */
     public Profile(@JsonProperty("profileId") int profileId,@JsonProperty("firstName") String firstName,
                    @JsonProperty("lastName") String lastName,@JsonProperty("eMail") String eMail,
@@ -159,8 +159,6 @@ public class Profile {
         return password;
     }
 
-    //todo: when editing password should the old one be given before the change is made
-
     /**
      * Setter for password
      * @param password new password
@@ -172,8 +170,8 @@ public class Profile {
     /**
      * Equals method
      * The claim for two profiles object to be equal is corresponding e-mail
-     * @param o
-     * @return
+     * @param o Object
+     * @return boolean value
      */
     @Override
     public boolean equals(Object o) {
@@ -185,7 +183,7 @@ public class Profile {
     /**
      * Method to generate hash code
      * The hash is generated through e-mail and password
-     * @return
+     * @return int value
      */
     @Override
     public int hashCode() {

@@ -17,9 +17,9 @@ public class City {
 
     /**
      * Constructor for city
-     * @param cityId
-     * @param cityName
-     * @param countyId
+     * @param cityId the id of the city
+     * @param cityName the name of the city
+     * @param countyId the id of the county the city belongs to
      */
     public City(int cityId, String cityName, int countyId) {
         this.cityId = cityId;

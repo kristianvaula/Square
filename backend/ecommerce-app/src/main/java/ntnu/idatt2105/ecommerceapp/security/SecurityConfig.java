@@ -24,9 +24,9 @@ public class SecurityConfig {
     /**
      * Allows every user to use endpoints with the prefix "/unauthorized", only user with user or admin role can
      * use endpoints with the prefix "/user" and only admin users can use endpoints with the prefix "/admin"
-     * @param http
-     * @return
-     * @throws Exception
+     * @param http security
+     * @return http.build
+     * @throws Exception e
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,7 +44,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //todo: slette?
+    //todo: Comment out?
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().anyRequest();

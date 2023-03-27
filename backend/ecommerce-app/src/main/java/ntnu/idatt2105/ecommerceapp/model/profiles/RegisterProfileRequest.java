@@ -5,6 +5,7 @@ package ntnu.idatt2105.ecommerceapp.model.profiles;
  * RegisterProfileRequest contains getter and setter for the attributes given in the registration form
  */
 public class RegisterProfileRequest {
+
     private String firstName;
     private String lastName;
     private String eMail;
@@ -43,13 +44,13 @@ public class RegisterProfileRequest {
     /**
      * Constructor with all attributes
      * The constructor validates string attributes and throws a NullPointerException if one of these is not defined
-     * @param firstName
-     * @param lastName
-     * @param eMail
-     * @param county
-     * @param city
-     * @param address
-     * @param password
+     * @param firstName firstName of the user creating the profile
+     * @param lastName lastName of the user creating the profile
+     * @param eMail email of the user creating the profile
+     * @param county what county the user creating the profile lives in
+     * @param city what city the user creating the profile lives in
+     * @param address the address where the user creating the profile lives
+     * @param password the profile´s password
      */
     public RegisterProfileRequest(String firstName, String lastName, String eMail, String county, String city,
                                   String address, String password) {
@@ -169,8 +170,6 @@ public class RegisterProfileRequest {
     public String getPassword() {
         return password;
     }
-
-    //todo: when editing password should the old one be given before the change is made
 
     /**
      * Setter for password

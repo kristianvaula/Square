@@ -10,6 +10,7 @@
             placeholder="Ola"
             type="text"
             :error="firstNameError"
+            data-test="firstName"
         />
       </fieldset>
 
@@ -21,6 +22,7 @@
             placeholder="Norman"
             type="text"   
             :error="lastNameError"   
+            data-test="lastName"
         />
       </fieldset>
 
@@ -32,6 +34,7 @@
             placeholder="Ola.Nordman@mail.com"
             type="text"
             :error="eMailError"
+            data-test="eMail"
         />
       </fieldset>
 
@@ -41,6 +44,7 @@
             v-model="location.county"
             :options="counties"      
             label="County:"
+            data-test="county"
         />
       </fieldset>
     
@@ -52,6 +56,7 @@
             placeholder="Oslo"
             type="text"
             :error="cityError"
+            data-test="city"
         />
       </fieldset>
 
@@ -62,6 +67,7 @@
             label="Address:"
             placeholder="Olav tryggvasons gate 24"
             type="text"
+            data-test="address"
         />
       </fieldset>
 
@@ -73,11 +79,11 @@
             placeholder="**********"
             type="password"
             :error="passwordError"
-
+            data-test="password"
         />
       </fieldset>
-      <input class="button" type="button" value="Register" @click="register">
-      <p class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</p>
+      <input class="button" type="button" value="Register" @click="register" data-test="registerBtn">
+      <p class="errorMessage" v-if="errorMessage" data-test="errorMessage"> {{ errorMessage }}</p>
     </form>
   </div>
 </template>
@@ -161,7 +167,7 @@ export default {
             router.push("/").then(() => location.reload());
         }
       } else {
-        this.errorMessage = "Make sure that all filed is filed in properly"
+        this.errorMessage = "Check if you have entered correct information"
       }
     }
   },

@@ -34,7 +34,6 @@ import '@/assets/style/Pool.css'
             CategoryUtils.getCategories()
                 .then((response) => {
                 if(response.data) {
-                    console.log(response.data)
                     this.categories = response.data
                 }
                 })
