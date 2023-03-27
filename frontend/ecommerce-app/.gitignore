@@ -4,6 +4,9 @@ node_modules
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
+/coverage
+/cypress/integration
+
 
 
 # local env files
