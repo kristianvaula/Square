@@ -26,7 +26,7 @@ public class CategoryController {
      * @param category The category to add to the database
      * @return a String with information about the operation, and the HttpStatus
      */
-    @PostMapping("/admin/new")
+    @PostMapping("/admin/category/new")
     public ResponseEntity<String> newCategory(@RequestBody Category category){
         logger.info("Received new category request");
         return service.newCategory(category);
