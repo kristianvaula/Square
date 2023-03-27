@@ -3,7 +3,6 @@ package ntnu.idatt2105.ecommerceapp.repositiories;
 import ntnu.idatt2105.ecommerceapp.model.Product;
 import ntnu.idatt2105.ecommerceapp.model.profiles.Profile;
 import org.springframework.dao.DataAccessException;
-
 import java.util.List;
 
 public interface ProductRepositoryInterface {
@@ -13,6 +12,10 @@ public interface ProductRepositoryInterface {
     int newSubcategorybinding(int productId, int subCategoryId);
     int newProductImage(int productId, String image) throws DataAccessException;
 
+    int checkFavourite(int productId, int profileId);
+
+    List<Integer> getFavouriteIds(int userId);
+    List<Product> getFavourites(int userId);
     Product getProductById(int productId);
     int getProductId(String title, int sellerId);
     Product getProductByTitleSeller(String title, int sellerId);
@@ -23,5 +26,6 @@ public interface ProductRepositoryInterface {
     List<String> getProductImagenames(Product product);
     Profile getUser(String eMail);
 
+    int removeFavourite(int productId, int profileId);
     int removeById(int productId);
 }

@@ -46,11 +46,23 @@ public class ProductController {
         return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/user/product/favorite")
-    public ResponseEntity<String> addToFavorites(@RequestParam("productId") int productId,
-                                                 @RequestParam("userId") int userId){
+    @PostMapping("/user/product/favourite")
+    public ResponseEntity<String> addToFavorites(@RequestParam("productId") String productId,
+                                                 @RequestParam("username") String username){
         logger.info("Received add to favourites request");
-        return service.addToFavourites(productId, userId);
+        return service.addToFavourites(Integer.valueOf(productId), username);
+    }
+
+    @GetMapping("/user/product/favourite/ids/{username}")
+    public ResponseEntity<List<Integer>> getFavouriteIds(@PathVariable("username") String username){
+        logger.info("Received request for products by seller: " + username);
+        return service.getFavouriteIds(username);
+    }
+
+    @GetMapping("/user/product/favourite/all/{username}")
+    public ResponseEntity<List<ProductResponse>> getFavourites(@PathVariable("username") String username){
+        logger.info("Received request for products by seller: " + username);
+        return service.getFavourites(username);
     }
 
     @GetMapping("/unauthorized/product/user/{username}")
@@ -81,6 +93,13 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getProduct(@PathVariable("id") int id) {
         logger.info("Received request for all products");
         return service.getProductById(id);
+    }
+
+    @DeleteMapping("user/product/remove/favourite/{productId}/{username}")
+    public ResponseEntity<String> removeFromFavourites(@PathVariable("productId") int productId,
+                                                    @PathVariable("username") String username) {
+        logger.info("Received remove favourites request for: " + username);
+        return service.removeFromFavourites(productId,username);
     }
 
     @DeleteMapping("admin/product/remove/{id}")

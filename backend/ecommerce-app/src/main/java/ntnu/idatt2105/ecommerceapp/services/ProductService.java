@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
@@ -95,19 +96,67 @@ public class ProductService {
      * Adds a product to favourites. Check if products exists,
      * and that the user is not the seller of the product.
      * @param productId Id of product
-     * @param userId id of user
+     * @param username username of user
      * @return Response
      */
-    public ResponseEntity<String> addToFavourites(int productId, int userId){
+    public ResponseEntity<String> addToFavourites(int productId, String username){
+        int profileId;
         Product product;
         try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        try {
             product = repository.getProductById(productId);
-            if(product.getSellerId() == userId) return new ResponseEntity<>("User cannot favourite own listing", HttpStatus.BAD_REQUEST);
+            if(product.getSellerId() == profileId) return new ResponseEntity<>("User cannot favourite own listing", HttpStatus.BAD_REQUEST);
         } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No product matching productId", HttpStatus.BAD_REQUEST);}
+        if(repository.checkFavourite(productId, profileId) == -1){
+            return new ResponseEntity<>("Product already favourited", HttpStatus.OK);
+        }
+        if(repository.addToFavourites(productId, profileId) == -1) {
+            return new ResponseEntity<>("Could not favourite product", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product added to favourites successfully", HttpStatus.OK);
+    }
 
-        int response = repository.addToFavourites(productId, userId);
-        if(response == -1) return new ResponseEntity<>("Could not favourite item", HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>("Product added successfully", HttpStatus.OK);
+    public ResponseEntity<List<Integer>> getFavouriteIds(@PathVariable("username") String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+
+        List<Integer> result = repository.getFavouriteIds(profileId);
+        if(result == null) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<ProductResponse>> getFavourites(@PathVariable("username") String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+
+        return getProducts(repository.getFavourites(profileId));
+    }
+
+    /**
+     * Adds a product to favourites. Check if products exists,
+     * and that the user is not the seller of the product.
+     * @param productId Id of product
+     * @param username username of user
+     * @return Response
+     */
+    public ResponseEntity<String> removeFromFavourites(int productId, String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        if(repository.removeFavourite(productId, profileId) == -1) {
+            return new ResponseEntity<>("Product not on favourite list", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product removed from favourites successfully", HttpStatus.OK);
     }
 
     /**
