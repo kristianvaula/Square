@@ -119,3 +119,10 @@ CREATE TABLE prodImage(
     FOREIGN KEY (productId) REFERENCES product(productId)
 );
 
+CREATE TABLE favorites(
+  productId INT NOT NULL,
+  profileId INT NOT NULL,
+  PRIMARY KEY (productId, profileId),
+  FOREIGN KEY (productId) REFERENCES product(productId),
+  FOREIGN KEY (profileId) REFERENCES profile(profileId)
+);
