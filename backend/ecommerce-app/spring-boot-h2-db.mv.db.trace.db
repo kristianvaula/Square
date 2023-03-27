@@ -5976,3 +5976,12 @@ DELETE FROM county WHERE countryId = 1 [42122-214]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:833)
+2023-03-27 18:21:43 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVOURITE" not found; SQL statement:
+SELECT DISTINCT f.productId FROM favourite f WHERE f.profileId = ? [42102-214]
+2023-03-27 18:22:07 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVOURITE" not found; SQL statement:
+SELECT DISTINCT f.productId FROM favourite f WHERE f.profileId = ? [42102-214]
+2023-03-27 18:22:11 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVOURITE" not found; SQL statement:
+SELECT profileId FROM favourite WHERE productId = ? AND profileId = ? [42102-214]

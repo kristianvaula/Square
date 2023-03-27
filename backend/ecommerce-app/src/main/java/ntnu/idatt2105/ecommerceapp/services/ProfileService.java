@@ -111,7 +111,9 @@ public class ProfileService {
      */
     public int getProfile(String eMail) {
         logger.info("Returning profile for " + eMail);
-        int profileId = profileDao.getProfile(eMail).getProfileId();
+        Profile profile = profileDao.getProfile(eMail);
+        if(profile == null) return -1;
+        int profileId = profile.getProfileId();
         logger.info("Profile is returned for {} is {}", eMail, profileId);
         return profileId;
     }
