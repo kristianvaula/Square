@@ -22,6 +22,7 @@
           ref="titleField"
           type="text"
           :error="errors.title"
+          data-test="tittelInput"
         />
       </div>
       <div class="base-input center">
