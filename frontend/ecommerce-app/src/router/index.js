@@ -61,6 +61,12 @@ const routes = [
     path: `/productPage/:productId`,
     name: `ProductPage`,
     component: () => import(`../views/ProductPage.vue`)
+  },
+
+  {
+    path: `/not-logged-in`,
+    name: `NotLoggedIn`,
+    component: () => import(`../views/NotLoggedInPage.vue`)
   }
 ]
 
