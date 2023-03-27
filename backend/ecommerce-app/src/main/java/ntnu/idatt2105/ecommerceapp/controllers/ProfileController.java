@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for handling calls regarding profiles
+ */
 @RestController
 public class ProfileController {
 
@@ -18,7 +21,11 @@ public class ProfileController {
     private ProfileService profileService;
     private Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-
+    /**
+     * Gets a location based on an addressId. A location consists of an address, a city, and a county
+     * @param id the addressId to check for
+     * @return the location linked to the provided addressId, and HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @GetMapping("/user/address/{addressId}")
     public ResponseEntity<Location> getLocationById(@PathVariable("addressId") int id) {
@@ -33,6 +40,11 @@ public class ProfileController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * The method updates a profile in the database with information provided by the user
+     * @param profileRequest Request for the profile to be updated in the database
+     * @return the newly updated profile.
+     */
     @CrossOrigin("http://localhost:8080")
     @PostMapping("/unauthorized/update-profile")
     public ResponseEntity<Profile> updateProfile(@RequestBody UpdateProfileRequest profileRequest) {

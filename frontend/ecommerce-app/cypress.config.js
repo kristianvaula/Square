@@ -6,4 +6,5 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
   },
+  configFile: "../../backend/ecommerce-app/src/main/resources/application-test.properties"
 });

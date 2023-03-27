@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Dao for profile
+ * Repository for a profile
  */
 @Repository
 public class ProfileDao implements IProfileDao {
@@ -55,10 +55,10 @@ public class ProfileDao implements IProfileDao {
 
     /**
      * Helper method for adding a simple entity to the database
-     * @param getSql Query to control that it does not already exist an entity for the specified params
+     * @param getSql Query to control existing entities for the specified params
      * @param insertSql Query to insert a new entity
-     * @param name Any string value assosiated to the entity
-     * @param foreignKey Foreign key assosiated to the entity
+     * @param name Any string value associated to the entity
+     * @param foreignKey Foreign key associated to the entity
      * @return Returns the id for the entity if exists, otherwise the new id
      */
     private int addSimpleEntity(String getSql, String insertSql, String name, int foreignKey) {
@@ -77,7 +77,7 @@ public class ProfileDao implements IProfileDao {
 
     /**
      * {@inheritDoc}
-     * @param cityName Name of the city adding to the database
+     * @param cityName Name of the city being added to the database
      * @param countyId id for the county the city is in.
      * @return cityId for the city
      */
@@ -90,7 +90,6 @@ public class ProfileDao implements IProfileDao {
         logger.info("Answered with cityId {}", cityId);
         return cityId;
     }
-
 
     /**
      * {@inheritDoc}
@@ -150,7 +149,6 @@ public class ProfileDao implements IProfileDao {
             int cityId = addCity(profileRequest.getCity(), countyId);
             int addressId = addAddress(profileRequest.getAddress(), cityId);
 
-
             logger.info("Adds profile type to user {} adding profile type {}", profileRequest.geteMail(), ProfileType.USER.getProfileName());
             int profileTypeId = addProfileType(ProfileType.USER.getProfileName());
             logger.info("{} has been given profile type with id: {}", profileRequest.geteMail(), profileTypeId);
@@ -184,6 +182,11 @@ public class ProfileDao implements IProfileDao {
         return profile;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param profileId The user´s profileId
+     * @return the user´s email
+     */
     @Override
     public String getProfileEmail(int profileId) {
         String profileSql = "SELECT eMail FROM profile WHERE profileId=?";
@@ -200,7 +203,7 @@ public class ProfileDao implements IProfileDao {
     /**
      * {@inheritDoc}
      * @param updateProfileRequest The profile to update in the database
-     * returns the newly updated profile.
+     * @return the newly updated profile.
      */
     public Profile updateProfile(UpdateProfileRequest updateProfileRequest) {
         String getProfileSql = "SELECT * FROM profile WHERE eMail=?";
@@ -211,8 +214,10 @@ public class ProfileDao implements IProfileDao {
         int cityId = addCity(updateProfileRequest.getCity(), countyId);
         int addressId = addAddress(updateProfileRequest.getAddress(), cityId);
 
-        logger.info(updateProfileRequest.getFirstName() + ", " + updateProfileRequest.getLastName() + ", " + updateProfileRequest.geteMail() + ", " + updateProfileRequest.getPassword() + ", " + addressId);
-        int rowAffected = jdbcTemplate.update(updateProfileSql, new Object[] {updateProfileRequest.getPassword(), addressId, updateProfileRequest.geteMail()});
+        logger.info(updateProfileRequest.getFirstName() + ", " + updateProfileRequest.getLastName() + ", "
+                + updateProfileRequest.geteMail() + ", " + updateProfileRequest.getPassword() + ", " + addressId);
+        int rowAffected = jdbcTemplate.update(updateProfileSql,
+                new Object[] {updateProfileRequest.getPassword(), addressId, updateProfileRequest.geteMail()});
 
         logger.debug("Rows affected after added new user: {}", rowAffected);
         profile = jdbcTemplate.queryForObject(getProfileSql, BeanPropertyRowMapper.newInstance(Profile.class), updateProfileRequest.geteMail());
@@ -230,21 +235,37 @@ public class ProfileDao implements IProfileDao {
         return jdbcTemplate.query(profilesSql, BeanPropertyRowMapper.newInstance(Profile.class));
     }
 
+    /**
+     * {@inheritDoc}
+     * @param addressId The addressId
+     * @return the address
+     */
     @Override
     public Address getAddress(int addressId) {
         return jdbcTemplate.queryForObject("SELECT * FROM address WHERE addressId=?",
                 BeanPropertyRowMapper.newInstance(Address.class), addressId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param cityId The cityId
+     * @return the city
+     */
     @Override
     public City getCity(int cityId) {
         return jdbcTemplate.queryForObject("SELECT * FROM city WHERE cityId = ?",
                 BeanPropertyRowMapper.newInstance(City.class), cityId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param countyId The countyId
+     * @return the county
+     */
     @Override
     public County getCounty(int countyId) {
         return jdbcTemplate.queryForObject("SELECT * FROM county WHERE countyId = ?",
                 BeanPropertyRowMapper.newInstance(County.class), countyId);
     }
+
 }

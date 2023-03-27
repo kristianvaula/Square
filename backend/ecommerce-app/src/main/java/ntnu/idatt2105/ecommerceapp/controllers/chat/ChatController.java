@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/unauthorized/chat") //todo: add user to url - only users should have the ability to send chats
+@RequestMapping("/user/chat")
 public class ChatController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class ChatController {
 
     /**
      * Create a new chat and add it to the database
-     * @param chat
+     * @param chat the chat to create
      */
     @PostMapping("/new-chat")
     public void newChat(@RequestBody Chat chat){
@@ -54,7 +54,7 @@ public class ChatController {
     }
 
     /**
-     * Returns an empty list if messages is null...
+     * Returns all messages in a specific chat. Returns an empty list if messages is null...
      * @return messages. A list holding all sent messages
      */
     @GetMapping("/messages/{chatId}")
@@ -69,6 +69,11 @@ public class ChatController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Sets the isUnread status to false
+     * @param chatId the id of the chat
+     * @return the new isUnread status
+     */
     @PostMapping("/read-chat/{chatId}")
     public ResponseEntity<Boolean> readChat(@PathVariable int chatId) {
         logger.info("Received a request to set isUnread to false in chat with chatId {}", chatId);
@@ -78,15 +83,11 @@ public class ChatController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(false, HttpStatus.OK);
-
-
     }
-
-
 
     /**
      * Create a new message and add it to the database
-     * @param message
+     * @param message the message to add
      */
     @PostMapping("/new-message")
     public void newMessage(@RequestBody MessageRequest message){
@@ -96,6 +97,11 @@ public class ChatController {
         logger.info("Message with messageId {} is added to chatId {}", messageId, message.getChatId());
     }
 
+    /**
+     * Get the email of the other participant in the chat
+     * @param participantRequest for the chat
+     * @return the other participant´s email
+     */
     @PostMapping("/participant")
     public ResponseEntity<String> getParticipant(@RequestBody ParticipantRequest participantRequest){
         logger.info("Received a request from {} to get the other profile in chat with chatId {}", participantRequest.getMyEmail(), participantRequest.getChatId());

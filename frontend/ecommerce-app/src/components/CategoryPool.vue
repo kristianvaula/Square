@@ -18,7 +18,7 @@ import { store } from '@/store';
 import CategoryCard from './CategoryCard.vue';
 import '@/assets/style/Pool.css'
     export default {
-        name: "ProductPool",
+        name: "CategoryPool",
         components: {
             CategoryCard,
         },

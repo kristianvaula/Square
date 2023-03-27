@@ -28,6 +28,14 @@ public class ProductController {
     ProductService service;
     private static final Logger logger = LoggerFactory.getLogger(ntnu.idatt2105.ecommerceapp.services.categories.CategoryService.class.getName());
 
+    /**
+     * Create a new product listing and add it to the database
+     * @param object Product object
+     * @param username username of seller
+     * @param subcategories subcategories associated
+     * @param images MultipartFile array of images
+     * @return response for user, and the HttpStatus
+     */
     @PostMapping("/user/product/new")
     public ResponseEntity<String> createProduct(@RequestParam("product") String object,
                                                 @RequestParam("username") String username,
@@ -65,30 +73,54 @@ public class ProductController {
         return service.getFavourites(username);
     }
 
+    /**
+     * Gets products by seller username
+     * @param username String seller-username
+     * @return response
+     */
     @GetMapping("/unauthorized/product/user/{username}")
     public ResponseEntity<List<ProductResponse>> getProductsBySeller(@PathVariable("username") String username){
         logger.info("Received request for products by seller: " + username);
         return service.getProductsBySeller(username);
     }
 
+    /**
+     * Gets all product
+     * @return List of products
+     */
     @GetMapping("/unauthorized/product/all")
     public ResponseEntity<List<ProductResponse>> getProducts() {
         logger.info("Received request for all products");
         return service.getAllProducts();
     }
 
+    /**
+     * Gets products by category
+     * @param categoryId category id
+     * @return product
+     */
     @GetMapping("/unauthorized/product/category/{category}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@PathVariable("category") int categoryId) {
         logger.info("Received request for all products in a category");
         return service.getProductsByCategory(categoryId);
     }
 
+    /**
+     * Gets products by subcategory
+     * @param subcategoryId subcategory id
+     * @return product
+     */
     @GetMapping("/unauthorized/product/subcategory/{subcategory}")
     public ResponseEntity<List<ProductResponse>> getProductsBySubcategory(@PathVariable("subcategory") int subcategoryId) {
         logger.info("Received request for all products");
         return service.getProductsBySubCategory(subcategoryId);
     }
 
+    /**
+     * Gets product by id
+     * @param id id
+     * @return product
+     */
     @GetMapping("/unauthorized/product/{id}")
     public ResponseEntity<List<ProductResponse>> getProduct(@PathVariable("id") int id) {
         logger.info("Received request for all products");
@@ -102,6 +134,11 @@ public class ProductController {
         return service.removeFromFavourites(productId,username);
     }
 
+    /**
+     * Removes product by id
+     * @param id product id
+     * @return result response
+     */
     @DeleteMapping("admin/product/remove/{id}")
     public ResponseEntity<String> removeProduct(@PathVariable("id") int id) {
         logger.info("Received remove product request for: " + id);

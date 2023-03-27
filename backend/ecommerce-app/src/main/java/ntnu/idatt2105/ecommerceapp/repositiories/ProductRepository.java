@@ -20,8 +20,12 @@ import java.util.*;
 
 import static ntnu.idatt2105.ecommerceapp.services.ProductService.IMAGE_PATH;
 
+/**
+ * Repository for a product
+ */
 @Repository
 public class ProductRepository implements ProductRepositoryInterface {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -52,6 +56,12 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String DELETE_SUBCAT_SQL = "DELETE FROM product_subcategory WHERE productId=?";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM product WHERE productId=?";
 
+    /**
+     * {@inheritDoc}
+     * @param product the product to be added
+     * @return 1 if success
+     * @throws DataAccessException
+     */
     @Override
     public int newProduct(Product product) throws DataAccessException{
         try {
@@ -62,6 +72,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product to be favorited
+     * @param userId the id of the user favoriting the product
+     * @return -1 if operation fails
+     */
     @Override
     public int addToFavourites(int productId, int userId) {
         try {
@@ -73,6 +89,13 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product to be bind
+     * @param subCategoryId the subCategory to be bind
+     * @return 1 if success
+     * @throws DataAccessException
+     */
     @Override
     public int newSubcategorybinding(int productId, int subCategoryId) throws DataAccessException{
         try {
@@ -84,11 +107,24 @@ public class ProductRepository implements ProductRepositoryInterface {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product the image belongs to
+     * @param image the image itself
+     * @return 1 if success
+     * @throws DataAccessException
+     */
     @Override
     public int newProductImage(int productId, String image) throws DataAccessException{
         return jdbcTemplate.update(INSERT_IMAGE_SQL, productId, image);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product
+     * @param profileId the id of the profile
+     * @return -1 if operation fails
+     */
     @Override
     public int checkFavourite(int productId, int profileId){
         try {
@@ -98,6 +134,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param profileID the profile´s id
+     * @return the list holding the productIds
+     */
     @Override
     public List<Integer> getFavouriteIds(int profileID) {
         try {
@@ -108,6 +149,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param profileID the profile´s id
+     * @return the list holding the products
+     */
     @Override
     public List<Product> getFavourites(int profileID) {
         try {
@@ -117,6 +163,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product
+     * @return the product with the given productId
+     */
     @Override
     public Product getProductById(int productId) {
         try {
@@ -127,6 +178,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param title the product´s title
+     * @param sellerId the product´s sellerId
+     * @return the productId of the product with the given title and sellerId
+     */
     @Override
     public int getProductId(String title, int sellerId) {
         try {
@@ -138,6 +195,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param email
+     * @return the profile with the given email
+     */
     @Override
     public Profile getUser(String email) {
         Profile response;
@@ -150,6 +212,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         return response;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param title the product´s title
+     * @param sellerId the product´s sellerId
+     * @return the product of the product with the given title and sellerId
+     */
     @Override
     public Product getProductByTitleSeller(String title, int sellerId) {
         try {
@@ -161,6 +229,10 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @return a list containing all the products
+     */
     @Override
     public List<Product> getProducts() {
         try {
@@ -170,6 +242,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param sellerId the product´s sellerId
+     * @return a list containing all the products with the given sellerId
+     */
     @Override
     public List<Product> getProductsBySeller(int sellerId) {
         try {
@@ -179,6 +256,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param categoryId the product´s categoryId
+     * @return a list containing all the products with the given categoryId
+     */
     @Override
     public List<Product> getProductsByCategory(int categoryId) {
         try {
@@ -188,6 +270,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param subcategoryId the product´s subCategoryId
+     * @return a list containing all the products with the given subCategoryId
+     */
     @Override
     public List<Product> getProductsBySubcategory(int subcategoryId) {
         try {
@@ -197,6 +284,11 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param product the product to get the image-names for
+     * @return a list containing the image-names
+     */
     @Override
     public List<String> getProductImagenames(Product product) {
         try {
@@ -212,7 +304,7 @@ public class ProductRepository implements ProductRepositoryInterface {
      * a list of Image objects where imagedata is base64 encoded
      * @param filenames all filenames
      * @return Images
-     * @throws IOException
+     * @throws IOException e
      */
     public List<Image> getProductImages(List<String> filenames) throws IOException {
         ArrayList<Image> images = new ArrayList<>();
@@ -228,6 +320,12 @@ public class ProductRepository implements ProductRepositoryInterface {
         return images;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param productId the id of the product to remove
+     * @param profileId the id of the profile unliking the product
+     * @return 1 if success, -1 if not
+     */
     @Override
     public int removeFavourite(int productId, int profileId) {
         try{
@@ -240,7 +338,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     /**
-     * Deletes subcategory binding and product by id
+     * {@inheritDoc}
      * @param productId product id
      * @return 1 if success
      */
@@ -258,4 +356,5 @@ public class ProductRepository implements ProductRepositoryInterface {
         }
         return 1;
     }
+
 }

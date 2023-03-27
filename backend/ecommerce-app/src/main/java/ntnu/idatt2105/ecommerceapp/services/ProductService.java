@@ -23,6 +23,10 @@ import java.io.*;
 
 import java.util.*;
 
+/**
+ * Service class for products
+ * Provides mechanism to control, add and get products.
+ */
 @Service
 public class ProductService {
     @Autowired
@@ -33,6 +37,11 @@ public class ProductService {
 
     public static String IMAGE_PATH = "src/main/resources/userImages/";
 
+    /**
+     * Constructor for ProductService
+     * @param repository the productRepository
+     * @param transactionManager tool to manage platform-transactions
+     */
     @Autowired
     public ProductService(ProductRepository repository, PlatformTransactionManager transactionManager) {
         this.repository = repository;
@@ -40,8 +49,7 @@ public class ProductService {
     }
 
     /**
-     * Performs necessary operations to create a
-     * new product.
+     * Performs necessary operations to create a new product.
      * @param product Product object
      * @param username username of seller
      * @param subcategories subcategories associated
@@ -182,7 +190,7 @@ public class ProductService {
      * @param productId product id
      * @param subcategories subcategory ids
      * @return 1 if success
-     * @throws DataAccessException
+     * @throws DataAccessException e
      */
     public int addSubcategories(int productId, List<Integer> subcategories) throws DataAccessException {
         int response = -1;
@@ -197,7 +205,7 @@ public class ProductService {
      * @param productId product id associated
      * @param images Multipartfile array
      * @return 1 if success
-     * @throws DataAccessException
+     * @throws DataAccessException e
      */
     private int addImages(int productId, MultipartFile[] images){
         for (MultipartFile image : images) {
@@ -220,8 +228,7 @@ public class ProductService {
 
     /**
      * Creates a response to return to client.
-     * Takes a list of product objects and fetches
-     * necesarry data and converts to a response
+     * Takes a list of product objects and fetches necessary data and converts to a response
      * @param products list of products
      * @return response
      */

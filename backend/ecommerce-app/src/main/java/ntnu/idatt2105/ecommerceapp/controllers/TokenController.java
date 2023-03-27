@@ -11,6 +11,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+/**
+ * Controller class that handles requests related to token generation.
+ */
 @RestController
 @RequestMapping(value = "/unauthorized")
 @EnableAutoConfiguration
@@ -22,6 +26,11 @@ public class TokenController {
     private ProfileService profileService;
     Logger logger = LoggerFactory.getLogger(TokenController.class);
 
+    /**
+     * Generates a JWT token for the specified profile and returns it as a string.
+     * @param profileRequest the profile-request containing the email and password for the profile to generate a token for
+     * @return a ResponseEntity containing the generated JWT token as a string, and the HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "/token")
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -40,6 +49,11 @@ public class TokenController {
         return new ResponseEntity<>("Access denied, wrong credentials....", HttpStatus.UNAUTHORIZED);
     }
 
+    /**
+     * Generates a JWT token for the profile associated with the specified email and password, and returns it as a string.
+     * @param request the profile-request containing the email and password for the profile to generate a token for
+     * @return a ResponseEntity containing the generated JWT token as a string, and the HttpStatus
+     */
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "/token2")
     @ResponseStatus(value = HttpStatus.CREATED)

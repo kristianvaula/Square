@@ -16,16 +16,16 @@ public interface IJdbcAuthenticationRepo {
      */
     ProfileType getProfileType(Profile profile);
     /**
-     * Getter for the profile type to a profile
-     * @param email
-     * @param password
-     * @return Profile type to the profile
+     * Getter for the profile type to a profile by email and password
+     * @param email the profile´s email
+     * @param password the profile´s password
+     * @return Profile-type to the profile
      */
     ProfileType getProfileType(String email, String password);
 
     /**
-     * Getter for the profile type ot a profile
-     * @param email
+     * Getter for the profile type ot a profile by email
+     * @param email the profile´s email
      * @return Profile type to the profile
      */
     ProfileType getProfileType(String email);
