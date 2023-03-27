@@ -105,13 +105,12 @@ export default {
         const productId = this.$route.params.productId
             ProductUtils.getProductById(productId)
                 .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    this.product = response.data[0].product
-                    this.images = response.data[0].imageList
+                if(response) {
+                    console.log(response)
+                    this.product = response[0].product
+                    this.images = response[0].imageList
                     this.imageLoaded = true 
-                    this.sellerId = response.data[0].product.sellerId
-                    console.log("Setting sellerId to " + this.sellerId)
+                    this.sellerId = response[0].product.sellerId
                 }
             })
                 .catch((err) => {
