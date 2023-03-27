@@ -35,11 +35,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * The filter controls the token given in the request
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
+     * @param request HttpServlet request
+     * @param response HttpServlet response
+     * @param filterChain object
+     * @throws ServletException e
+     * @throws IOException e
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -54,7 +54,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // if Bearer auth header exists, validate token, and extract userEmail from token.
+        // If Bearer auth header exists, validate token, and extract userEmail from token.
         // Note that we have added userId as subject to the token when it is generated
         // Note also that the token comes in this format 'Bearer token'
         jwtToken = header.substring(7);
@@ -65,9 +65,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // if token is valid, add user details to the authentication context
-        // Note that user details should be fetched from the database in real scenarios
-        // this is case we will retrieve use details from mock
+        // If token is valid, add user details to the authentication context
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                 profileInfo[0],
                 null,
@@ -79,8 +77,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * The method validates the token and subtracts e-mail and the authorization for the profile assosiated with the token
-     * @param token
+     * The method validates the token and subtracts e-mail and the authorization for the profile associated with the token
+     * @param token from request
      * @return If the token is valid: an array with e-mail on index 0 and profileType on index 1, else null
      */
     public String[] validateTokenAndGetProfileInfo(final String token) {
