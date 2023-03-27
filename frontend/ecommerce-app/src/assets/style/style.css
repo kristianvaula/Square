@@ -121,6 +121,11 @@ button:disabled {
   min-width:var(--product-card-width + 50px);
   max-width:60%;
 }
+.eighty-pool {
+  width:80%;
+  min-width:var(--product-card-width + 50px);
+  max-width:80%;
+}
 
 .flex-centered {
   display:flex;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -59,6 +60,12 @@ public class ProductController {
                                                  @RequestParam("username") String username){
         logger.info("Received add to favourites request");
         return service.addToFavourites(Integer.valueOf(productId), username);
+    }
+
+    @GetMapping("/unauthorized/product/search/{param}")
+    public ResponseEntity<List<ProductResponse>> searchProducts(@PathVariable("param") String searchString){
+        logger.info("Received search request with" + searchString);
+        return service.searchProducts(searchString);
     }
 
     @GetMapping("/user/product/favourite/ids/{username}")

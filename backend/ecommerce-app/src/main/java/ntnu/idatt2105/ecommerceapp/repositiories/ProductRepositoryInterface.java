@@ -51,6 +51,13 @@ public interface ProductRepositoryInterface {
     int checkFavourite(int productId, int profileId);
 
     /**
+     * Searches for products by title and description using LIKE
+     * @param searchString search string
+     * @return products
+     */
+    public List<Product> searchString(String searchString);
+
+    /**
      * Method to get a list with productIds representing products the profile has liked
      * @param userId the user´s id
      * @return the list holding the productIds

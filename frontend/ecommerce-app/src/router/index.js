@@ -62,11 +62,15 @@ const routes = [
     name: `ProductPage`,
     component: () => import(`../views/ProductPage.vue`)
   },
-
   {
     path: `/not-logged-in`,
     name: `NotLoggedIn`,
     component: () => import(`../views/NotLoggedInPage.vue`)
+  },
+  {
+    path: '/search-results/:searchString',
+    name: 'SearchResults',
+    component: () => import('../views/SearchResultsPage.vue')
   }
 ]
 
