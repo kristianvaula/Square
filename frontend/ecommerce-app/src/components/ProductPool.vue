@@ -1,7 +1,7 @@
 <template>
     <div class="pool">
         <div class="no-products-message" v-if="products.length === 0 || empty">
-            <h3>There are no products in this category yet</h3>
+            <h3 class="lowkey-h3">Your search provided no results</h3>
         </div>
         <div v-else class="product-pool">
             <ProductCard class="item" v-for="instance in products" :key="instance.id" :product="instance"></ProductCard>
@@ -14,6 +14,8 @@
 import { store } from '@/store';
 import ProductCard from './ProductCard.vue';
 import '@/assets/style/Pool.css'
+import '@/assets/style/style.css'
+
     export default {
         name: "ProductPool",
         components: {

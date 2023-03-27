@@ -40,10 +40,10 @@ export default {
     },
     createSubCategory(category) {
         let config = getUserConfig()
-        return axios.post(baseurl + "/unauthorized/sub-category/new", category, config)
+        return axios.post(baseurl + "/admin/sub-category/new", category, config)
     },
     removeSubCategory(id) {
         let config = getUserConfig()
-        return axios.delete(`${baseurl}/unauthorized/sub-category/delete/${id}`, config)
+        return axios.delete(`${baseurl}/admin/sub-category/delete/${id}`, config)
     }
 }
