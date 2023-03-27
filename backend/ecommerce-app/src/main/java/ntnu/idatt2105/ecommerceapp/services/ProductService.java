@@ -104,17 +104,22 @@ public class ProductService {
         Product product;
         try {
             profileId = repository.getUser(username).getProfileId();
-        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);
+        }
         try {
             product = repository.getProductById(productId);
             if(product.getSellerId() == profileId) return new ResponseEntity<>("User cannot favourite own listing", HttpStatus.BAD_REQUEST);
         } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No product matching productId", HttpStatus.BAD_REQUEST);}
-        if(repository.checkFavourite(productId, profileId) == -1){
+        if(repository.checkFavourite(productId, profileId) != -1){
+            logger.warn("Product already favoured");
             return new ResponseEntity<>("Product already favourited", HttpStatus.OK);
         }
         if(repository.addToFavourites(productId, profileId) == -1) {
+            logger.error("Could not favourite product");
             return new ResponseEntity<>("Could not favourite product", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.info("Product favourited successfully");
         return new ResponseEntity<>("Product added to favourites successfully", HttpStatus.OK);
     }
 
@@ -127,12 +132,10 @@ public class ProductService {
      * @return List of integer productIds
      */
     public ResponseEntity<List<Integer>> getFavouriteIds(@PathVariable("username") String username){
-        int profileId;
         Product product;
-        try {
-            profileId = repository.getUser(username).getProfileId();
-        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
-
+        Profile profile = repository.getUser(username);
+        if(profile == null)  return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        int profileId = profile.getProfileId();
         List<Integer> result = repository.getFavouriteIds(profileId);
         if(result == null) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(result, HttpStatus.OK);

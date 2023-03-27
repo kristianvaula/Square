@@ -29,7 +29,7 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     //INSERT
     private static final String INSERT_PRODUCT_SQL = "INSERT INTO product(title, description, price, used, sellerId, timeCreated) VALUES(?,?,?,?,?,NOW())";
-    private static final String INSERT_FAVOURITE_SQL = "INSERT INTO favourites (productId, profileId) VALUES (?,?)";
+    private static final String INSERT_FAVOURITE_SQL = "INSERT INTO favourite (productId, profileId) VALUES (?,?)";
     private static final String INSERT_PRODUCT_SUBCAT_SQL = "INSERT INTO product_subCategory (productId, subCategoryId) VALUES(?,?)";
     private static final String INSERT_IMAGE_SQL = "INSERT INTO prodImage(productId, image) VALUES(?,?)";
 
@@ -44,9 +44,8 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String SELECT_PROFILE_SQL ="SELECT * FROM profile WHERE email=?";
     private static final String SELECT_PRODUCTS_SELLERID_SQL = "SELECT * FROM product WHERE sellerId=?";
     private static final String SELECT_FAVORITE_SQL = "SELECT profileId FROM favourite WHERE productId = ? AND profileId = ?";
-    private static final String SELECT_FAVORITEIDS_SQL = "SELECT productId FROM product p,favourite f WHERE p.productId = f.productId";
+    private static final String SELECT_FAVORITEIDS_SQL = "SELECT DISTINCT f.productId FROM favourite f WHERE f.profileId = ?";
     private static final String SELECT_FAVORITES_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p,favourite f WHERE p.productId = f.productId AND f.profileId = ?";
-
 
     private static final String DELETE_FAVOURITE_SQL = "DELETE FROM favourite WHERE productId = ? AND profileId = ?";
     private static final String DELETE_IMAGE_SQL = "DELETE FROM prodImage WHERE productId=?";
@@ -232,7 +231,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     @Override
     public int removeFavourite(int productId, int profileId) {
         try{
-            jdbcTemplate.update(DELETE_FAVOURITE_SQL, productId);
+            jdbcTemplate.update(DELETE_FAVOURITE_SQL, productId, profileId);
         }catch(Exception e){
             logger.warn(e.getMessage());
             return -1;
