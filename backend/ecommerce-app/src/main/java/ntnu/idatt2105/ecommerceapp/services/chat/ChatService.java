@@ -68,7 +68,7 @@ public class ChatService {
     }
 
     /**
-     * The method adds a new message
+     * The method adds a new message to the database
      * @param message the message to add
      * @return The chatId where there is a new chat
      */
@@ -97,7 +97,7 @@ public class ChatService {
      * The method gets the email of the other participant in the chat
      * @param chatId the id of the chat
      * @param myEmail your email
-     * @return the other participants´ email
+     * @return the other participant´s email
      */
     public String getParticipant(int chatId, String myEmail) {
         int myProfileId = profileDao.getProfile(myEmail).getProfileId();
