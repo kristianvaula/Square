@@ -1,7 +1,7 @@
 .category-card {
     display: grid;
     position: relative;
-    width: 125px;
+    width: 150px;
     height: 125px;
     border-radius: 8px;
     overflow: hidden;
@@ -43,7 +43,7 @@
     color: white;
     display: grid;
     position: relative;
-    width: 125px;
+    width: 130px;
     height: 125px;
     border-radius: 8px;
     overflow: hidden;
