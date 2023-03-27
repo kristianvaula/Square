@@ -14,19 +14,19 @@ import java.sql.Timestamp;
 public class Product {
 
     @Id
-    private int productId;
+    private Integer productId;
     @Column
     private String title;
     @Column
     private String description;
     @Column
-    private int price;
+    private Integer price;
     @Column
-    private int sellerId;
+    private Integer sellerId;
     @Column
     private int used;
     @Column
-    private int sold;
+    private Integer sold;
     @Column
     private Timestamp timeCreated;
 
@@ -41,7 +41,7 @@ public class Product {
      * Getter for productId
      * @return productId
      */
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
@@ -49,7 +49,7 @@ public class Product {
      * Setter for productId
      * @param productId new productId
      */
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -73,7 +73,7 @@ public class Product {
      * Getter for price
      * @return price
      */
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -81,7 +81,7 @@ public class Product {
      * Setter for price
      * @param price new price
      */
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -89,7 +89,7 @@ public class Product {
      * Getter for sellerId
      * @return sellerId
      */
-    public int getSellerId() {
+    public Integer getSellerId() {
         return sellerId;
     }
 
@@ -97,15 +97,15 @@ public class Product {
      * Setter for sellerId
      * @param sellerId new sellerId
      */
-    public void setSellerId(int sellerId) {
+    public void setSellerId(Integer sellerId) {
         this.sellerId = sellerId;
     }
 
-    public int getSold() {
+    public Integer getSold() {
         return sold;
     }
 
-    public void setSold(int sold) {
+    public void setSold(Integer sold) {
         this.sold = sold;
     }
 

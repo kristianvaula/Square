@@ -209,12 +209,14 @@ export default {
       let arr = JSON.parse(JSON.stringify(list))
       if(arr.length == 0) return 
       if(user() === null) return 
+      let state = 0
+      if(values.state) state = 1
 
       let product = {
           title: values.title,
           description: values.desc,
           price: values.price,
-          used: values.state
+          used: state
       }; 
 
       let username = user();
@@ -227,6 +229,7 @@ export default {
       for(let i = 0; i < uploadedImages.length; i++) {
         formData.append('images', uploadedImages[i])
       }
+      console.log(formData)
       sendForm(formData, imageData)
     })
 

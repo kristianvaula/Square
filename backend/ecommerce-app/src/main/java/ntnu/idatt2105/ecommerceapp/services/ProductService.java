@@ -57,8 +57,7 @@ public class ProductService {
      * @return response for user
      */
     public ResponseEntity<String> newProduct(Product product, String username, List<Integer> subcategories, MultipartFile[] images) {
-        if(product.getSellerId() < 0 ||
-            product.getTitle() == null ||
+        if( product.getTitle() == null ||
             product.getDescription() == null ||
             product.getPrice() < 0 ||
             username == null ||
