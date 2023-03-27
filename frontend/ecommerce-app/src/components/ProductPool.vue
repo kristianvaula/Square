@@ -52,7 +52,6 @@ import '@/assets/style/style.css'
             if(this.tokenStore.jwtToken){
                 ProfileUtils.getProfileId(this.tokenStore.loggedInUser)
                     .then((response) => {
-                        console.log(response.data)
                         this.userId = response.data; 
                     })
             }

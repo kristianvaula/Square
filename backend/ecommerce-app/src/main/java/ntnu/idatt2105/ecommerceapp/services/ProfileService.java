@@ -32,51 +32,49 @@ public class ProfileService {
 
     /**
      * The method gets a list of registered counties from the database
-     * @return List with counties
+     * @return List containing the counties
      */
     public List<County> getCounties() {
         return profileDao.getCounties();
     }
 
     /**
-     * The method adds a profile to the database if it does not exist a profile with the e-mail in the profile request
+     * The method adds a profile to the database if a profile with the e-mail in the profile-request does not already exist
      * @param profileRequest The profile to add to the database
-     * @return Null if it already exists a profile with the e-mail in the profile request. Otherwise, the newly added
-     * profile
+     * @return Null if it already exists a profile with the e-mail in the profile request.
+     * Otherwise, the newly added profile
      */
     public Profile addProfile(RegisterProfileRequest profileRequest) {
         Profile existingProfile = profileDao.getProfile(profileRequest.geteMail());
         if (existingProfile == null) {
-            logger.info("Creating profile for " + profileRequest.geteMail() + " with password " + profileRequest.getPassword());
+            logger.info("Creating profile for " + profileRequest.geteMail());
             String encodedPassword = passwordEncoder.encode(profileRequest.getPassword());
             profileRequest.setPassword(encodedPassword);
             return profileDao.addProfile(profileRequest);
         }
-        logger.info("It already exists a profile for eMail "  + profileRequest.geteMail());
+        logger.info("A profile with eMail already exists "  + profileRequest.geteMail());
         return null;
     }
 
     /**
-     * The method adds a profile to the database if it does not exist a profile with the e-mail in the profile request
-     * @param updateProfileRequest The profile to add to the database
-     * @return Null if it already exists a profile with the e-mail in the profile request. Otherwise, the newly added
-     * profile
+     * The method updates a profile in the database with information provided by the user
+     * @param updateProfileRequest The profile to be updated in the database
+     * @return the newly updated profile.
      */
     public Profile updateProfile(UpdateProfileRequest updateProfileRequest) {
         logger.info("Updating profile with profileId " + updateProfileRequest.getProfileId());
         return profileDao.updateProfile(updateProfileRequest);
-
     }
 
     /**
      * The method checks the credentials given as parameters against the database
-     * @param eMail E-mail to profile the credentials check is preformed on
-     * @param password Proposed password to the profile
-     * @param isPasswordEncrypted boolean should be set to true if the password is encrypted, otherwise false
-     * @return True if the credentials is correct, and false if the check is incorrect.
+     * @param eMail email to profile the credentials check is preformed on
+     * @param password Proposed password for the profile
+     * @param isPasswordEncrypted boolean should be set to true if the password is encrypted, otherwise to false
+     * @return True if the credentials is correct, and false if they are incorrect.
      */
     public boolean checkProfileCredentials(String eMail, String password, boolean isPasswordEncrypted) {
-        logger.info("Controlling credentials for "  + eMail + " password " + password);
+        logger.info("Controlling credentials for "  + eMail);
         List<Profile> profiles = profileDao.getProfiles();
         Profile profile = profileDao.getProfile(eMail);
         boolean correctPassword = false;
@@ -102,10 +100,15 @@ public class ProfileService {
             logger.info("Credentials is correct! Returning profile for " + profileRequest.getEMail());
             return profileDao.getProfile(profileRequest.getEMail());
         }
-        logger.info("Credentials is invalid for " + profileRequest.getEMail());
+        logger.info("Credentials are invalid for " + profileRequest.getEMail());
         return null;
     }
 
+    /**
+     * The method gets a profileId based on its email
+     * @param eMail the profile´s email
+     * @return profileId of the profile with the provided email
+     */
     public int getProfile(String eMail) {
         logger.info("Returning profile for " + eMail);
         int profileId = profileDao.getProfile(eMail).getProfileId();
@@ -113,30 +116,52 @@ public class ProfileService {
         return profileId;
     }
 
+    /**
+     * The method gets a profileType based on the profile
+     * @param profile the profile to check profileType for
+     * @return the profileType of the provided profile
+     */
     public ProfileType getProfileType(Profile profile) {
         logger.info("Retrieving profile type for " + profile.getEMail());
         return jdbcAuthenticationRepo.getProfileType(profile);
     }
 
+    /**
+     * The method gets a profileType based on the profile´s email and password
+     * @param email the profile´s email
+     * @param password the profile´s password
+     * @return the profileType of the profile with the provided email and password
+     */
     public ProfileType getProfileType(String email, String password) {
         logger.info("Retrieving profile type for " + email + " password " + password);
         return jdbcAuthenticationRepo.getProfileType(email, password);
     }
 
+    /**
+     * The method gets a profileType based on the profile´s email
+     * @param email the profile´s email
+     * @return the profileType of the profile with the provided email
+     */
     public ProfileType getProfileType(String email) {
         logger.info("Retrieving profile type for " + email);
         return jdbcAuthenticationRepo.getProfileType(email);
     }
 
     /**
-     * The method retrieves the profile for the parameters if the credentials is correct
-     * @param email Profile request for wanted profile
+     * The method retrieves the profile for the parameters if the credentials are correct
+     * @param email Profile-request for requested profile
      * @return Profile if the credentials is correct, otherwise null
      */
     public Profile getProfileByEmail(String email) {
         return profileDao.getProfile(email);
     }
 
+    /**
+     * The method gets a location based on an addressId.
+     * A location consists of an address, a city, and a county
+     * @param addressId the addressId to check for
+     * @return the location linked to the provided addressId
+     */
     public Location getLocation(int addressId){
         logger.info("Retrieving address for addressId {}", addressId);
         Address address = profileDao.getAddress(addressId);

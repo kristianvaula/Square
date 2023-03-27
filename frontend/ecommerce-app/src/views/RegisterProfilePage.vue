@@ -167,7 +167,7 @@ export default {
             router.push("/").then(() => location.reload());
         }
       } else {
-        this.errorMessage = "Make sure that all filed is filed in properly"
+        this.errorMessage = "Check if you have entered correct information"
       }
     }
   },

@@ -17,11 +17,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
 import java.util.*;
 
+/**
+ * Service class for products
+ * Provides mechanism to control, add and get products.
+ */
 @Service
 public class ProductService {
     @Autowired
@@ -32,6 +37,11 @@ public class ProductService {
 
     public static String IMAGE_PATH = "src/main/resources/userImages/";
 
+    /**
+     * Constructor for ProductService
+     * @param repository the productRepository
+     * @param transactionManager tool to manage platform-transactions
+     */
     @Autowired
     public ProductService(ProductRepository repository, PlatformTransactionManager transactionManager) {
         this.repository = repository;
@@ -39,8 +49,7 @@ public class ProductService {
     }
 
     /**
-     * Performs necessary operations to create a
-     * new product.
+     * Performs necessary operations to create a new product.
      * @param product Product object
      * @param username username of seller
      * @param subcategories subcategories associated
@@ -92,11 +101,78 @@ public class ProductService {
     }
 
     /**
+     * Adds a product to favourites. Check if products exists,
+     * and that the user is not the seller of the product.
+     * @param productId Id of product
+     * @param username username of user
+     * @return Response
+     */
+    public ResponseEntity<String> addToFavourites(int productId, String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        try {
+            product = repository.getProductById(productId);
+            if(product.getSellerId() == profileId) return new ResponseEntity<>("User cannot favourite own listing", HttpStatus.BAD_REQUEST);
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No product matching productId", HttpStatus.BAD_REQUEST);}
+        if(repository.checkFavourite(productId, profileId) == -1){
+            return new ResponseEntity<>("Product already favourited", HttpStatus.OK);
+        }
+        if(repository.addToFavourites(productId, profileId) == -1) {
+            return new ResponseEntity<>("Could not favourite product", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product added to favourites successfully", HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Integer>> getFavouriteIds(@PathVariable("username") String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+
+        List<Integer> result = repository.getFavouriteIds(profileId);
+        if(result == null) return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<ProductResponse>> getFavourites(@PathVariable("username") String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);}
+
+        return getProducts(repository.getFavourites(profileId));
+    }
+
+    /**
+     * Adds a product to favourites. Check if products exists,
+     * and that the user is not the seller of the product.
+     * @param productId Id of product
+     * @param username username of user
+     * @return Response
+     */
+    public ResponseEntity<String> removeFromFavourites(int productId, String username){
+        int profileId;
+        Product product;
+        try {
+            profileId = repository.getUser(username).getProfileId();
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);}
+        if(repository.removeFavourite(productId, profileId) == -1) {
+            return new ResponseEntity<>("Product not on favourite list", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Product removed from favourites successfully", HttpStatus.OK);
+    }
+
+    /**
      * Performs call to add a subcategory
      * @param productId product id
      * @param subcategories subcategory ids
      * @return 1 if success
-     * @throws DataAccessException
+     * @throws DataAccessException e
      */
     public int addSubcategories(int productId, List<Integer> subcategories) throws DataAccessException {
         int response = -1;
@@ -111,7 +187,7 @@ public class ProductService {
      * @param productId product id associated
      * @param images Multipartfile array
      * @return 1 if success
-     * @throws DataAccessException
+     * @throws DataAccessException e
      */
     private int addImages(int productId, MultipartFile[] images){
         for (MultipartFile image : images) {
@@ -134,8 +210,7 @@ public class ProductService {
 
     /**
      * Creates a response to return to client.
-     * Takes a list of product objects and fetches
-     * necesarry data and converts to a response
+     * Takes a list of product objects and fetches necessary data and converts to a response
      * @param products list of products
      * @return response
      */

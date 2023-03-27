@@ -12,12 +12,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfileRequest {
+
     private final String eMail;
     private final String password;
 
     /**
      * Constructor for creating a profile request from another object from class ProfileRequest
-     * The constructor validates string attributes and throws a NullPointerException if one of these is not defined
+     * The constructor validates string attributes and throws a NullPointerException if one of these is undefined
      * @param profileRequest The object to create a new profile request for
      */
     public ProfileRequest(ProfileRequest profileRequest) {
@@ -31,8 +32,8 @@ public class ProfileRequest {
     /**
      * Constructor for creating a profile
      * The constructor validates string attributes and throws a NullPointerException if one of these is not defined
-     * @param eMail
-     * @param password
+     * @param eMail the profile´s email
+     * @param password the profile's password
      */
     @JsonCreator
     public ProfileRequest(@JsonProperty("eMail") final String eMail, @JsonProperty("password") final String password) {
