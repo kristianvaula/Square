@@ -42,14 +42,14 @@ public class ProductRepository implements ProductRepositoryInterface {
     private static final String SELECT_PRODUCT_BY_ID_SQL = "SELECT * FROM product WHERE productId = ?;";
     private static final String SELECT_PRODUCT_SQL = "SELECT * FROM product WHERE title = ? AND sellerId=?;";
     private static final String SELECT_PRODUCTS_SQL = "SELECT * FROM product;";
-    private static final String SELECT_PRODUCTS_CATEGORY_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps, subcategory s WHERE p.productId = ps.productId AND ps.subcategoryId = s.subcategoryId AND s.categoryId = ?";
-    private static final String SELECT_PRODUCTS_SUBCATEGORY_SQL = "SELECT p.productId, description, price, sellerid, buyerid, title, used, timeCreated FROM product p, product_subcategory ps WHERE p.productId = ps.productId AND ps.subcategoryId = ?";
+    private static final String SELECT_PRODUCTS_CATEGORY_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, sold, title, used, timeCreated FROM product p, product_subcategory ps, subcategory s WHERE p.productId = ps.productId AND ps.subcategoryId = s.subcategoryId AND s.categoryId = ?";
+    private static final String SELECT_PRODUCTS_SUBCATEGORY_SQL = "SELECT p.productId, description, price, sellerid,sold, title, used, timeCreated FROM product p, product_subcategory ps WHERE p.productId = ps.productId AND ps.subcategoryId = ?";
     private static final String SELECT_PRODUCTID_SQL = "SELECT productId FROM product WHERE title = ? AND sellerId=?;";
     private static final String SELECT_PROFILE_SQL ="SELECT * FROM profile WHERE email=?";
     private static final String SELECT_PRODUCTS_SELLERID_SQL = "SELECT * FROM product WHERE sellerId=?";
     private static final String SELECT_FAVORITE_SQL = "SELECT profileId FROM favourite WHERE productId = ? AND profileId = ?";
     private static final String SELECT_FAVORITEIDS_SQL = "SELECT DISTINCT f.productId FROM favourite f WHERE f.profileId = ?";
-    private static final String SELECT_FAVORITES_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, buyerid, title, used, timeCreated FROM product p,favourite f WHERE p.productId = f.productId AND f.profileId = ?";
+    private static final String SELECT_FAVORITES_SQL = "SELECT DISTINCT p.productId, p.description, price, sellerid, sold, title, used, timeCreated FROM product p,favourite f WHERE p.productId = f.productId AND f.profileId = ?";
 
     private static final String UPDATE_SOLD_SQL = "UPDATE product SET sold = 1 WHERE productId = ? ";
 

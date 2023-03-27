@@ -22,11 +22,11 @@ public class Product {
     @Column
     private int price;
     @Column
-    private int used;
-    @Column
     private int sellerId;
     @Column
-    private Integer buyerId;
+    private int used;
+    @Column
+    private int sold;
     @Column
     private Timestamp timeCreated;
 
@@ -101,20 +101,12 @@ public class Product {
         this.sellerId = sellerId;
     }
 
-    /**
-     * Getter for buyerId
-     * @return buyerId
-     */
-    public Integer getBuyerId() {
-        return buyerId;
+    public int getSold() {
+        return sold;
     }
 
-    /**
-     * Setter for buyerId
-     * @param buyerId new buyerId
-     */
-    public void setBuyerId(Integer buyerId) {
-        this.buyerId = buyerId;
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 
     /**
@@ -131,6 +123,19 @@ public class Product {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * getts used
+     * @return
+     */
+    public Integer getUsed() {
+        return used;
+    }
+
+
+    public void setUsed(Integer used) {
+        this.used = used;
     }
 
     /**

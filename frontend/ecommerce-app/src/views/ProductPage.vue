@@ -9,7 +9,8 @@
       <div class="product-choices">
         <div class="price">
           <h3>Condition</h3>
-          <h3 v-if="this.product.used" class="price-view">Used</h3>
+          <h3 v-if="this.product.sold == 1" class="price-view">Sold</h3>
+          <h3 v-else-if="this.product.used" class="price-view">Used</h3>
           <h3 v-else class="price-view">New</h3>
         </div>
         <div class="price">
@@ -168,6 +169,7 @@ mounted () {
   ProductUtils.getProductById(productId)
     .then((response) => {
       if(response) {
+        console.log(response[0].product)
         this.product = response[0].product
         this.images = response[0].imageList
         this.imageLoaded = true 
