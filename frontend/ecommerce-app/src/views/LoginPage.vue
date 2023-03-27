@@ -11,6 +11,7 @@
               placeholder="Ola.Nordman@mail.com"
               type="text"
               :error="eMailError"
+              data-test="eMail"
           />
         </fieldset>
         <fieldset>
@@ -21,12 +22,13 @@
               placeholder="*******"
               type="password"
               :error="passwordError"   
+              data-test="password"
           />
         </fieldset>
-        <input class="button" type="submit" value="Login in" @click="signIn">
+        <input class="button" type="submit" value="Login in" @click="signIn" data-test="submitBtn">
         <h5>or</h5>
         <input id="registerButton" type="button" value="Create account" @click="registerProfile">
-        <p class="errorMessage">{{ errorMessage }}</p>
+        <p class="errorMessage" data-test="errorMessage">{{ errorMessage }}</p>
       </form>
     </div>
 </div>
