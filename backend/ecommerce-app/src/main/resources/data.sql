@@ -1,0 +1,11 @@
+INSERT INTO county VALUES(1, 'Agder');
+INSERT INTO county VALUES(2, 'Innlandet');
+INSERT INTO county VALUES(3, 'Møre og Romsdal');
+INSERT INTO county VALUES(4, 'Norland');
+INSERT INTO county VALUES(5, 'Oslo');
+INSERT INTO county VALUES(6, 'Rogaland');
+INSERT INTO county VALUES(7, 'Vestfold og Telemark');
+INSERT INTO county VALUES(8, 'Troms og Finnmark');
+INSERT INTO county VALUES(9, 'Trøndelag');
+INSERT INTO county VALUES(10, 'Vestland');
+INSERT INTO county VALUES(11, 'Viken');
