@@ -14,7 +14,6 @@ function getUserConfig(){
   console.log(tokenStore.jwtToken) 
   return {
     headers: {
-      "Content-type": "application/json",
       "Authorization": "Bearer " + tokenStore.jwtToken
   },
   }
@@ -51,23 +50,72 @@ const getProductsWithImages = response => response.data.map(productResponse => (
 export default {
   
   createProduct(formData) {
-    return axios.post(baseurl + "/unauthorized/product/new", formData, getUserConfig()); 
+    let config = getUserConfig()
+    return axios.post(baseurl + "/user/product/new", formData, config); 
   }, 
   getProducts() {
-    let config = getUserConfig()
-    return axios.get(baseurl + "/unauthorized/product/all", config)
-    .then(getProductsWithImages)
+    return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductById(id) {
     return axios.get(baseurl + `/unauthorized/product/${id}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductByCategory(category) {
     return axios.get(baseurl + `/unauthorized/product/category/${category}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductBySubcategory(subcategory) {
     return axios.get(baseurl + `/unauthorized/product/subcategory/${subcategory}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  },
+  getProductsBySeller(username) {
+    return axios.get(baseurl + `/unauthorized/product/user/${username}`, defaultConfig)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
 }
