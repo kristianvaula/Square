@@ -1,0 +1,133 @@
+:root {
+  --main-color:#011627; 
+  --secondary-color:#FFFFFF;
+  --on-hover:#e4e9ed; 
+  --wine-red: #702632; 
+  --product-card-width:250px; 
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;  
+}
+
+a, router-link {
+  text-decoration: none;
+}
+
+li {
+  list-style: none; 
+}
+
+.errorMessage {
+  color: red;
+}
+
+fieldset {
+  border: 0;
+}
+
+legend {
+  font-size: 25px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: 2px solid #d8d8d8;
+    background-color: var(--secondary-color);
+    -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
+    box-shadow: 2px 15px 12px rgba(0, 0, 0, 0.57);
+    color: #011627;
+}
+
+.form h1 {
+  border-bottom: solid #011627;
+}
+
+
+.button {
+  border-radius: 12px;
+  height: 50px;
+  width: 50%;
+  background-color: var(--wine-red);
+  font-size: 20px;
+  color: white;
+  box-shadow: 0 4px #999;
+}
+
+.button-small {
+  border-radius: 6px;
+  height: 25px;
+  width: 100px;
+  background-color: #702632;
+  font-size: 15px;
+  color: white;
+  box-shadow: 0 2px #999;
+}
+
+.button:hover, .button-small:hover {
+  background-color: #ba1632;
+  cursor: pointer;
+} 
+
+button:disabled {
+  opacity:0.5;
+}
+
+.button:active {
+  background-color: #ba1632;
+  box-shadow: 0 2px #666;
+  transform:translateY( 4px );
+}
+.button-small:active {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
+}
+
+.button-small:disabled {
+  background-color: #ba1632;
+  box-shadow: 0 0px #666;
+  transform:translateY( 2px );
+}
+
+/* ICONS */
+.icon-medium {
+  width:3em;
+  opacity:0.6;
+}
+.icon-heart {
+  width:2.5em;
+  opacity:0.8;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.lowkey-h3{
+  font-size:0.5em;
+  opacity:0.8;
+} 
+
+.sixty-pool {
+  width:60%;
+  min-width:var(--product-card-width + 50px);
+  max-width:60%;
+}
+.eighty-pool {
+  width:80%;
+  min-width:var(--product-card-width + 50px);
+  max-width:80%;
+}
+
+.flex-centered {
+  display:flex;
+  justify-content:center;
+}

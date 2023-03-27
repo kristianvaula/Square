@@ -1,0 +1,12 @@
+#baseInputContainer {
+    padding: 10px;
+}
+
+label {
+    font-size: large;
+}
+
+input {
+    height: 30px;
+    padding: 10px;
+}
