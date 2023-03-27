@@ -9,6 +9,7 @@ import java.util.List;
 public interface ProductRepositoryInterface {
 
     int newProduct(Product product);
+    int addToFavourites(int productId, int userId);
     int newSubcategorybinding(int productId, int subCategoryId);
     int newProductImage(int productId, String image) throws DataAccessException;
 

@@ -46,6 +46,13 @@ public class ProductController {
         return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PostMapping("/user/product/favorite")
+    public ResponseEntity<String> addToFavorites(@RequestParam("productId") int productId,
+                                                 @RequestParam("userId") int userId){
+        logger.info("Received add to favourites request");
+        return service.addToFavourites(productId, userId);
+    }
+
     @GetMapping("/unauthorized/product/user/{username}")
     public ResponseEntity<List<ProductResponse>> getProductsBySeller(@PathVariable("username") String username){
         logger.info("Received request for products by seller: " + username);

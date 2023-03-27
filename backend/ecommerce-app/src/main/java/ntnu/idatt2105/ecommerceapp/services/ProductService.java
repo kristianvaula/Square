@@ -92,6 +92,25 @@ public class ProductService {
     }
 
     /**
+     * Adds a product to favourites. Check if products exists,
+     * and that the user is not the seller of the product.
+     * @param productId Id of product
+     * @param userId id of user
+     * @return Response
+     */
+    public ResponseEntity<String> addToFavourites(int productId, int userId){
+        Product product;
+        try {
+            product = repository.getProductById(productId);
+            if(product.getSellerId() == userId) return new ResponseEntity<>("User cannot favourite own listing", HttpStatus.BAD_REQUEST);
+        } catch (EmptyResultDataAccessException e) { return new ResponseEntity<>("No product matching productId", HttpStatus.BAD_REQUEST);}
+
+        int response = repository.addToFavourites(productId, userId);
+        if(response == -1) return new ResponseEntity<>("Could not favourite item", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Product added successfully", HttpStatus.OK);
+    }
+
+    /**
      * Performs call to add a subcategory
      * @param productId product id
      * @param subcategories subcategory ids

@@ -28,6 +28,7 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     //INSERT
     private static final String INSERT_PRODUCT_SQL = "INSERT INTO product(title, description, price, used, sellerId, timeCreated) VALUES(?,?,?,?,?,NOW())";
+    private static final String INSERT_FAVOURITE_SQL = "INSERT INTO favorites (productId, profileId) VALUES (?,?)";
     private static final String INSERT_PRODUCT_SUBCAT_SQL = "INSERT INTO product_subCategory (productId, subCategoryId) VALUES(?,?)";
     private static final String INSERT_IMAGE_SQL = "INSERT INTO prodImage(productId, image) VALUES(?,?)";
 
@@ -55,6 +56,18 @@ public class ProductRepository implements ProductRepositoryInterface {
             throw e;
         }
     }
+
+    @Override
+    public int addToFavourites(int productId, int userId) {
+        try {
+            return jdbcTemplate.update(INSERT_FAVOURITE_SQL, productId, userId);
+        } catch (DataAccessException e) {
+            logger.error("An error occured while inserting Product");
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 
     @Override
     public int newSubcategorybinding(int productId, int subCategoryId) throws DataAccessException{
