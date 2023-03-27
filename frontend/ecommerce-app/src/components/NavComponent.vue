@@ -59,7 +59,6 @@
           <li><router-link to="/my-profile">My Profile</router-link></li>
           <li><router-link to="/my-favorites">My Favorites</router-link></li>
           <li><router-link to="/my-listings">My Listings</router-link></li>
-          <li><router-link to="/my-purchases">My Purchases</router-link></li>
           <li><a @click="signOut">Sign Out</a></li>
         </ul>
       </li>

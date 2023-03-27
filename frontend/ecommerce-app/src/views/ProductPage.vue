@@ -1,38 +1,57 @@
 <template>
-    <div class="product-page">
-        <div class="product-pictures">
-            <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
-            <h5 v-if="this.timeCreated !== undefined">Last edited: {{ this.timeCreated }}</h5>
-        </div>
-        <h1>{{ product.title }}</h1>
-        <div class="product-information">
-            <div class="product-choices">
-                <div class="price">
-                    <h3>Condition</h3>
-                    <h3 v-if="this.product.used" class="price-view">Used</h3>
-                    <h3 v-else class="price-view">New</h3>
-                </div>
-                <div class="price">
-                    <h3>Price</h3>
-                    <h3 class="price-view">{{ product.price + " NOK" }}</h3>
-                </div>
-                <div class="product-buttons">
-                    <h3> Add to favourites</h3>
-                        <img v-if="this.isInFavourites" class="favourite-icon" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
-                        <img v-else class="favourite-icon" src="@/assets/icons/heart.png" @click="favouriteProduct">
-                </div>
-                <div v-if="this.sellerId != this.loggedInUserId" class="product-buttons">
-                    <h3>Contact seller</h3>
-                    <img src="@/assets/icons/message.png" class="favourite-icon" @click="contactSeller">
-                </div>
-                
-            </div>
-            <div>
-                <h3>Description</h3>
-                <h5 class="price-view">{{ this.product.description }}</h5>
-            </div>
-        </div>
+  <div class="product-page">
+    <div class="product-pictures">
+      <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
+      <h5 v-if="this.timeCreated !== undefined">Last edited: {{ this.timeCreated }}</h5>
     </div>
+    <h1>{{ product.title }}</h1>
+    <div class="product-information">
+      <div class="product-choices">
+        <div class="price">
+          <h3>Condition</h3>
+          <h3 v-if="this.product.used" class="price-view">Used</h3>
+          <h3 v-else class="price-view">New</h3>
+        </div>
+        <div class="price">
+          <h3>Price</h3>
+          <h3 class="price-view">{{ product.price + " NOK" }}</h3>
+        </div>
+        <div v-if="!isOwner()" class="product-buttons">
+          <h3> Add to favourites</h3>
+            <img 
+              v-if="this.isFavourited()" 
+              class="favourite-icon" 
+              src="@/assets/icons/heartfilled.png" 
+              @click="unfavouriteProduct"
+            >
+            <img 
+              v-else 
+              class="favourite-icon" 
+              src="@/assets/icons/heart.png" 
+              @click="favouriteProduct"
+            >
+        </div>
+        <div 
+          v-if="!isOwner()" 
+          class="product-buttons"
+        >
+            <h3>Contact seller</h3>
+            <img src="@/assets/icons/message.png" class="favourite-icon" @click="contactSeller">
+        </div>
+        <div 
+          v-if="isOwner()" 
+          class="product-buttons"
+        >
+            <h3>Mark As Sold</h3>
+            <img src="@/assets/icons/hammer.png" class="favourite-icon" @click="markAsSold">
+        </div>
+      </div>
+      <div>
+        <h3>Description</h3>
+        <h5 class="price-view">{{ this.product.description }}</h5>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -45,85 +64,117 @@ import ProfileUtils from '@/utils/ProfileUtils';
 import { useTokenStore } from "@/store/token.js";
 
 export default {
-    name: `ProductPage`,
+  name: `ProductPage`,
+  data() {
+    return {
+      store,
+      displayImage: false, 
+      images: [],
+      isInFavourites: false,
+      product: Object,
+      imageLoaded: false,
+      timeCreated: undefined,
+      favourites: [], 
+      user: undefined
+    }
+  },
+  setup() {
+    const tokenStore = useTokenStore();
+    return {
+        tokenStore,
+    }
+  },
+  components: {
+    ImgCarouselComponent
+  },
+methods: {
+  isOwner(){ 
+    return this.product.sellerId === this.userId; 
+  },
+  isFavourited(){
+      if(this.favourites !== undefined && this.favourites.length > 0){
+          return this.favourites.includes(this.product.productId)
+      }
+  },
+  setFavourited(){
+    if(this.favourites !== undefined && this.favourites.length > 0){
+        this.isInFavourites = this.favourites.includes(this.product.productId)
+    }
+    else {this.isInFavourited = false }
+  },  
+  favouriteProduct() {
+    if(this.tokenStore.jwtToken){
+      ProductUtils.favouriteProduct(this.product.productId,this.tokenStore.loggedInUser)
+        .then(() => {
+          this.favourites.push(this.product.productId)
+          this.setFavourited()
+          alert("Product added to favourites"); 
+        })
+        .catch((error) => {
+          console.log(error); 
+          alert("There was an error adding the product to favourites")
+        })
+    }
+    else{
+      alert("You have to log in to favourite a product."); 
+    }  
+  },
+  markAsSold(){
 
-    data() {
-        return {
-            store,
-            displayImage: false, 
-            images: [],
-            isInFavourites: false,
-            loggedInUserId: -1,
-            sellerId: -1,
-            product: Object,
-            imageLoaded: false,
-            timeCreated: undefined, 
-        }
-    },
-    setup() {
-        const tokenStore = useTokenStore();
-
-        return {
-            tokenStore
-        }
-    },
-
-
-
-    components: {
-        ImgCarouselComponent
-    },
-
-    methods: {
-        unfavouriteProduct() {
-            this.isInFavourites = false
-            alert(`removed from favourites!`)
-
-        },
-
-        favouriteProduct() {
-            this.isInFavourites = true
-            alert(`added to favourites!`)
-        },
-
-        async contactSeller() {
-
-            let loggedInUserPromise = await ProfileUtils.getProfileId(this.tokenStore.loggedInUser);
-        
-            const loggedInUserId = loggedInUserPromise.data;
-            const sellerId = this.sellerId;
-            const newChat = {
-                profile1: loggedInUserId,
-                profile2: sellerId
-            }
-
-            await ChatUtils.newChat(newChat);
-            router.push('/my-messages')
-        }
-
-
-    },
-
-    mounted () {
-        const productId = this.$route.params.productId
-            ProductUtils.getProductById(productId)
-                .then((response) => {
-                if(response) {
-                    console.log(response)
-                    this.product = response[0].product
-                    this.images = response[0].imageList
-                    this.imageLoaded = true 
-                    this.sellerId = response[0].product.sellerId
-                    if(response[0].product.timeCreated) {
-                        const date = new Date(response[0].product.timeCreated)
-                        this.timeCreated = date.toLocaleDateString('en-GB', {day: 'numeric', month: 'long' });
-                    }
-                }
-            })
-                .catch((err) => {
-                console.log(err)
-                })
-        },  
+  },
+  unfavouriteProduct() {
+    if(this.tokenStore.jwtToken){
+      ProductUtils.unfavourProduct(this.product.productId, this.tokenStore.loggedInUser)
+        .then(() => {
+          this.fetchFavourites()
+          this.setFavourited()
+          alert("Product removed from favourites"); 
+        })
+        .catch((error) => {
+          console.log(error); 
+          alert("There was an error adding the product to favourites")
+        })
+    }    
+  },
+  async contactSeller() {
+    const newChat = {
+        profile1: this.userId,
+        profile2: this.product.sellerId
+    }
+    await ChatUtils.newChat(newChat);
+    router.push('/my-messages')
+  },
+  fetchFavourites(){
+      if(this.tokenStore.jwtToken){
+          ProductUtils.getFavouriteIds(this.tokenStore.loggedInUser)
+              .then((response) => {
+                  if(response.data && response.data !== undefined){
+                      this.favourites = response.data
+                  }
+              })
+      }   
+    }
+},
+mounted () {
+  const productId = this.$route.params.productId
+  this.fetchFavourites()
+  ProfileUtils.getProfileId(this.tokenStore.loggedInUser).then((response) => this.userId = response.data)
+  ProductUtils.getProductById(productId)
+    .then((response) => {
+      if(response) {
+        this.product = response[0].product
+        this.images = response[0].imageList
+        this.imageLoaded = true 
+        if(response[0].product.timeCreated) {
+          const date = new Date(response[0].product.timeCreated)
+          this.timeCreated = date.toLocaleDateString('en-GB', {day: 'numeric', month: 'long' });
+      }
+    }})
+    .catch((err) => {
+    console.log(err)
+    })
+    this.setFavourited()
+  },  
 }
 
 

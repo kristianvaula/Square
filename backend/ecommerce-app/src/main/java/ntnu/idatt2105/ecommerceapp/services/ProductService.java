@@ -157,7 +157,9 @@ public class ProductService {
         int profileId;
         Product product;
         try {
-            profileId = repository.getUser(username).getProfileId();
+            Profile profile = repository.getUser(username);
+            if(profile == null) return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);
+            profileId = profile.getProfileId();
         } catch (EmptyResultDataAccessException e) {
             return new ResponseEntity<>("No profile matching username", HttpStatus.BAD_REQUEST);
         }

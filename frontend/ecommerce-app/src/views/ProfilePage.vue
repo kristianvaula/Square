@@ -14,9 +14,6 @@
             <router-link to="/my-listings">
                 <Button class="my-button">My Listings</Button>
             </router-link>
-            <router-link to="/my-purchases">
-                <Button class="my-button">My Purchases</Button>
-            </router-link>
         </div>
         <div>
             <router-link to="/">
