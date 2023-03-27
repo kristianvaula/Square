@@ -164,7 +164,7 @@ export default {
 
         await this.tokenStore.getTokenAndSaveInStore(profilePromise.data);
         if(this.tokenStore.jwtToken){
-            router.push("/");
+            router.push("/").then(() => location.reload());
         }
       } else {
         this.errorMessage = "Make sure that all filed is filed in properly"

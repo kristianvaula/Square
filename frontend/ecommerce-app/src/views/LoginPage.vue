@@ -83,7 +83,7 @@ export default {
         const tokenPromise = await ProfileUtils.getToken(this.eMail, this.password);
         this.tokenStore.setTokenAndLoggedInUser(tokenPromise.data, this.eMail);
         if(this.tokenStore.jwtToken) {
-          router.push("/");
+          router.push("/").then(() => location.reload());
         }
       } catch(error) {        
         if (error.response.status === 401) {

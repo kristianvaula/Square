@@ -30,8 +30,10 @@ public class ChatService {
     public List<Chat> getChats(int profileId) {
         logger.info("Gets chats for profileId {} from database", profileId);
         List<Chat> chats = chatRepo.getChats(profileId);
-        Chat chat = chats.get(0);
-        logger.info("Logging chat info {}, {}, {}, {}", chat.getChatId(), chat.isUnread(), chat.getProfile1(), chat.getProfile2() );
+        if(chats.size()>0){
+            Chat chat = chats.get(0);
+            logger.info("Logging chat info {}, {}, {}, {}", chat.getChatId(), chat.isUnread(), chat.getProfile1(), chat.getProfile2() );
+        }
         return chats;
     }
 

@@ -19,16 +19,19 @@
     height: 50px;
     width: 50%;
     border-radius: 12px;
-}
-
-#registerButton:hover {
     background-color: rgb(240, 233, 233);
     box-shadow: 0 4px #999;
 }
 
 #registerButton:active {
     background-color: rgb(240, 233, 233);
+    transform: translateY(2px);
     box-shadow: 0 2px #999;
+}
+
+#registerButton:hover {
+    cursor:pointer; 
+    
 }
 
 

@@ -16,12 +16,11 @@ public interface ProductRepositoryInterface {
     int getProductId(String title, int sellerId);
     Product getProductByTitleSeller(String title, int sellerId);
     List<Product> getProducts();
-
+    List<Product> getProductsBySeller(int sellerId);
     List<Product> getProductsByCategory(int categoryId);
-
     List<Product> getProductsBySubcategory(int subcategoryId);
-
     List<String> getProductImagenames(Product product);
     Profile getUser(String eMail);
+
     int removeById(int productId);
 }

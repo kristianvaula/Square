@@ -46,6 +46,12 @@ public class ProductController {
         return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping("/unauthorized/product/user/{username}")
+    public ResponseEntity<List<ProductResponse>> getProductsBySeller(@PathVariable("username") String username){
+        logger.info("Received request for products by seller: " + username);
+        return service.getProductsBySeller(username);
+    }
+
     @GetMapping("/unauthorized/product/all")
     public ResponseEntity<List<ProductResponse>> getProducts() {
         logger.info("Received request for all products");
@@ -71,7 +77,7 @@ public class ProductController {
     }
 
     @DeleteMapping("admin/product/remove/{id}")
-    public ResponseEntity<String> removeProduct(@PathVariable("id") int id){
+    public ResponseEntity<String> removeProduct(@PathVariable("id") int id) {
         logger.info("Received remove product request for: " + id);
         return service.removeById(id);
     }

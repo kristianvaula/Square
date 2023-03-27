@@ -50,23 +50,72 @@ const getProductsWithImages = response => response.data.map(productResponse => (
 export default {
   
   createProduct(formData) {
-    let config = getUserConfig();
+    let config = getUserConfig()
     return axios.post(baseurl + "/user/product/new", formData, config); 
   }, 
   getProducts() {
     return axios.get(baseurl + "/unauthorized/product/all", defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductById(id) {
     return axios.get(baseurl + `/unauthorized/product/${id}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductByCategory(category) {
     return axios.get(baseurl + `/unauthorized/product/category/${category}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   getProductBySubcategory(subcategory) {
     return axios.get(baseurl + `/unauthorized/product/subcategory/${subcategory}`, defaultConfig)
-    .then(getProductsWithImages)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  },
+  getProductsBySeller(username) {
+    return axios.get(baseurl + `/unauthorized/product/user/${username}`, defaultConfig)
+    .then(response => {
+      if (response.status === 200) {
+        return getProductsWithImages(response);
+      } else {
+        return undefined; 
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
 }

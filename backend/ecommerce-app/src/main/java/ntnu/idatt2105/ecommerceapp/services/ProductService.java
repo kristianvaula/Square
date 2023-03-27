@@ -152,15 +152,9 @@ public class ProductService {
             } catch (IOException e) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            if(resp == null){
-                logger.warn("Failed to load images for: " + products.get(i));
-                continue;
-            }
             responses.add(resp);
         }
         logger.info("Returning products list of length " + responses.size());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"files.zip\"");
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
@@ -220,6 +214,20 @@ public class ProductService {
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }
         return getProducts(Collections.singletonList(product));
+    }
+
+    /**
+     * Gets products by seller username
+     * @param username String seller-username
+     * @return response
+     */
+    public ResponseEntity<List<ProductResponse>> getProductsBySeller(String username){
+        Profile profile = repository.getUser(username); //Get profile
+        int sellerId = profile.getProfileId();
+        if(sellerId <= 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return getProducts(repository.getProductsBySeller(sellerId));
     }
 
     /**

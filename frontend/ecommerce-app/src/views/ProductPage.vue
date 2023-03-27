@@ -2,12 +2,16 @@
     <div class="product-page">
         <div class="product-pictures">
             <ImgCarouselComponent :loaded="imageLoaded" :images="images"/>
-            <!--<h5>Last changed</h5>
-            <h5>{{ product.timeCreated }}</h5>-->
+            <h5 v-if="this.timeCreated !== undefined">Last edited: {{ this.timeCreated }}</h5>
         </div>
         <h1>{{ product.title }}</h1>
         <div class="product-information">
             <div class="product-choices">
+                <div class="price">
+                    <h3>Condition</h3>
+                    <h3 v-if="this.product.used" class="price-view">Used</h3>
+                    <h3 v-else class="price-view">New</h3>
+                </div>
                 <div class="price">
                     <h3>Price</h3>
                     <h3 class="price-view">{{ product.price + " NOK" }}</h3>
@@ -17,7 +21,7 @@
                         <img v-if="this.isInFavourites" class="favourite-icon" src="@/assets/icons/heartfilled.png" @click="unfavouriteProduct">
                         <img v-else class="favourite-icon" src="@/assets/icons/heart.png" @click="favouriteProduct">
                 </div>
-                <div class="product-buttons">
+                <div v-if="this.sellerId != this.loggedInUserId" class="product-buttons">
                     <h3>Contact seller</h3>
                     <img src="@/assets/icons/message.png" class="favourite-icon" @click="contactSeller">
                 </div>
@@ -52,7 +56,8 @@ export default {
             loggedInUserId: -1,
             sellerId: -1,
             product: Object,
-            imageLoaded: false 
+            imageLoaded: false,
+            timeCreated: undefined, 
         }
     },
     setup() {
@@ -85,15 +90,13 @@ export default {
 
             let loggedInUserPromise = await ProfileUtils.getProfileId(this.tokenStore.loggedInUser);
         
-            console.log(loggedInUserPromise)
             const loggedInUserId = loggedInUserPromise.data;
             const sellerId = this.sellerId;
             const newChat = {
                 profile1: loggedInUserId,
                 profile2: sellerId
             }
-            console.log("Sending chat:")
-            console.log(newChat)
+
             await ChatUtils.newChat(newChat);
             router.push('/my-messages')
         }
@@ -105,13 +108,16 @@ export default {
         const productId = this.$route.params.productId
             ProductUtils.getProductById(productId)
                 .then((response) => {
-                if(response.data) {
-                    console.log(response.data)
-                    this.product = response.data[0].product
-                    this.images = response.data[0].imageList
+                if(response) {
+                    console.log(response)
+                    this.product = response[0].product
+                    this.images = response[0].imageList
                     this.imageLoaded = true 
-                    this.sellerId = response.data[0].product.sellerId
-                    console.log("Setting sellerId to " + this.sellerId)
+                    this.sellerId = response[0].product.sellerId
+                    if(response[0].product.timeCreated) {
+                        const date = new Date(response[0].product.timeCreated)
+                        this.timeCreated = date.toLocaleDateString('en-GB', {day: 'numeric', month: 'long' });
+                    }
                 }
             })
                 .catch((err) => {
@@ -157,6 +163,7 @@ export default {
 
 .price {
     margin: 30px;
+    opacity: 0.95;
 }
 
 .product-buttons {
