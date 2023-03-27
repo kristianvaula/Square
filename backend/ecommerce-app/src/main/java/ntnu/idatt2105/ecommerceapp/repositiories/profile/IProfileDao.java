@@ -11,6 +11,7 @@ import java.util.List;
  * Interface for a profile dao
  */
 public interface IProfileDao {
+
     /**
      * Getter for county
      * @param countyName the name of the county
@@ -68,6 +69,11 @@ public interface IProfileDao {
      */
     Profile getProfile(String eMail);
 
+    /**
+     * Getter for the profiles´ email
+     * @param profileId The users´ profileId
+     * @return profiles´ email
+     */
     String getProfileEmail(int profileId);
 
     /**
@@ -83,9 +89,24 @@ public interface IProfileDao {
      */
     List<Profile> getProfiles();
 
+    /**
+     * Getter for address
+     * @param addressId The addressId
+     * @return the address
+     */
     Address getAddress(int addressId);
 
+    /**
+     * Getter for city
+     * @param cityId The cityId
+     * @return the city
+     */
     City getCity(int cityId);
 
+    /**
+     * Getter for county
+     * @param countyId The countyId
+     * @return the county
+     */
     County getCounty(int countyId);
 }

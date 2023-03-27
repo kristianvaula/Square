@@ -30,7 +30,6 @@ public class ProfileService {
     private Logger logger = LoggerFactory.getLogger(ProfileService.class);
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // todo: move method to another service?
     /**
      * The method gets a list of registered counties from the database
      * @return List with counties
