@@ -1,9 +1,11 @@
 package ntnu.idatt2105.ecommerceapp.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 public class Product {
     @Id
@@ -20,6 +22,8 @@ public class Product {
     private int sellerId;
     @Column
     private Integer buyerId;
+    @Column
+    private Timestamp timeCreated;
 
     @Autowired
     public Product() {
@@ -79,5 +83,13 @@ public class Product {
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+
+    public Timestamp getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }
