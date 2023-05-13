@@ -7,13 +7,13 @@ It was my first project using a frontend framework, as well as a client/server r
 
 #### Some screenshots from the application: 
 
-![home](https://github.com/kristianvaula/Square/main/home.png)
+![home](https://github.com/kristianvaula/Square/blob/main/home.png)
 
-![subc](https://github.com/kristianvaula/Square/main/subc.png)
+![subc](https://github.com/kristianvaula/Square/blob/main/subc.png)
 
-![product](https://github.com/kristianvaula/Square/main/product.png)
+![product](https://github.com/kristianvaula/Square/blob/main/product.png)
 
-![new](https://github.com/kristianvaula/Square/main/new.png)
+![new](https://github.com/kristianvaula/Square/blob/main/new.png)
 
 SQUARE is a web application that allows users to buy and sell products. It also includes a chat functionality, allowing users to communicate with each other and negotiate prices.
 
