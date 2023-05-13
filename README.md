@@ -1,4 +1,9 @@
 # SQUARE
+SQUARE was a one-week intensive project that counted for 100% of the grade-basis in the fourth semester course IDATT2105 - Full Stack Applikasjonsutvikling. Among the requirements included a frontend using Vuejs, backend using Java and Spring Boot and a database using MySQL/H2. 
+
+It was my first project using a frontend framework, as well as a client/server relationship. We were only allowed to use clean CSS, and not any frameworks like Tailwind. The database communcation was done using JDBC. 
+
+
 
 SQUARE is a web application that allows users to buy and sell products. It also includes a chat functionality, allowing users to communicate with each other and negotiate prices.
 
