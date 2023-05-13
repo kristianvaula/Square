@@ -39,16 +39,6 @@ To access all of SQUARE's features, users must create a profile and log in. Logg
 
 To purchase a product, users can view listing details and initiate a chat with the seller. The chat feature enables communication and price negotiation between users. Logged-in users can also favorite products, which adds the product to their favorite list under their user profile, and view products they have listed under `my-listings`.
 
-
-## IN CASE OF PROBLEMS
-
-If you run into error messages when trying to run the application, you might have to change the first letter of the following files to uppercase letters:
-
-- `baseInput.css → Baseinput.css`
-- `formPage.css → FormPage.css`
-
-The files are located under src/assets/style.
-
 ## Team members
 - `Thomas Iversen`
 - `Espen Justad`
