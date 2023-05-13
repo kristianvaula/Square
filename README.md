@@ -3,7 +3,13 @@ SQUARE was a one-week intensive project that counted for 100% of the grade-basis
 
 It was my first project using a frontend framework, as well as a client/server relationship. We were only allowed to use clean CSS, and not any frameworks like Tailwind. The database communcation was done using JDBC. 
 
+![home](https://github.com/kristianvaula/Square/home.png)
 
+![subc](https://github.com/kristianvaula/Square/subc.png)
+
+![product](https://github.com/kristianvaula/Square/product.png)
+
+![new](https://github.com/kristianvaula/Square/new.png)
 
 SQUARE is a web application that allows users to buy and sell products. It also includes a chat functionality, allowing users to communicate with each other and negotiate prices.
 
